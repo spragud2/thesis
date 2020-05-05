@@ -1,0 +1,71 @@
+Protein coding genes have dominated the study of genetics for decades. The rules by which they function are well understood and we can often predict the function of an unknown gene based off of its underlying sequence content. This is due to the well understood rules of protein coding reading frames and the principles of conservation in biology. In the early 1990s (get actual date), an RNA transcript was discovered that was essential for the process of X chromosome inactivation (XCI), by which an entire X chromosome in female eutherians is near completely transcriptionally silenced. This transcript, known as Xist, does not code for protein, but rather is a non-coding RNA.
+
+The advent of RNA sequencing has led to explosion of annotated RNA transcripts that have no corresponding protein products. Even with numerous advances in genetics and genomics, these RNAs have proven to particularly challenging to understand. 
+\section{Long non-coding RNAs}
+Long non-coding RNAs (lncRNAs) are defined as non-coding RNA transcripts longer than 200 base pairs (bp). lncRNAs have emerged as a major mechanism of gene regulation in eutherians, however they have been annotated in all eukaryotic organisms. Humans in particular have many thousands of annotated lncRNAs, but the overwhelming majority have no known functional role, if any. Despite this, it is known that several lncRNAs play key roles in differention, development, as well as disease. 
+
+Of the lncRNAs that have been studied and have known function within the cell, there often is considerable work left to fully understand the function of these transcripts, despite many years worth of work. A particular challenge with lncRNAs is that they are often poorly conserved related to protein coding genes, if they are conserved at all. Furthermore, conventional alignment tools such as BLAST or nhmmer fail to detect meaningful relationships between two transcripts with similar function. 
+
+lncRNAs are difficult to study experimentally, as well. lncRNAs rarely function in isolation, but rather through the concerted action of the lncRNA transcripts, RNA binding proteins, and other biological molecules such as DNA or other proteins. This indicates that lncRNAs exist in a complex network of interactions that has proven difficult to unravel. 
+\subsection{Functional annotation}
+Long non-coding RNAs biochemically are very similar to mRNAs, in fact there is very little other than the presence of a reading frame that differentiates an messenger RNA from a lncRNA. lncRNAs are thus genes for which the final functional product is an RNA transcript. Given that RNA molecules are known to chemically bind to numerous biological molecules, including protein, DNA, and RNA itself, it perhaps comes as little surprise that lncRNAs are capable of widely varied function within the cell. 
+
+lncRNAs have generally been grouped into several sub-categories based on broadly defined features of their loci. The primary groups that have been annotated are intergenic lncRNAs (lincRNAs), which are found between annotated protein coding genes, anti-sense lncRNAs, whose loci are located on the anti-sense strand relative to a known gene, and intronic lncRNAs, which are encapsulated within the intron of a protein coding gene. The vague and non-specific nature of these definitions underlines how little is known about lncRNAs in general. In comparison, we can annotate protein coding genes down to their exact roles within the cell, not-with-standing larger classifications into cliques and communities within larger functional networks. 
+
+What is relatively well known is that lncRNAs are often involved in genetic regulation. Since the discovery of \emph{XIST} and the further identification of additional lncRNAs in years following the introduction of next generation sequencing, it has become clear that a primary functional role of lncRNA is the regulation of gene expression in human and other mammalian genomes. While RNA-seq has allowed for the rapid discovery of genes that produce RNA transcripts as their final product, the elucidation of the function for these newly annotated transcripts has proven far more challenging. 
+
+\subsubsection{Guilt by association}
+Assigning functional roles to lncRNAs, if there is any function to be assigned, has proven to be a daunting task. One of the first methods used is the so-called \emph{guilt by association} hypothesis. Rather than trying to identify the specific function of a lncRNA, trends from gene expression data are used to attempt identify features such as specificity of cell type expression. A more advanced approach uses informatics techniques to identify protein coding genes and biological pathways that are co-regulated with specific lncRNAs, with the underlying assumption that if a lncRNA is co-regulated with a specific pathway, it is likely to have a functional role within that pathway. 
+
+This methodology is useful for identifying transcripts that may be useful for further targeted experimental studies, but \emph{guilt by association} is an inherently correlative method that does provide real insights into the lncRNAs of interest. Despite this shortcoming, several functional lncRNAs have been identified and characterized this way. 
+
+\subsubsection{High throughput loss of function screens}
+Perhaps the holy grail of lncRNA functional annotation is a reliable high throughput screening methodology to ascribe function to lncRNA transcripts. RNA interference studies have found that lincRNA knockdowns can have profound effects throughout the transcriptome, especially in the maintenance of stem of cells. RNAi screens suffer from several limitations, however, including variance in silencing and off-target effects. Within the realm of cancer biology, RNAi screens have led to several well known examples of erroneously ascribed function, including \emph{MELK} and \emph{STK33}.
+
+Traditional \emph{CRISPR} approaches are not viable as lncRNAs lack reading frames, however over- and under-expression extensions such as \emph{CRISPRa} and \emph{CRISPRi} have identified functional lncRNAs (https://genome.cshlp.org/content/early/2019/12/23/gr.251561.119). Despite these successes, the correlative nature of these screens are just the first steps in elucidating the mechanisms by which a lncRNA function. 
+
+Of the small number of lncRNAs that have well characterized roles within the cell, many still have their exact mechanism of action being actively studied. \emph{XIST} is one of the most well known lncRNAs and was discovered in the early 1990s, however there is still considerable controversy about how exactly it enacts XCI. \emph{XIST} serves as a reminder that these genes are very complicated and are often multi-faceted in their function, and so therefore there remains a massive amount of work left in the field to sift through the truly enormous number of annotated lncRNAs in the human genome.
+
+\subsection{lncRNA mediated gene regulation}
+
+The connection between RNA and chromatin has long been known. Early chromatin purification experiments revealed that potentially twice as much RNA as DNA associated with chromatin. Further studies have shown that several lncRNAs, such as \emph{XIST}, \emph{AIR}, \emph{KCNQ1OT1}, and others associate with chromatin and modulate the deposition or removal of regulatory markers on chromatin. 
+
+One feature shared by all these transcripts is the formation of RNA-protein complexes, often involving numerous RNA binding proteins at several different regions within the lncRNA transcript. 
+
+\section{Xist as a model lncRNA}
+The XIST lncRNA is one of the most well characterized lncRNAs due to its essential role in XCI and because it is one of the few transcripts that is completely conserved in all eutherians. XCI is the process by which mammalian females transcriptionally silence a single X chromosome as a means of gene dosage compensation. Proper expression of Xist is required for initiation of XCI, and XIST is required for silencing virtually all genes on the inactive-X. While X-inactivation is complex, involving many additional factors beyond XIST, and mechanistic details are still an area of active research, XIST provides a well-studied example of lncRNA activity.
+
+Given that Xist is one of the only well known lncRNAs, and that its function is approximated in other functional analogs in the human and mouse transcriptomes, such as the lncRNAs AIRN and KCNQ1OT1, XIST will be used as a ground truth approximation for the rules by which cis-acting repressive lncRNAs function.
+
+\section{RNA Binding Proteins}
+\lipsum[1-2]
+\subsection{Background}
+\lipsum[1-2]
+\subsection{Binding Motifs}
+\lipsum[1-2]
+\subsection{RBP interactions with Xist}
+\lipsum[1-2]
+
+\section{$k$-mer based sequence comparison}
+\lipsum[1-2]
+\subsection{Motivation}
+\lipsum[1-2]
+\subsection{SEEKR Algorithm}
+\lipsum[1-2]
+\subsection{Mapping the non-coding transcriptome}
+\lipsum[1-2]
+
+\section{Hidden Markov Models}
+\lipsum[1-2]
+\subsection{Gene finding and other applications}
+\lipsum[1-2]
+\subsection{Model structure}
+\lipsum[1-2]
+\subsection{Inference and Algorithms}
+\lipsum[1-2]
+\subsubsection{Forward and Backward Algorithms}
+\lipsum[1-2]
+\subsubsection{Viterbi Algorithm}
+\lipsum[1-2]
+\subsubsection{Baum-Welch Algorithm}
+\lipsum[1-2]
