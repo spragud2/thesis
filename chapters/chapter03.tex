@@ -129,7 +129,7 @@ $$(X_i=ATCGCCCG,\phi_i=-,-,+,+,+,+,+,+)$$
 
 The ``hit" in this example is defined as the sequence CGCCCG. There may be any number of hits within a sequence, but a hit is always composed of contiguous ``$+$" (query) labeled nucleotides.  The Viterbi path through each sequence was calculated as in algorithm \ref{alg:viterbi}, \ref{alg:backtrack}, and was implemented in corefunctions.py within the \emph{hmmSEEKR} package. This code can be called as in section 3.4.3 within the mSEEKR.py program.
 
-Table \ref{tbl:hmmresults} illustrates the output of mSEEKR.py. Here, an HMM was trained on mouse \emph{XIST} repeat A as the query hidden state, and the null hidden state was trained on the set of all unspliced lncRNAs in  mice, and mouse \emph{XIST}, \emph{KCNQ1OT1}, and \emph{AIRN} were scanned for matches to the repeat A query. For full details see Methods 3.4.4. In the literature, repeat A is defined in mouse as spanning basepairs 292-713 (brockdorff), and \emph{hmmSEEKR} called basepairs 201-748 as a hit to the repeat A query within mouse Xist (Table \ref{tbl:hmmresults}, yielding 100\% recovery of the original sequence. The score, kmerLLR as in table \ref{tbl:hmmresults}, is calculated as in algorithm \ref{alg:LLR}. As the original definition for repeat A was formally defined by the presence of the tandem repeat, and not based on functional motif enrichment, it is harder to accurately assess the false positive rate of the HMM.
+Table \ref{tbl:hmmresults} illustrates the output of mSEEKR.py when scanning mouse \emph{Xist} using a human \emph{XIST} query. Here, an HMM was trained on human \emph{XIST} repeat A as the query hidden state, and the null hidden state was trained on the set of all unspliced lncRNAs in  mice (Methods 3.4.3), and mouse \emph{Xist} was scanned for matches to the repeat A query. In the literature, repeat A is defined in mouse as spanning basepairs 292-713 (brockdorff), and \emph{hmmSEEKR} called basepairs 201-748 as a hit to the repeat A query within mouse Xist (Table \ref{tbl:hmmresults}), yielding 100\% recovery of the original sequence. The score, kmerLLR as in table \ref{tbl:hmmresults}, is calculated as in algorithm \ref{alg:LLR}. As the original definition for repeat A was formally defined by the presence of the tandem repeat, and not based on functional motif enrichment, it is harder to accurately assess the false positive rate of the HMM.
 
 
 \begin{table}[h]
@@ -152,19 +152,67 @@ Rank&Start & End   & Length & kmerLLR & seqName                               \\
 As there are no pre-existing annotations for these $k$-mer based sequence features within lncRNAs, it is difficult to define what constitutes a true positive and a true negative. To help elucidate what sequence features within \emph{XIST} and other lncRNAs are functional, we turned to protein binding data for proteins that are known to bind \emph{XIST} and have been shown to be crucial for its function.
 
 \subsection{Xist Associated RBPs}
-A crucial feature of the tandem repeats located within the \emph{XIST} transcript are the 4 core repeats that bind unique subsets of RNA binding proteins. Several RBPs have been shown to be crucial for the function of \emph{XIST}, including HNRNPK, RBM15, and several others. The tandem repeats have been defined based off their repetitiveness, but we have shown in Figure \ref{fig:shufD} that a non-repetitive sequence can have the same motif content as a repetitive one. Therefore, we hypothesized that the functional elements of lncRNA such as \emph{XIST} are defined not be 
-
-\begin{figure}[h]
+A crucial feature of the \emph{XIST} transcript are the 4 core repeats that bind unique subsets of RNA binding proteins. Several RBPs have been shown to be crucial for the function of \emph{XIST}, including HNRNPK, RBM15, and several others. The tandem repeats have been defined based off their repetitiveness, but we have shown in Figure \ref{fig:shufD} that a non-repetitive sequence can have the same motif content as a repetitive one. Therefore, we hypothesized that the functional elements of lncRNA such as \emph{XIST} are not defined by repetitiveness but rather by enrichment of protein binding motifs. To further test \emph{hmmSEEKR}, we sought to identify the proteins most associated with the A,B,D,E-repeats of \emph{XIST} so that we could validate the predictive power of our model against existing protein binding data.
+\begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{images/sigproteins.pdf}
-\caption{}
+\caption{Proteins selectively enriched within tandem repeats of \emph{XIST}. A) $\log_2$ ratio of read density for Repeat A compared to the remainder of \emph{XIST} is shown. Individual points represent biological replicates. B) $\log_2$ ratio of read density for Repeat B compared to the remainder of \emph{XIST} is shown. Individual points represent biological replicates. C) $\log_2$ ratio of read density for Repeat D compared to the remainder of \emph{XIST} is shown. Individual points represent biological replicates. D) $\log_2$ ratio of read density for Repeat E compared to the remainder of \emph{XIST} is shown. Individual points represent biological replicates.}
 \label{fig:xistproteins}
 \end{figure}
 
+We found that each repeat within \emph{XIST} contained at least one protein that was at least 2x more enriched in within the repeat than the remainder of the \emph{XIST} transcript (Figure \ref{fig:xistproteins}A). RBM15 and SRSF1 were found to be the most specific proteins to repeat A. Prior work has shown that RBM15 is required for full \emph{XIST} silencing functionality, and that RBM15 recruits the m6A complex to the 5' region of \emph{XIST}. SRSF1 has previously been shown to bind the A-repeat of \emph{XIST} but its function within the sequence is currently unknown.
 
-\subsection{Kcnq1ot1}
-\lipsum[1-2]
-\subsection{Prediction of RBP Binding}
+Both the B-repeat and D-repeat were found to be signficantly enriched for HNRNPK over the rest of the transcript (Figure \ref{fig:xistproteins}B-C). HNRNPK is required for recruitment of PRC1 to the \emph{XIST} transcripts. Deletion of the B-repeat region has previously been shown to be sufficient to abrogate \emph{XIST} dependent PRC recruitment, as well as \emph{XIST} mediated silencing. Our analysis showed that DROSHA is also enriched within the B-repeat of \emph{XIST}, however no previous studies have identified DROSHA as a direct interactor with \emph{XIST} and so the function of this interaction is unknown.
+
+The E-repeat of \emph{XIST} was highly enriched for several proteins. The E-repeat itself is composed primarily of T-rich sequence, and therefore the proteins we observe often contain similar motifs (cisBP). PTBP1, MATR3, TARDBP, and TIA1 were all found to be the most enriched within the E-repeat. PTBP1 has previously been shown to be required for proper \emph{XIST} expression and splicing during development. TARDBP depletion is also associated with increased expression of mis-spliced \emph{XIST} transcripts. A recent study found that MATR3 and PTBP1 form a condensate mediated by the \emph{XIST} E-repeat and this condensate is required for \emph{XIST} localization to the Xi. 
+
+\subsection{Detection of Rsx Domains}
+Our \emph{Rsx} study in Chapter 2 relied on the existence of tandem repeats within the \emph{Rsx} transcript to perform the domain based SEEKR analysis. On a whole transcript level, \emph{XIST} and \emph{Rsx} were slightly anti-correlated despite their shared function. The relationship between the two sequences didn't become apparent until we parsed out the tandem repeats within \emph{Rsx} and performed pairwise comparisons between each \emph{XIST} tandem repeat. 
+
+We hypothesized that we could use \emph{hmmSEEKR} to identify regions of non-linear sequence similarity between \emph{XIST} and \emph{Rsx} without \emph{a priori} identification of tandem repeats. To do this, we trained 4 separate HMMs on the A,B,D, and E-repeats of \emph{XIST} at $k=2,3,4,5,6$ and all pairwise combinations of $\alpha,\beta = .5,.75,.9,.99,.999,.9999$. The results outlined in Figure \ref{fig:koalarsxhmm} and Table \ref{tbl:rsxresults} are using the set of parameters that yielded the best F1 score (Methods 3.4.X). 
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{images/koalarsx.pdf}
+\caption{Proteins selectively enriched within tandem repeats of \emph{XIST}. A) $\log_2$ ratio of read density for Re}
+\label{fig:koalarsxhmm}
+\end{figure}
+
+We found that the HMM trained on the \emph{XIST} D-repeat captured the entire tandem repeat from transcript coordinates 1,000-14,000 (Figure \ref{fig:koalarsxhmm}, Table \ref{tbl:rsxresults}). Likewise, the HMM trained on the \emph{XIST} B-repeat captured a significant portion of \emph{Rsx} repeat 1, and these regions were significantly more C-rich than the remainder of \emph{Rsx} repeat 1 (show data). Additional C-rich sequence were also identified at the 5' and 3' regions of \emph{Rsx} (Figure \ref{fig:koalarsxhmm}). The HMMs trained on the A-repeat and E-repeat both significantly aligned with \emph{Rsx} repeat 4, with 100\% precision and 25.45\% recall. In our original analysis, we mapped A,E-repeats to repeats 2,3, and 4 in \emph{Rsx}, however repeats 2 and 3 had relatively marginal correlation to the A,E-repeats, whereas the A,E$\rightarrow$4 relationship was the strongest of all comparisons in the original \emph{Rsx} analysis (Sprague et al.).
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline 
+\emph{Rsx} Repeat Name& Start & End   & Xist Association   & Precision& Recall                      \\
+\hline 
+    1&  1000   & 14000    & B,D     & 98.42\% & 100\% \\
+      2&17500 & 21000  & A,E     & 100\%   & 1.32\% \\
+      3&21500  & 22500   & A,E      & 0\% & 0\%  \\
+      4&23000 & 27500  & A,E     & 100\%   & 25.45\% \\
+\hline 
+\end{tabular}
+\caption{Test}
+\label{tbl:rsxresults}
+\end{table}
+\subsection{Sequence based prediction of RBP binding in Kcnq1ot1}
+Within the human transcriptome, we know of at least one lncRNA that silences gene expression in \emph{cis} through a PRC-mediated mechanism similar to \emph{XIST}, \emph{KCNQ1OT1}. The mouse \emph{Kcnq1ot1} has been shown to silence megabase scale regions of chromosome 7 and human \emph{KCNQ1OT1} silences a large region of chromosome 11. Unlike \emph{XIST}, the sequence of \emph{KCNQ1OT1} is not predominantly comprised of tandem repeat domains (Figure \ref{fig:kcndot}), barring a region in the 3' region of the sequence. Furthermore, eCLIP data for RBPs known to be essential for \emph{XIST}'s function show that the predominantly bind in the 5' half of \emph{KCNQ1OT1}'s sequence (Figure \ref{fig:kcnproteins}). 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.4\textwidth]{images/kcnd.pdf}
+\caption{Proteins selectively enriched within tandem repeats of \emph{XIST}. A) $\log_2$ ratio of read density for Re}
+\label{fig:kcndot}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{images/kcnproteins.pdf}
+\caption{Proteins selectively enriched within tandem repeats of \emph{XIST}. A) $\log_2$ ratio of read density for Re}
+\label{fig:kcnproteins}
+\end{figure}
+\subsection{Transcriptome-wide RBP Prediction}
 \lipsum[1-2]
 
 \section{Discussion}
@@ -235,7 +283,7 @@ $$\{+,+,N,N,-,-\}$$
  \label{alg:ambigIdx}
 \end{algorithm}
 
-\subsubsection{Identifying hits from the viterbi parse}
+\subsubsection{Identifying hits from the Viterbi parse}
 Within \emph{hmmSEEKR} a Viterbi parse is a sequence of state labels that have been assigned to each $k$-mer from a DNA sequence, \emph{e.g.} if the DNA sequence was ``AAAACCCC", and $k=4$, then the $k$-mer sequence is $\{AAAA,AAAC,AACC,ACCC,CCCC\}$, and a hypothetical Viterbi parse would be a list such as $\{-,-,-,+,+\}$, where ``$-$" represents the null state, and ``$+$" represents the query state. \textbf{Algorithm \ref{alg:groupHMM}} takes the list $\{-,-,-,+,+\}$ and converts it into a grouped list, \emph{e.g.} $\{\{-,-,-\},\{+,+\}\}$. This also exactly defines what term a hit within our HMM, consecutively labeled ``$+$" regions with a sequence from the viterbi parse.
 \begin{algorithm}[h]
 \DontPrintSemicolon
@@ -624,8 +672,6 @@ The parsed sequences are then combined with any ambiguous sequence regions from 
 
 Finally the regions that have been designated as ``hits" are compiled in a dataframe within the \texttt{formatHits} and \texttt{hitOutput} functions. Additionally, this is where the HMM score is calculated as in Algorithm \ref{alg:LLR}. 
 
-\subsection{Xist, Kcnq1ot1, Airn Viterbi Parses}
-
 \subsection{Xist Enriched Proteins}
 
 ENCODE eCLIP Experiments (non-controls) in K562 cells bigWig Files
@@ -645,3 +691,117 @@ We calculated the eCLIP signal enrichment of each protein within each \emph{XIST
 If $N$ is the size of $I$, \emph{i.e.} the size of the given repeat in \emph{XIST}, then the ratio of average signal $R$ is:
 
 $$R = \frac{L-N}{N}\frac{\sum_{i\in{I}}{X_i}}{{\sum_{j\in{I^c}}{X_j}}}$$
+
+\subsection{\emph{Rsx} HMM Analysis}
+
+Human \emph{XIST} repeats A,B,D,E were used as queries within 4 separate \emph{hmmSEEKR} models. For the null model, human unspliced lncRNAs (GENCODE V26) were used. A model was trained for each value of $k \in \{2,3,4,5,6\}$ and for the transition parameters all combinations of the following values were tested, $\alpha,\beta \in \{.5, .75, .9, .99, .999, .9999$\}. The koala \emph{Rsx} transcript was then scanned using each of these HMMs. For measuring performance of the HMM, precision was defined as the number of nucleotides from the HMM Viterbi parse that fell within the correct \emph{Rsx} repeat as found in Sprague et al. 2019. Recall was defined as the percentage of each \emph{Rsx} repeat recovered from the associated \emph{XIST} trained HMM. The $F_1$ score was then calculated as 
+
+\begin{equation}
+    F_1 = \left(\frac{2}{\texttt{precision}^{-1}+\texttt{recall}{^-1}}\right)
+\end{equation}
+
+And the set of parameters for each \emph{XIST} query with the highest $F_1$ score was chosen (Table \ref{tbl:rsxparams}.
+
+\begin{table}[h]
+\centering
+\begin{center}
+ \begin{tabular}{|l| l| l | l |} 
+ \hline
+ Query & k & $\alpha$ & $\beta$ \\
+ \hline
+ Repeat A & 4 & .9999 & .9999 \\ 
+ \hline
+ Repeat B & 4 & .9999 & .9999\\
+ \hline
+ Repeat D & 2 & .9999 & .9999\\
+ \hline
+ Repeat E & 4 & .9999 & .9999\\
+ \hline
+\end{tabular}
+\end{center}
+\caption{Best values of k, the $Q\rightarrow Q$ parameter $\alpha$, and $N\rightarrow N$ parameter $\beta$ as determined through a grid search based approach to identify sequences with the highest SEEKR correlation to the query.}
+\label{tbl:rsxparams}
+\end{table}
+
+\subsection{Transcriptome Search}
+The goal of this experiment is to determine if mSEEKR is significantly outperforming random with respect to overlap of eCLIP hits for proteins that are significantly enriched within the XIST locus. These proteins and their respective queries are:
+
+1. Repeat A - SRSF1 and RBM15
+2. Repeat B - HNRNPK
+3. Repeat D - HNRNPK
+4. Repeat E - TIA1, MATR3, PTBP1
+
+These eCLIP files were sourced from ENCODE, with the following experiment names:
+
+1. SRSF1 - ENCFF696TJG
+2. RBM15 - ENCFF739LLZ
+3. HNRNPK - ENCFF894NKS
+4. TIA1 - ENCFF080VML
+5. MATR3 - ENCFF162SAS
+6. PTBP1 - ENCFF765BPN
+
+
+The following RNAseq data was used to identify transcripts with high association with chromatin and unspliced expression.
+
+1. K562 Chromatin Association RNAseq - ENCFF957VGD
+
+
+The following programs were used to perform the experiment
+
+1. mSEEKR/v1.0.8
+2. RSEM/1.2.31
+3. deeptools/3.0.0
+4. subread/2.0.0
+
+1. Create a fasta file with transcript isoforms of interest. For this analysis, a single spliced isoform (primary) and the unspliced transcript
+  - make note of the genome used to make this file
+  - in this example, let this be v26_combo.fa
+2. In the directory with the fasta file from (1), run the following commands
+
+```module add bowtie/1.2.2
+module add rsem/1.2.31
+module add samtools
+module add deeptools/2.5.2
+sbatch --mem 50g -t 5:00:00 -N 1 -n 24 --wrap='bowtie-build --threads 24 v26_combo.fa hgT'
+sbatch --mem 50g --wrap='rsem-prepare-reference . hgT'
+```
+
+3. Run RSEM with paired end reads:
+
+sbatch -N 1 --mem 50g -t 5:00:00 -J rsemChr -n 24 --wrap='rsem-calculate-expression -p 24 --paired-end READS1.fastq READS2.fastq  hgT EXPNAME'
+
+
+- With single reads, just provide a single fasta file and remove the --paired-end arg
+
+- EXPNAME - file prefix for output
+
+
+4. In a new directory, wget the genome file for the corresponding genome that was used in (1)
+  sbatch --wrap='wget URL'
+
+5. Using the same version of bowtie as in (2), build the index for this genome:
+
+sbatch --mem 50g -t 5:00:00 -N 1 -n 24 --wrap='bowtie-build --threads 24 GRCh38.p14.genome.fa hg38'
+
+6. Align the original fastq reads using bowtie
+
+sbatch -N 1 -n 24 -t 5:00:00 --mem 50g --wrap='bowtie --threads 24 -S ./hg38 path/to/READS1.fastq  path/to/READS2.fastq aln.out'
+
+7. Process with samtools and deeptools
+
+```sbatch --wrap='for f in *out; do samtools view -S -b $f > ${f}.bam; done'
+sbatch --wrap='for f in *bam; do samtools sort  $f > ${f}sorted.bam; done'
+sbatch --wrap='for f in *sorted.bam; do samtools index $f; done'
+```
+Get forward and reverse bedgraphs
+
+sbatch -J FORWARD -t 50:00:00 -N 1 -n 24 --wrap='bamCoverage --filterRNAstrand forward -bs 100 -p 24 -b aln.outsorted.bam -of bedgraph -o alnFORWARD.bedGraph'
+
+sbatch -J REVERSE -t 50:00:00 -N 1 -n 24 --wrap='bamCoverage --filterRNAstrand reverse -bs 100 -p 24 -b aln.outsorted.bam -of bedgraph -o alnREVERSE.bedGraph'
+
+This portion of the protocol takes the SAF files and counts the number of reads from the BAM file that overlap HMM hits, using the following commands:
+
+```
+featureCounts -a hmmE.saf -o tia1E  tia1.bam -s 2 -F SAF -p -f
+featureCounts -a randomE.saf -i tia1RandomE tia1.bam -s 2 -F SAF -p -f 
+```
