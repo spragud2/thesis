@@ -37,6 +37,24 @@
     captionpos=b
 }
 
+\def\frontmatter{%
+    \pagenumbering{roman}
+    \setcounter{page}{1}
+    \renewcommand{\thesection}{\Roman{section}}
+}%
+
+\def\mainmatter{%
+    \pagenumbering{arabic}
+    \setcounter{page}{1}
+    \setcounter{section}{0}
+    \renewcommand{\thesection}{\arabic{section}}
+}%
+
+\def\backmatter{%
+    \setcounter{section}{0}
+    \renewcommand{\thesection}{\Alph{section}}
+}%
+
 \lstset{style=mystyle}
 \newcommand{\changefont}{%
     \fontsize{11}{11}\selectfont
@@ -59,7 +77,17 @@
 \date{June 2020}
 \doublespacing
 \RaggedRight 
+
+
+\usepackage[style=numeric,refsection=chapter]{biblatex}
+\addbibresource{sample.bib}
+
+
 \begin{document}
+
+
+\frontmatter
+
 \maketitle
 \begin{abstract}
 \begin{center}
@@ -75,20 +103,23 @@ We used hmmSEEKR to identify regions of sequence similarity between several know
 ...
 \end{center}
 \tableofcontents
+
+\mainmatter
+
+
+\input{chapters/test}
+ \begin{refsection}
+ \end{refsection}
 \chapter{Introduction}
 \input{chapters/introduction}
-
 \chapter{Xist and Rsx}
 \input{chapters/chapter02}
-
 \chapter{hmmSEEKR}
 \input{chapters/chapter03}
-
 \chapter{SEEKR $k$-mers}
+\chapter{Conclusion}
+
 \input{chapters/chapter04}
 
-
-\chapter{Conclusion}
 \input{chapters/conclusion}
-
 \end{document}
