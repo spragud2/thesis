@@ -79,9 +79,8 @@
 \RaggedRight 
 
 
-\usepackage[style=numeric,refsection=chapter]{biblatex}
-\addbibresource{sample.bib}
-
+\usepackage[backend=biber,refsection=chapter,style=ieee,maxbibnames=99,citestyle=numeric-comp]{biblatex}
+\addbibresource{references.bib}
 
 \begin{document}
 
@@ -106,10 +105,6 @@ We used hmmSEEKR to identify regions of sequence similarity between several know
 
 \mainmatter
 
-
-\input{chapters/test}
- \begin{refsection}
- \end{refsection}
 \chapter{Introduction}
 \input{chapters/introduction}
 \chapter{Xist and Rsx}

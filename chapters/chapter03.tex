@@ -219,8 +219,14 @@ Within the human transcriptome, we know of at least one lncRNA that silences gen
 \caption{Proteins selectively enriched within tandem repeats of \emph{XIST}. A) $\log_2$ ratio of read density for Re}
 \label{fig:kcnproteins}
 \end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{Transcriptome-wide RBP Prediction}
-\lipsum[1-2]
+Many of the proteins that bind to \emph{XIST} and \emph{KCNQ1OT1} bind throughout the transcriptome. Furthermore, \emph{XIST} clusters with thousands of transcripts in the human genome based on $k$-mer content \cite{Kirk2018FunctionalContent}. Therefore, we hypothesized that \emph{XIST}-like sub-sequences may be found throughout the transcriptome, both in lncRNAs as well as in pre-mRNAs. To test this hypothesis, we trained 4 HMMs on the A-,B-,D-, and E-repeats of human \emph{XIST} as in section 3.2.6 and used \emph{hmmSEEKR} to scan the set of all unspliced coding and non-coding transcripts in the human genome. 
+
+We found that our HMM significantly out-performed a randomized HMM parse for each of the proteins we tested. 
 
 \section{Discussion}
 \lipsum[1-2]

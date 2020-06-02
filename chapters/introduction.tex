@@ -1,12 +1,15 @@
-Protein coding genes have dominated the study of genetics for decades. The rules by which they function are well understood and we can often predict the function of an unknown gene based off of its underlying sequence content. This is due to the well understood rules of protein coding reading frames and the principles of conservation in biology. In the early 1990s (get actual date), an RNA transcript was discovered that was essential for the process of X chromosome inactivation (XCI), by which an entire X chromosome in female eutherians is near completely transcriptionally silenced. This transcript, known as Xist, does not code for protein, but rather is a non-coding RNA.
+Protein coding genes have dominated the study of genetics for decades. The rules by which they function are well understood and we can often predict the function of an unknown gene based off of its underlying sequence content \cite{Whisstock2003PredictionStructure}. This is due to the well understood rules of protein coding reading frames and the principles of conservation in biology \cite{Burge1997PredictionDNA,Altschul1990BasicTool,Wheeler2013Nhmmer:HMMs}. In the early 1992, the non-coding \emph{XIST} RNA was discovered and found to be essential for the process of X chromosome inactivation (XCI), by which an entire X chromosome in female eutherians is near completely transcriptionally silenced \cite{Brown10TheNucleus.,Brockdorff10TheNucleus.}.
 
-The advent of RNA sequencing has led to an explosion of annotated RNA transcripts that have no corresponding protein products. Even with numerous advances in genetics and genomics, these RNAs have proven to particularly challenging to understand. 
+The advent of RNA sequencing has led to an explosion of annotated RNA transcripts that have no corresponding protein products in multiple mammalian species \cite{Derrien2012TheExpression,Hon2017AnEnds,Bogu2016ChromatinMouse}. Even with numerous advances in genetics and genomics, these RNAs have proven to particularly challenging to understand. 
 \section{Long non-coding RNAs}
-Long non-coding RNAs (lncRNAs) are defined as non-coding RNA transcripts longer than 200 base pairs (bp). lncRNAs have emerged as a major mechanism of gene regulation in eutherians, however they have been annotated in all eukaryotic organisms. Humans in particular have many thousands of annotated lncRNAs, but the overwhelming majority have no known functional role, if any. Despite this, it is known that several lncRNAs play key roles in differention, development, as well as disease. 
+Long non-coding RNAs (lncRNAs) are defined as non-coding RNA transcripts longer than 200 base pairs (bp) \cite{Derrien2012TheExpression}. lncRNAs have emerged as a major mechanism of gene regulation in eutherians \cite{Sarropoulos2019DevelopmentalSpecies,Bogu2016ChromatinMouse,Sauvageau2013MultipleDevelopment}, however they have been annotated in eukaryotic organisms as far back as \emph{S. cerevisiae} \cite{Niederer2017LongCerevisiae}. Despite their ubiquitous presence, lncRNAs have evaded generalized understanding due to their variety and poor conservation across species \cite{Johnsson2014EvolutionaryFunction}. 
 
-Of the lncRNAs that have been studied and have known function within the cell, there often is considerable work left to fully understand the function of these transcripts, despite many years worth of work. A particular challenge with lncRNAs is that they are often poorly conserved related to protein coding genes, if they are conserved at all. Furthermore, conventional alignment tools such as BLAST or nhmmer fail to detect meaningful relationships between two transcripts with similar function. 
+Of the lncRNAs that have been studied and have known function within the cell, there often is considerable work left to fully understand the function of these transcripts, despite many years worth of work. A particular challenge with lncRNAs is that they are often poorly conserved related to protein coding genes, if they are conserved at all \cite{Sleutels2002TheGenes,Pang2006RapidFunction, Johnsson2014EvolutionaryFunction}. Furthermore, conventional alignment tools such as BLAST or nhmmer fail to detect meaningful relationships between two transcripts with similar function \cite{Kirk2018FunctionalContent,Sprague2019NonlinearDomains}. 
 
-lncRNAs are difficult to study experimentally, as well. lncRNAs rarely function in isolation, but rather through the concerted action of the lncRNA transcripts, RNA binding proteins, and other biological molecules such as DNA or other proteins. This indicates that lncRNAs exist in a complex network of interactions that has proven difficult to unravel. 
+lncRNAs have proven difficult to study experimentally, as well. lncRNAs rarely function in isolation, but rather through the concerted action of the lncRNA transcripts, RNA binding proteins, and other biological molecules such as DNA or other proteins \cite{Chu2015SystematicProteins,Schertzer2019LncRNA-InducedDNA,Hacisuleyman2016FunctionLocus,Wang2011AExpression,Yang2013MALAT-1Regulation}. Rather than being a single functional unit in a larger sequence of molecular operations within the cell, as in many signalling cascades, lncRNAs have been shown serve as hubs where complex processes take place simultaneously \cite{Schertzer2019LncRNA-InducedDNA, Chu2015SystematicProteins, Moindrot2015ASilencing,Brockdorff2018LocalNcRNA}. 
+
+\subsection{Conservation}
+
 \subsection{Functional annotation}
 Long non-coding RNAs biochemically are very similar to mRNAs, in fact there is very little other than the presence of a reading frame that differentiates an messenger RNA from a lncRNA. lncRNAs are thus genes for which the final functional product is an RNA transcript. Given that RNA molecules are known to chemically bind to numerous biological molecules, including protein, DNA, and RNA itself, it perhaps comes as little surprise that lncRNAs are capable of widely varied function within the cell. 
 
@@ -22,7 +25,7 @@ This methodology is useful for identifying transcripts that may be useful for fu
 \subsubsection{High throughput loss of function screens}
 Perhaps the holy grail of lncRNA functional annotation is a reliable high throughput screening methodology to ascribe function to lncRNA transcripts. RNA interference studies have found that lincRNA knockdowns can have profound effects throughout the transcriptome, especially in the maintenance of stem of cells. RNAi screens suffer from several limitations, however, including variance in silencing and off-target effects. Within the realm of cancer biology, RNAi screens have led to several well known examples of erroneously ascribed function, including \emph{MELK} and \emph{STK33}.
 
-Traditional \emph{CRISPR} approaches are not viable as lncRNAs lack reading frames, however over- and under-expression extensions such as \emph{CRISPRa} and \emph{CRISPRi} have identified functional lncRNAs (\citep{Cai2020AHomeostasis}). Despite these successes, the correlative nature of these screens are just the first steps in elucidating the mechanisms by which a lncRNA function. 
+Traditional \emph{CRISPR} approaches are not viable as lncRNAs lack reading frames, however over- and under-expression extensions such as \emph{CRISPRa} and \emph{CRISPRi} have identified functional lncRNAs \cite{Cai2020AHomeostasis}. Despite these successes, the correlative nature of these screens are just the first steps in elucidating the mechanisms by which a lncRNA function. 
 
 Of the small number of lncRNAs that have well characterized roles within the cell, many still have their exact mechanism of action being actively studied. \emph{XIST} is one of the most well known lncRNAs and was discovered in the early 1990s, however there is still considerable controversy about how exactly it enacts XCI. \emph{XIST} serves as a reminder that these genes are very complicated and are often multi-faceted in their function, and so therefore there remains a massive amount of work left in the field to sift through the truly enormous number of annotated lncRNAs in the human genome.
 
@@ -65,7 +68,7 @@ A hidden markov model (HMM) is a generative probabilistic model for stochastic s
 
 The reason for modeling the joint distribution $P(X,Y)$ is that it allows an HMM to not only calculate the probability of any given sequence, but allows for the generation of randomized outcomes of the model. HMMs therefore reflect a simplified, hypothesized process by which the data may be reasonably generated.
 
-To allow for tractable calculation of probabilities, an HMM relies on the Markov assumption, which posits that the current observation is conditionally independent of all other observations, except for the observation immediately prior. This assumption is formally defined in Equation \ref{eq:markov}.
+To allow for tractable calculation of probabilities, an HMM relies on the Markov assumption, which posits that the current observation is conditionally independent of all other observations, except for the observation immediately prior. This assumption is formally defined in Equation \ref{eq:markov} \cite{Rabiner1989ARecognition}.
 
 \begin{equation}
     P(x_t|x_{t-1},x_{t-2},\dots,x_1) = P(x_t | x_{t-1})
@@ -84,7 +87,7 @@ Could be accurately modeled with the markov assumption:
     $P(\texttt{park} | \texttt{dog}) > P(\texttt{office} | \texttt{dog}) $
 \end{center}
 
-A markov based model would be able to reliably suggest the word \emph{park} instead of \emph{office} because the word \emph{office} would almost never follow the word \emph{dog}, regardless of the remainder of the sentence. This assumption has proven to be wildly useful in the field of bioinformatics, especially with probabilistic modeling of DNA sequences. Mammalian chromosomes can be hundrends of millions of basepairs long, but in reality the relationships between nucleotides exist on much shorter scales. Often a nucleotide can be accurately predicted from preceeding sequence using only the previous 5-6 nucleotides (GENSCAN).
+A markov based model would be able to reliably suggest the word \emph{park} instead of \emph{office} because the word \emph{office} would almost never follow the word \emph{dog}, regardless of the remainder of the sentence. This assumption has proven to be wildly useful in the field of bioinformatics, especially with probabilistic modeling of DNA sequences. Mammalian chromosomes can be hundrends of millions of basepairs long, but in reality the relationships between nucleotides exist on much shorter scales. Often a nucleotide can be accurately predicted from preceeding sequence using only the previous 5-6 nucleotides \cite{Burge1997PredictionDNA}.
 
 \subsection{Gene finding and other applications}
 HMMs have been used for many purposes, from sequence alignment to modeling the timing of switches in fluorescence from FRET experiments. An early application of HMMs to biological data was gene finding in the 1990s. During this period the Human Genome Project was well underway, and only a fraction of protein coding genes were known. Huge regions of the human genome were being sequenced but massively parallel RNA sequencing technology did not exist at the time, so it was unknown where genes were in the human genome. Therefore, computational models were developed to predict regions within the genome that contained reading frames. 
@@ -114,9 +117,9 @@ And the probability of each observation $x_i \in X$ is conditionally independent
     P(x_t,X_{1:t-1},X_{t+1:L},Y_{1:L}) = P(x_t|y_t)
 \end{equation}
 
-These conditional independencies can be represented in the graphical form illustrated in Figure \ref{fig:HMM}. 
+These conditional indepence assumptions can be represented in the graphical form illustrated in Figure \ref{fig:HMM}. 
 
-From here the joint probability for an HMM can be derived. This explicitly allows the calculation of the probability for all possible sequences of observations and all possible sequences of hidden states. 
+From here the joint probability for an HMM can be derived \cite{Rabiner1989ARecognition}. This explicitly allows the calculation of the probability for all possible sequences of observations and all possible sequences of hidden states. 
 
 \begin{equation}
     P(X,Y) = P(y_1)p(x_1|y_1)\prod_{t=2}^L{P(y_t|y_{t-1})P(x_t|y_t)}
@@ -161,7 +164,7 @@ $$P(X=ATC,Y=000)$$
 $$\vdots$$
 $$P(X=ATC,Y=111)$$
 
-The law of total probability (Eq. \ref{eq:totalprob}) states that, for two random variables $A$ and $B$ with a joint distribution $P(A,B)$ the marginal distribution $P(A)$ can be calculated by summing over all possible values of $B$.
+The law of total probability (Eq. \ref{eq:totalprob}) states that, for two random variables $A$ and $B$ with a joint distribution $P(A,B)$ the marginal distribution $P(A)$ can be calculated by summing over all possible values of $B$ \cite{Brookes1951FoundationsProbability}.
 
 \begin{equation}
     P(A) = \sum_B{P(A,B)}
@@ -172,7 +175,7 @@ Within the context of our HMM, we are interested in knowing the probability of o
 
 This quantity is important for several reasons, but as described above is impossible to calculate through a brute force approach, as the size of the set $\Phi$ combinatorally explodes.
 
-Fortunately, there exists an algorithm which can efficiently calculate $P(X)$ with a computational complexity of $LK^2$, compared to the $K^L$ complexity described above.
+Fortunately, there exists an algorithm which can efficiently calculate $P(X)$ with a computational complexity of $LK^2$, compared to the $K^L$ complexity described above \cite{Rabiner1989ARecognition}.
 \subsection{Forward and Backward Algorithms}
 \subsubsection{Forward Algorithm}
 The forward algorithm recursively calculates the total probability of the sequence $X$ starting from the first observation. This calculation is made feasible by using the conditional independencies demonstrated in Figure \ref{fig:HMM} and the joint probability distribution in equation \ref{eq:jointhmm}.
@@ -196,11 +199,11 @@ $2\leq t\leq L$
 \label{eq:fwdterm}
 \end{equation}
 
-Here $i$ and $j$ are an element in the set of hidden states. The final term, summed over all hidden states, represents the total probability of the observed sequence $X$.
+Here $i$ and $j$ are an element in the set of hidden states. The final term, summed over all hidden states, represents the total probability of the observed sequence $X$ \cite{Rabiner1989ARecognition}.
 
 \subsubsection{Backward Algorithm}
 The backwards probability $\beta$ is the probability of seeing the observations from time t + 1 to the end, given
-that we are in state i at time t.
+that we are in state i at time t \cite{Rabiner1989ARecognition}.
 
 \subsubsection{Initialization}
 \begin{equation}
@@ -238,7 +241,7 @@ p(y_t=i|x_{1:L}) = \frac{\alpha_i(t)\beta_i(t)}{\sum_j{\alpha_j(t)\beta_j(t)}}
 Figure \ref{fig:fwdbwd} illustrates how information from the entire sequence is incorporated through the forward probability, $\alpha$, and the backward probability, $\beta$, to get a \emph{smoothed probability} for $y_t = i$.
 
 \subsection{Viterbi Algorithm}
-Perhaps one of the most useful tasks for an HMM is that of decoding, or identifying the most likely parse of the sequence, $\phi_{max}$. That is, $\phi_{max}$ yields the highest joint probability $P(X,Y=\phi_{max})$. 
+Perhaps one of the most useful tasks for an HMM is that of decoding, or identifying the most likely parse of the sequence, $\phi_{max}$. That is, $\phi_{max}$ yields the highest joint probability $P(X,Y=\phi_{max})$ \cite{Rabiner1989ARecognition}. 
 
 Mathematically, the Viterbi algorithm is very similar to the forward algorithm. Rather than taking the sum at each step in the recursion, the state transition that maximizes the probability at time $t$ is stored in a list, and then a back-trace is calculated yielding the path of maximizing hidden states.
 
@@ -273,5 +276,10 @@ V^*(t-1) = \argmax_i{\mu_i(t)}
 \label{eq:backtrace}    
 \end{equation}
 
-Once the list created from equation \ref{eq:backtrace} has been inverted, as it is a back-trace, the path $V^* = \phi_{max}$, which is the parse $\phi \in \Phi$ that maximizes the joint probability of the HMM. 
+Once the list created from equation \ref{eq:backtrace} has been inverted, as it is a back-trace, the path $V^* = \phi_{max}$, which is the parse $\phi \in \Phi$ that maximizes the joint probability of the HMM \cite{Rabiner1989ARecognition}. 
 \subsection{Baum-Welch Algorithm}
+
+
+\begin{singlespace}
+\printbibliography
+\end{singlespace}
