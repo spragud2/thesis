@@ -1,24 +1,24 @@
 \section{Introduction}
-$K$-mer counting is a seemingly relatively straightforward process. Given a sequence $X = \{x_1,\dots,x_L\}$ of length $L$, for each position $i\in 1\leq i\leq \left(L-k+1\right)$ within the sequence, a sub-string is sliced from $[i,i+k)$. Where ``[" indicates inclusion, and ``)" indicates non-inclusive. A hash-map, or dictionary as known within Python, then saves the count for each $k$-mer as encountered in $X$. In many applications, the frequency of each $k$-mer would be calculated by dividing each $k$-mer count by the total number of $k$-mers, \emph{i.e.} $L-k+1$. 
+$K$-mer counting is a seemingly relatively straightforward process. Given a sequence $X = \{x_1,\dots,x_L\}$ of length $L$, for each position $i\in 1\leq i\leq \left(L-k+1\right)$ within the sequence, a sub-string is sliced from $[i,i+k)$. Where ``[" indicates inclusion, and ``)" indicates non-inclusive. A hash-map (python dictionary), then saves the count for each $k$-mer as encountered in $X$. In many applications, the frequency of each $k$-mer would be calculated by dividing each $k$-mer count by the total number of $k$-mers, \emph{i.e.} $L-k+1$. 
 
-SEEKR differs from this approach in that the algorithm adjusts from the non-uniformity of $k$-mers within our genome. Some $k$-mers are more, or less, frequent than others solely due to mononucleotide frequencies within the genome. Therefore, the enrichment for already common $k$-mers, or depletion of rare $k$-mers, are not informative unless it is known if they are significantly more enriched than background. To account for this, SEEKR calculates a $z$-score for each $k$-mer rather than a frequency.
+SEEKR differs from this approach in that the algorithm adjusts from the non-uniformity of $k$-mers within the genome. Some $k$-mers are more, or less, frequent than others solely due to mononucleotide frequency variations within the genome \cite{Haubold2014Alignment-freeGenetics,Yang2008PerformanceReconstruction}. Therefore, the enrichment for already common $k$-mers, or depletion of rare $k$-mers, are not informative unless it is known if they are significantly more enriched than background. To account for this, SEEKR calculates a $z$-score for each $k$-mer rather than a frequency.
 
 The $z$-score is calculated by first calculating the $k$-mer frequencies within some reference set of sequences, \emph{e.g.} the transcriptome. From this reference set of $k$-mer frequencies, the mean frequency of each $k$-mer $\mu_j$ and the standard deviation of each $k$-mer $\sigma_j$ is calculated. 
 
-For each $k$-mer frequency $j$ within a sequence $X$, $X_j$ has a $z$-score $X^*_j$: 
+For each $k$-mer frequency $j$ within a sequence $X$, $X_j$ has a $z$-score $X^*_j$ \cite{Kirk2018FunctionalContent}: 
 
 \begin{equation}
     X_j^* = \frac{X_j-\mu_j}{\sigma_j}
     \label{eq:zscore}
 \end{equation}
 
-We observed when studying the $k$-mer similarities between XIST and RSX that these $z$-scores were approximately log-normally distributed. For the analysis within that paper, we transformed $z$-scores as outlined in 2.X.X. However, we sought to perform a more rigorous analysis of different methodologies for adjusting $k$-mer counts. This chapter outlines the methods that we used and their results. 
+We observed when studying the $k$-mer similarities between XIST and RSX that these $z$-scores were approximately log-normally distributed \cite{Sprague2019NonlinearDomains}. For the analysis within that paper, we transformed $z$-scores as outlined in 2.X.X. However, we sought to perform a more rigorous analysis of different methodologies for adjusting $k$-mer counts. This chapter outlines the methods that we used and their results. 
 
 \section{Results} 
 
 \subsection{$k$-mer counts are log-normally distributed}
 
-We observed that a primary challenge with estimating the correlation between highly repetitive regions of \emph{XIST} and other \emph{cis}-repressive lncRNAs was that the $k$-mer counts were heavily right-skewed. Pearson correlation is primarily intended to calculate the correlation between two normally distributed random variables. Spearman correlation can be used when this condition is not met, but a further observation we made was that the mode of the $k$-mer count distribution for any sequence or sub-sequence was 0, yielding artificially high correlations between any two given sequences. 
+We observed that a primary challenge with estimating the correlation between highly repetitive regions of \emph{XIST} and other \emph{cis}-repressive lncRNAs was that the $k$-mer counts were heavily right-skewed \cite{Sprague2019NonlinearDomains}. Pearson correlation is primarily intended to calculate the correlation between two normally distributed random variables. Spearman correlation can be used when this condition is not met, but a further observation we made was that the mode of the $k$-mer count distribution for any sequence or sub-sequence was 0, yielding artificially high correlations between any two given sequences \cite{Sprague2019NonlinearDomains}. 
 
 To correct for the right skewed distribution of $k$-mers across all sequences, we first confirmed that $k$-mer counts within lncRNAs are log-normally distributed (Figure \ref{fig:logdist}). The left panel of Figure \ref{fig:logdist} shows the marginal count distribution of $k$-counts summed over all possible $k$-mers, over all annotated human transcripts (Methods 4.x.x). We then log-transformed the data and observed an approximately normal distribution (Figure \ref{fig:logdist}), with the exception being the mode of the distribution was still a count of 0. This indicated that $k$-mer frequencies amongst all transcripts were log-normally distributed and that correcting for this in the SEEKR algorithm may yield better correlation estimates amongst transcripts. 
 \begin{figure}[h!]
@@ -30,7 +30,7 @@ To correct for the right skewed distribution of $k$-mers across all sequences, w
 
 \subsection{$k$-mer counting methodologies}
 
-We then asked if we could devise a $k$-mer counting strategy that yielded more consistent estimates of correlations between two sequences, in a way that is sensible and mathematically tractable. The primary difficulty is the addition of a $z$-score calculation step within SEEKR, which transforms the data in a way that suppresses the influence of naturally frequent or depleted $k$-mers within a reference set, \emph{e.g.} the transcriptome. 
+We then asked if a $k$-mer counting strategy could be devised that yielded more consistent estimates of correlations between two sequences, in a way that is sensible and mathematically tractable. The primary difficulty is the addition of a $z$-score calculation step within SEEKR, which transforms the data in a way that suppresses the influence of naturally frequent or depleted $k$-mers within a reference set, \emph{e.g.} the transcriptome. 
 
 Within our \emph{Rsx} analysis in Chapter 2, we originally noticed that the $z$-scores themselves were log-normally distributed, and so we log-transformed the $z$-scores after shifting all values by equation \ref{eq:seekrrsx} (Sprague et al, 2019).
 
@@ -214,9 +214,11 @@ P(\texttt{frequency}) = \sum_{\texttt{k-mers}}{\sum_{\texttt{sequences}}{P(\text
 $$
 
 \subsection{SEEKR Data Sources}
-For each of the analyses above, we used the following transcript annotations. For \emph{XIST}, we used Mouse A-repeat (MXA), mouse B-repeat (MXB), human D-repeat (HXD), and mouse E-repeat (MXE) as annotated in \cite{Brockdorff10TheNucleus.}. For the \emph{Rsx} repeats, we used the koala \emph{Rsx} 1,2,3, and 4 repeats as defined in \cite{Sprague2019NonlinearDomains}. For the reference set of sequences within SEEKR, used the GENCODE (M14) annotated set of spliced lncRNA transcripts in the mouse transcriptome. 
+For each of the analyses above, we used the following transcript annotations. For \emph{XIST}, we used Mouse A-repeat (MXA) \cite{Brockdorff10TheNucleus.}, mouse B-repeat (MXB) \cite{Brockdorff10TheNucleus.}, human D-repeat (HXD) \cite{Brown10TheNucleus.}, and mouse E-repeat (MXE)\cite{Brockdorff10TheNucleus.} as annotated in \cite{Brockdorff10TheNucleus.}. For the \emph{Rsx} repeats, we used the koala \emph{Rsx} 1,2,3, and 4 repeats as defined in \cite{Sprague2019NonlinearDomains}. For the reference set of sequences within SEEKR, used the GENCODE (M14) annotated set of spliced lncRNA transcripts in the mouse transcriptome \cite{Derrien2012TheExpression}. Relatively speaking though very little is known about lncRNAs. It is known that the tandem repeats of \emph{XIST} encode a significant amount of its function \cite{Nesterova2001CharacterizationSequence,Wang2017TargetingGuanines,Hoki2009AMouse,Zhao2008PolycombChromosome,Pintacuda2017HnRNPKSilencing}, despite much of the sequence of \emph{XIST} being relatively poorly conserved \cite{Nesterova2001CharacterizationSequence}. This has led to the notion that lncRNAs may derive a significant amount of their function from small sub-sequences \cite{Brockdorff2018LocalNcRNA, Sprague2019NonlinearDomains}. 
+
+Our lab developed a $k$-mer based algorithm for quantifying sequence similarity between two lncRNAs \cite{Kirk2018FunctionalContent}. This revealed large communities of lncRNAs that are related based on their $k$-mer content, and these communities were predictive of cellular function \cite{Kirk2018FunctionalContent}. However, the functional analog to \emph{XIST} in marsupials, \emph{Rsx} was anti-correlated with \emph{XIST} in this analysis. This observation led to the implementation of a modular approach to lncRNA sequence analysis -- \emph{i.e.}, breaking the sequences up into known or hypothesized functional domains and comparing only those regions. It was only after this that the degree of similarity between \emph{XIST} and \emph{Rsx} could be realized \cite{Sprague2019NonlinearDomains}. We then developed a statistical model using an HMM framework  
 
 
 \begin{singlespace}
-\printbibliography
+\printbibliography[heading=bibintoc,title={References}]
 \end{singlespace}

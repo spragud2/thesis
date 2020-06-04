@@ -8,46 +8,45 @@ Of the lncRNAs that have been studied and have known function within the cell, t
 
 lncRNAs have proven difficult to study experimentally, as well. lncRNAs rarely function in isolation, but rather through the concerted action of the lncRNA transcripts, RNA binding proteins, and other biological molecules such as DNA or other proteins \cite{Chu2015SystematicProteins,Schertzer2019LncRNA-InducedDNA,Hacisuleyman2016FunctionLocus,Wang2011AExpression,Yang2013MALAT-1Regulation}. Rather than being a single functional unit in a larger sequence of molecular operations within the cell, as in many signalling cascades, lncRNAs have been shown serve as hubs where complex processes take place simultaneously \cite{Schertzer2019LncRNA-InducedDNA, Chu2015SystematicProteins, Moindrot2015ASilencing,Brockdorff2018LocalNcRNA}. 
 
-\subsection{Conservation}
+%\subsection{Conservation}
+
+%This is a new section I would like to put in, if I have time. 
 
 \subsection{Functional annotation}
-Long non-coding RNAs biochemically are very similar to mRNAs, in fact there is very little other than the presence of a reading frame that differentiates an messenger RNA from a lncRNA. lncRNAs are thus genes for which the final functional product is an RNA transcript. Given that RNA molecules are known to chemically bind to numerous biological molecules, including protein, DNA, and RNA itself, it perhaps comes as little surprise that lncRNAs are capable of widely varied function within the cell. 
+Long non-coding RNAs biochemically are very similar to mRNAs, in fact there is very little other than the presence of a reading frame that differentiates an messenger RNA from a lncRNA \cite{Amaral2008TheMachine}. lncRNAs are thus genes for which the final functional product is an RNA transcript \cite{Ponting2009EvolutionRNAs}. Given that RNA molecules are known to chemically bind to numerous biological molecules, including protein, DNA, and RNA itself \cite{Chu2015SystematicProteins,Hacisuleyman2016FunctionLocus,Schertzer2019LncRNA-InducedDNA}, it perhaps comes as little surprise that lncRNAs are capable of widely varied function within the cell. 
 
-lncRNAs have generally been grouped into several sub-categories based on broadly defined features of their loci. The primary groups that have been annotated are intergenic lncRNAs (lincRNAs), which are found between annotated protein coding genes, anti-sense lncRNAs, whose loci are located on the anti-sense strand relative to a known gene, and intronic lncRNAs, which are encapsulated within the intron of a protein coding gene. The vague and non-specific nature of these definitions underlines how little is known about lncRNAs in general. In comparison, we can annotate protein coding genes down to their exact roles within the cell, not-with-standing larger classifications into cliques and communities within larger functional networks. 
+lncRNAs have generally been grouped into several sub-categories based on broadly defined features of their loci. The primary groups that have been annotated are intergenic lncRNAs (lincRNAs), which are found between annotated protein coding genes, anti-sense lncRNAs, whose loci are located on the anti-sense strand relative to a known gene, and intronic lncRNAs, which are encapsulated within the intron of a protein coding gene \cite{Rinn2012GenomeRNAs}. The vague and non-specific nature of these definitions underlines how little is known about lncRNAs in general. In comparison, we can annotate protein coding genes down to their exact roles within the cell, not-with-standing larger classifications into cliques and communities within larger functional networks \cite{Loewenstein2009ProteinInference.}. 
 
-What is relatively well known is that lncRNAs are often involved in genetic regulation. Since the discovery of \emph{XIST} and the further identification of additional lncRNAs in years following the introduction of next generation sequencing, it has become clear that a primary functional role of lncRNA is the regulation of gene expression in human and other mammalian genomes. While RNA-seq has allowed for the rapid discovery of genes that produce RNA transcripts as their final product, the elucidation of the function for these newly annotated transcripts has proven far more challenging. 
+What is relatively well known is that lncRNAs are often involved in genetic regulation \cite{Kirk2018FunctionalContent,Schertzer2019LncRNA-InducedDNA,Hacisuleyman2016FunctionLocus,Rinn2012GenomeRNAs}. Since the discovery of \emph{XIST} and the further identification of additional lncRNAs in years following the introduction of next generation sequencing, it has become clear that a primary functional role of lncRNA is the regulation of gene expression in human and other mammalian genomes. While RNA-seq has allowed for the rapid discovery of genes that produce RNA transcripts as their final product, the elucidation of the function for these newly annotated transcripts has proven far more challenging \cite{Kirk2018FunctionalContent,Rinn2012GenomeRNAs}. 
 
 \subsubsection{Guilt by association}
-Assigning functional roles to lncRNAs, if there is any function to be assigned, has proven to be a daunting task. One of the first methods used is the so-called \emph{guilt by association} hypothesis. Rather than trying to identify the specific function of a lncRNA, trends from gene expression data are used to attempt identify features such as specificity of cell type expression. A more advanced approach uses informatics techniques to identify protein coding genes and biological pathways that are co-regulated with specific lncRNAs, with the underlying assumption that if a lncRNA is co-regulated with a specific pathway, it is likely to have a functional role within that pathway. 
+Assigning functional roles to lncRNAs, if there is any function to be assigned, has proven to be a daunting task. One of the first methods used is the so-called \emph{guilt by association} hypothesis \cite{Guttman2009ChromatinMammals,Rinn2012GenomeRNAs}. Rather than trying to identify the specific function of a lncRNA, trends from gene expression data are used to attempt identify features such as specificity of cell type expression \cite{Mercer2008SpecificBrain,Perron2017InExpression,Lefever2017DecodeRNA-Guilt-by-association}. A more advanced approach uses informatics techniques to identify protein coding genes and biological pathways that are co-regulated with specific lncRNAs, with the underlying assumption that if a lncRNA is co-regulated with a specific pathway, it is likely to have a functional role within that pathway \cite{Thiel2019IdentifyingAnalysis}. 
 
-This methodology is useful for identifying transcripts that may be useful for further targeted experimental studies, but \emph{guilt by association} is an inherently correlative method that does provide real insights into the lncRNAs of interest. Despite this shortcoming, several functional lncRNAs have been identified and characterized this way. 
+This methodology is useful for identifying transcripts that may be useful for further targeted experimental studies, but \emph{guilt by association} is an inherently correlative method that does provide real insights into the lncRNAs of interest. Despite this shortcoming, several functional lncRNAs have been identified and characterized this way \cite{Gupta2010LongMetastasis, Broadbent2011ALncRNAs}. 
 
-\subsubsection{High throughput loss of function screens}
-Perhaps the holy grail of lncRNA functional annotation is a reliable high throughput screening methodology to ascribe function to lncRNA transcripts. RNA interference studies have found that lincRNA knockdowns can have profound effects throughout the transcriptome, especially in the maintenance of stem of cells. RNAi screens suffer from several limitations, however, including variance in silencing and off-target effects. Within the realm of cancer biology, RNAi screens have led to several well known examples of erroneously ascribed function, including \emph{MELK} and \emph{STK33}.
-
-Traditional \emph{CRISPR} approaches are not viable as lncRNAs lack reading frames, however over- and under-expression extensions such as \emph{CRISPRa} and \emph{CRISPRi} have identified functional lncRNAs \cite{Cai2020AHomeostasis}. Despite these successes, the correlative nature of these screens are just the first steps in elucidating the mechanisms by which a lncRNA function. 
-
-Of the small number of lncRNAs that have well characterized roles within the cell, many still have their exact mechanism of action being actively studied. \emph{XIST} is one of the most well known lncRNAs and was discovered in the early 1990s, however there is still considerable controversy about how exactly it enacts XCI. \emph{XIST} serves as a reminder that these genes are very complicated and are often multi-faceted in their function, and so therefore there remains a massive amount of work left in the field to sift through the truly enormous number of annotated lncRNAs in the human genome.
 
 \subsection{lncRNA mediated gene regulation}
 
-The connection between RNA and chromatin has long been known. Early chromatin purification experiments revealed that potentially twice as much RNA as DNA associated with chromatin. Further studies have shown that several lncRNAs, such as \emph{XIST}, \emph{AIR}, \emph{KCNQ1OT1}, and others associate with chromatin and modulate the deposition or removal of regulatory markers on chromatin. 
+The connection between RNA and chromatin has long been known. Early chromatin purification experiments revealed twice as much RNA as DNA \cite{Paul1975Chromatin-associatedEuchromatin}. Further studies have shown that several lncRNAs, such as \emph{XIST}, \emph{AIR}, \emph{KCNQ1OT1}, and others associate with chromatin and modulate the deposition or removal of regulatory markers on chromatin \cite{Schertzer2019LncRNA-InducedDNA,Pandey2008Kcnq1ot1Regulation,Sleutels2002TheGenes}. 
 
-One feature shared by all these transcripts is the formation of RNA-protein complexes, often involving numerous RNA binding proteins at several different regions within the lncRNA transcript. 
+One feature shared by all these transcripts is the formation of RNA-protein complexes \cite{Schertzer2019LncRNA-InducedDNA}, often involving numerous RNA binding proteins at several different regions within the lncRNA transcript \cite{Brockdorff2018LocalNcRNA,Nesterova2001CharacterizationSequence,Sprague2019NonlinearDomains,Pintacuda2017HnRNPKSilencing}. 
+
+More detail here
 
 \section{Xist as a model lncRNA}
-The XIST lncRNA is one of the most well characterized lncRNAs due to its essential role in XCI and because it is one of the few transcripts that is completely conserved in all eutherians. XCI is the process by which mammalian females transcriptionally silence a single X chromosome as a means of gene dosage compensation. Proper expression of Xist is required for initiation of XCI, and XIST is required for silencing virtually all genes on the inactive-X. While X-inactivation is complex, involving many additional factors beyond XIST, and mechanistic details are still an area of active research, XIST provides a well-studied example of lncRNA activity.
+The XIST lncRNA is one of the most well characterized lncRNAs due to its essential role in XCI and because it is one of the few transcripts that is completely conserved in all eutherians \cite{Brown10TheNucleus.,Brockdorff10TheNucleus.,Sprague2019NonlinearDomains,Kirk2018FunctionalContent}. XCI is the process by which mammalian females transcriptionally silence a single X chromosome as a means of gene dosage compensation. Proper expression of Xist is required for initiation of XCI, and XIST is required for silencing virtually all genes on the inactive-X \cite{Brown10TheNucleus.,Brockdorff10TheNucleus.,Hoki2009AMouse}. While X-inactivation is complex, involving many additional factors beyond XIST, and mechanistic details are still an area of active research, XIST provides a well-studied example of lncRNA activity.
 
-Given that Xist is one of the only well known lncRNAs, and that its function is approximated in other functional analogs in the human and mouse transcriptomes, such as the lncRNAs AIRN and KCNQ1OT1, XIST will be used as a ground truth approximation for the rules by which cis-acting repressive lncRNAs function.
+
+Throughout this dissertation, we used XIST as a guide to understand less studied lncRNAs, specifically the known functional analogs \emph{Rsx}, \emph{Airn}, and \emph{KCNQ1OT1}. The ideas presented in this dissertation can be generalized to essentially any lncRNA; however, given how nascent the lncRNA field is and how little is known -- \emph{XIST} represents one of the few well studied lncRNAs in the eutherian genome.
 
 \section{$k$-mer based sequence comparison}
-Traditional pairwise alignment has been a mainstay of bioinformatics for decades. Originally for detection of homologous sequences, pairwise alignment is now crucial for next generation sequencing experiments. A fundamental issue with pairwise alignment is its complexity. To obtain the best alignment between $N$ sequences of length $L$, $L^N$ calculations have to be made. To compare just 5 sequences of 100bp each, $10^{10}$ calculations would have to be made! For this reason, expedients have long been sought. Alignment-free methods of sequence comparison have existed almost as long as sequence alignment has.
+Traditional pairwise alignment has been a mainstay of bioinformatics for decades \cite{Smith1981IdentificationSubsequences}. Originally for detection of homologous sequences, pairwise alignment is now crucial for next generation sequencing experiments \cite{Dobin2013STAR:Aligner,Langmead2009UltrafastGenome}. A fundamental issue with pairwise alignment is its complexity. To obtain the best alignment between $N$ sequences of length $L$, $L^N$ calculations have to be made. To compare just 5 sequences of 100bp each, $10^{10}$ calculations would have to be made! For this reason, expedients have long been sought. Alignment-free methods of sequence comparison have existed almost as long as sequence alignment has \cite{Haubold2014Alignment-freeGenetics,Vinga2003Alignment-freeReview}.
 
-A particularly common form of alignment-free comparison involves $k$-mer frequency comparisons. A $k$-mer is defined as a sub-sequence of length $k$ within a larger sequence. $k$-mer based methods have been used for a variety of purposes, but most commonly for examining speciation in metagenomic samples and the evolutionary distance between two species. For DNA, as the value of $k$ is increased, the number of possible permutations of the four nucleotides increases exponentially ($4^k$). Therefore, the amount of shared overlap of $k$-mers is a function of their evolutionary distance from each other. Closely related species may show significant overlap for $k\in[14,26]$, whereas distantly related species may have the same amount of overlap for signficantly smaller values of $k\in[8,12]$.
+A particularly common form of alignment-free comparison involves $k$-mer frequency comparisons \cite{Haubold2014Alignment-freeGenetics}. A $k$-mer is defined as a sub-sequence of length $k$ within a larger sequence. $k$-mer based methods have been used for a variety of purposes, but most commonly for examining speciation in metagenomic samples and the evolutionary distance between two species \cite{Sims2011Whole-genomeFFPs,Yang2008PerformanceReconstruction,Yi2013Co-phylog:Organisms,Qi2004WholeApproach}. For DNA, as the value of $k$ is increased, the number of possible permutations of the four nucleotides increases exponentially ($4^k$). Therefore, the amount of shared overlap of $k$-mers is a function of their evolutionary distance from each other. Closely related species may show significant overlap for $k\in[14,26]$, whereas distantly related species may have the same amount of overlap for signficantly smaller values of $k\in[8,12]$ \cite{Qi2004WholeApproach,Yi2013Co-phylog:Organisms,Sims2011Whole-genomeFFPs}. 
 
-These methods are based on the frequencies of $k$-mers within a larger sequence, not on direct alignment between two sequences. Therefore statistics can quickly be calculated that quantify the degree of similarity between two sets of $k$-mers. However, as described above these methods have been traditionally applied to evolutionary relations, and not as a functional model of sequence content. 
+These methods are based on the frequencies of $k$-mers within a larger sequence, not on direct alignment between two sequences. Therefore statistics can quickly be calculated that quantify the degree of similarity between two sets of $k$-mers. Other methods, such as rapid detection of longest common sub-string \cite{Ulitsky2006TheReconstruction}, have also been developed. However, as described above these methods have been traditionally applied to evolutionary relations, and not as a functional model of sequence content. 
 
-Our lab has recently developed a $k$-mer based method for assessing functionality in long non-coding RNAs. In the following section the motivation and algorithm for using $k$-mers to predict functionality in long non-coding RNAs will be described. 
+Our lab has recently developed a $k$-mer based method for assessing functionality in long non-coding RNAs \cite{Kirk2018FunctionalContent}. In the following section the motivation and algorithm for using $k$-mers to predict functionality in long non-coding RNAs will be described. 
 
 \subsection{SEEKR Algorithm}
 
@@ -55,18 +54,16 @@ Our lab has recently developed a $k$-mer based method for assessing functionalit
  
  \begin{figure}[t!]
 \centering
-\includegraphics[width=.8\textwidth]{images/seekr.png}
-\caption[width=.8\textwidth]{(A) LncRNAs of related function (names in black) may harbor similar sequence similarity in the form of motif content (colored bars) even if they lack linear homology. (B) In SEEKR, the abundance of all kmers of length k are counted by tiling across each lncRNA in a user-defined group in one nucleotide increments.}
+\includegraphics[width=.8\textwidth]{images/seekrclip.png}
+\caption[width=.8\textwidth]{(A) LncRNAs of related function (names in black) may harbor similar sequence similarity in the form of motif content (colored bars) even if they lack linear homology. (B) In SEEKR, the abundance of all kmers of length k are counted by tiling across each lncRNA in a user-defined group in one nucleotide increments. \cite{Kirk2018FunctionalContent}.}
 \label{fig:seekr}
 \end{figure}
 
-Our lab developed an algorithm for comparing $k$-mer content between lncRNAs, called SEEKR (SEquence Evaluation from Kmer Representation). Within the algorithm, each $k$-mer in a sequence is counted through a 1bp sliding window. $k$-mer counts for each lncRNA are then normalized by lncRNA length and standardized across a reference set (\emph{e.g.} the transcriptome) to derive a matrix of standardized $k$-mer frequencies. The degree of similarity between two lncRNA transcripts can then be calculated using the pearson correlation coefficient.
+Our lab developed an algorithm for comparing $k$-mer content between lncRNAs, called SEEKR (SEquence Evaluation from Kmer Representation). Within the algorithm, each $k$-mer in a sequence is counted through a 1bp sliding window. $k$-mer counts for each lncRNA are then normalized by lncRNA length and standardized across a reference set (\emph{e.g.} the transcriptome) to derive a matrix of standardized $k$-mer frequencies. The degree of similarity between two lncRNA transcripts can then be calculated using the pearson correlation coefficient \cite{Kirk2018FunctionalContent}.
 
 
 \section{Hidden Markov Models}
-A hidden markov model (HMM) is a generative probabilistic model for stochastic sequential processes. For some observable process, or sequence, $X$, we assume there is an underlying random process $Y$ that is controlling the behavior of $X$. A generative probabilistic model such as an HMM calculates the joint probability distribution $P(X,Y)$, rather than the more commonly seen classifier, or discriminative model, that models the conditional probability distribution $P(Y|X)$ such that a most probable classifier label can be assigned to $X$.
-
-The reason for modeling the joint distribution $P(X,Y)$ is that it allows an HMM to not only calculate the probability of any given sequence, but allows for the generation of randomized outcomes of the model. HMMs therefore reflect a simplified, hypothesized process by which the data may be reasonably generated.
+A hidden markov model (HMM) is a generative probabilistic model for stochastic sequential processes \cite{Rabiner1989ARecognition,Burge1997PredictionDNA}. For some observable process, or sequence, $X = \{x_1,x_2,\dots, x_n\}$, we assume there is an underlying, or latent, random process $Y = \{y_1,y_2,\dots,y_n\}$ that is controlling the behavior of $X$. A generative probabilistic model such as an HMM calculates the joint probability distribution $P(X,Y)$, rather than the more commonly seen classifier, or discriminative model, that models the conditional probability distribution $P(Y|X)$. Modeling the joint distribution $P(X,Y)$ allows an HMM to not only calculate the probability of any given sequence, but allows generate stochastic realizations of the model, \emph{i.e.} it can generate stochastic sequences that behave similarly to the data the model was trained on. HMMs therefore reflect a simplified, hypothesized process by which the data may be reasonably generated. Comparatively, most discriminative classifiers simply attempt to map a data point $x_i$ to some class label $y_j$, $x_i\mapsto y_j$ \cite{Ng2002OnBayes}.
 
 To allow for tractable calculation of probabilities, an HMM relies on the Markov assumption, which posits that the current observation is conditionally independent of all other observations, except for the observation immediately prior. This assumption is formally defined in Equation \ref{eq:markov} \cite{Rabiner1989ARecognition}.
 
@@ -106,18 +103,18 @@ Using the nomenclature defined in 1.4.1, this is the sequence of hidden states $
 \label{fig:HMM}
 \end{figure}
 \subsection{Model structure}
-The HMM is constructed with the Markov assumption placed on the sequence of hidden states $Y$, so that for a sequence of length $L$ the probability of the current hidden state $y_i$ is dependent only on the previous hidden state $y_{i-1}$. Further, $y_i$ does not depend on the observed sequence $X$. 
+The HMM is constructed with the Markov assumption placed on the sequence of hidden states $Y$, so that for a sequence of length $L$ the probability of the current hidden state $y_i$ is dependent only on the previous hidden state $y_{t-1}$. Further, $y_t$ does not depend on the observed sequence $X$. 
 \begin{equation}
     P(y_t,X_{1:L},Y_{1:t-1},Y_{t+1:L}) = P(y_t|y_{t-1})
 \end{equation}
 
-And the probability of each observation $x_i \in X$ is conditionally independent of everything except the emitting state at time $i$, $y_i$, and is not dependent on any other $x_{j,j\neq i} \in X$.
+And the probability of each observation $x_t \in X$ is conditionally independent of everything except the emitting state at time $t$, $y_t$, and is not dependent on any other observation.
 
 \begin{equation}
     P(x_t,X_{1:t-1},X_{t+1:L},Y_{1:L}) = P(x_t|y_t)
 \end{equation}
 
-These conditional indepence assumptions can be represented in the graphical form illustrated in Figure \ref{fig:HMM}. 
+These conditional independence assumptions can be represented in the graphical form illustrated in Figure \ref{fig:HMM}. 
 
 From here the joint probability for an HMM can be derived \cite{Rabiner1989ARecognition}. This explicitly allows the calculation of the probability for all possible sequences of observations and all possible sequences of hidden states. 
 
@@ -137,7 +134,7 @@ There are three primary questions that an HMM is used to answer.
 \end{enumerate}
 
 \subsubsection{Combinatorial Explosion}
-To answer the above questions through complete enumeration over all possible combinations of observed sequences and the corresponding possible sequences of hidden states, $K^L$ combinations would have to explored, where $L$ is the length of the sequence and $K$ is the number of hidden states. For an average gene of $L=1000$bp and 5 hidden states, $5^{1000}\approx10^{698}$, total calculations would have to be made. This is clearly intractable, even for far shorter sequences. Fortunately algorithms have been developed that make these calculations linear with respect to the length of the sequence.
+To answer the above questions through complete enumeration over all possible combinations of observed sequences and the corresponding possible sequences of hidden states, $K^L$ combinations would have to explored \cite{Rabiner1989ARecognition}, where $L$ is the length of the sequence and $K$ is the number of hidden states. For an average gene of $L=1000$bp and 5 hidden states, $5^{1000}\approx10^{698}$, total calculations would have to be made. This is clearly intractable, even for far shorter sequences. Fortunately algorithms have been developed that make these calculations linear with respect to the length of the sequence.
 \subsubsection{Observation Likelihood}
 A key quantity when working with HMMs is the total likelihood of the observed sequence $P(X)$. Specifically, we want to know the probability of the observed sequence over \emph{all possible parses} $\phi_i \in \Phi$. Here $\Phi$ refers to the set of all possible parses, and $\phi_i$ refers to an individual parse selected from $\Phi$. 
 
@@ -146,7 +143,7 @@ A key quantity when working with HMMs is the total likelihood of the observed se
 \label{eq:partition}
 \end{equation}
 
-To make it more clear what this quantity is, an example is provided. Let $X = ATC$, and let the set of hidden states be simply $\left\{0,1\right\}$. The set of \emph{all possible parses} $\Phi$ is then a set of $2^3$ elements:
+To make it more clear what this quantity is, an example is provided. Let $X = ATC$, an arbitrary DNA sequence, and let the set of hidden states be two labels, $\left\{0,1\right\}$. The set of \emph{all possible parses} $\Phi$ is then a set of $2^3$ elements:
 
 $$\Phi = \{\{000\},\{001\},\{010\},\{011\},\{100\},\{101\},\{110\},\{111\}\}$$
 
@@ -277,9 +274,8 @@ V^*(t-1) = \argmax_i{\mu_i(t)}
 \end{equation}
 
 Once the list created from equation \ref{eq:backtrace} has been inverted, as it is a back-trace, the path $V^* = \phi_{max}$, which is the parse $\phi \in \Phi$ that maximizes the joint probability of the HMM \cite{Rabiner1989ARecognition}. 
-\subsection{Baum-Welch Algorithm}
 
 
 \begin{singlespace}
-\printbibliography
+\printbibliography[heading=bibintoc,title={References}]
 \end{singlespace}

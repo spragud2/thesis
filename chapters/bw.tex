@@ -1,0 +1,113 @@
+\subsubsection{Baum-Welch Updating}
+
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\setstretch{1}
+\SetAlgoLined
+\emph{X}$\leftarrow$Sequence of kmers\;
+\emph{Y}$\leftarrow$Sequence of hidden states\;
+\emph{E}$\leftarrow$Emission matrix\;
+\emph{A}$\leftarrow$Transition matrix\;
+\emph{$\pi$}$\leftarrow$Starting probability of each state\;
+\emph{states}$\leftarrow$ List of states \emph{i.e.} [-,+]\;
+\;
+
+$\alpha(t)\leftarrow$forward probabilities\;
+$\beta(t)\leftarrow$backward probabilities\;\;
+
+$\gamma_{i}(t)\leftarrow \frac{P(Y_t=i,X|A,E,\pi)}{P(X_t)}$ ; probability of being in state i at time t\;
+$\epsilon_{ij}(t)\leftarrow \frac{P(Y_t=i,Y_{t+1}=j,X|A,E,\pi)}{P(X_t)}$ ; probability of being in state i at time t and state j at time t+1\;
+\;
+
+\For{each time "t" in sequence X}{
+\For{state "i" in states}{
+$\log P(X_t)\leftarrow \textrm{logsumexp}\left(\alpha_i(t)+\beta_i(t)\right)$\;
+$\gamma_i(t)\leftarrow \alpha_i(t)+\beta_i(t) - \log P(X_t)$\;
+\For{state "j" in state}{
+$A_{ij}(t+1)\leftarrow \log P(Y_{t+1}=j|Y_t=i)$\;
+$E_j(t+1)\leftarrow \log P(X_{t+1}|Y_{t+1}=j)$\;
+numerator$\leftarrow \alpha_i(t)+A_{ij}(t) + \beta_j(t+1)+E_j(t+1)$\;
+denominator$\leftarrow \log P(X_t)$\;\;
+$\epsilon_{ij}(t)\leftarrow$numerator-denominator\;
+}
+}
+Append new entry to $\gamma$ list of dicts\;
+Append new entry to $\epsilon$ list of dicts\;
+}
+
+Sum $\gamma$ and $\epsilon$ over all values of $T$ for all states $i$ and $j$. The sum below represents the expected number of transitions from state $i$ to state $j$ over the sequence. 
+$$A^*_{ij} = \frac{\sum_t{\epsilon_{ij}(t)}}{\sum_t{\gamma_{i}(t)}} $$\;
+
+Do not update emission matrix $E$.\;\;
+\textbf{return} $A^*$\;
+
+ \caption{Baum Welch Parameter Update}
+ \label{bw}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\setstretch{1}
+\SetAlgoLined
+\emph{X}$\leftarrow$Sequence of kmers\;
+\emph{Y}$\leftarrow$Sequence of hidden states\;
+\emph{E}$\leftarrow$Emission matrix\;
+\emph{A}$\leftarrow$Transition matrix\;
+\emph{$\pi$}$\leftarrow$Starting probability of each state\;
+\emph{states}$\leftarrow$ List of states \emph{i.e.} [-,+]\;
+\;
+
+$\alpha_i(t)\leftarrow$forward probabilities, indexed by time $t$ and state $i$ \emph{i.e.} the probability of being in state $i$ at time $t$\;
+$T\leftarrow$length of X\;\; 
+
+Initialize probabilities at $t=1$\;
+$\alpha_i(t=1)\leftarrow \pi(i) + \log P(X_t |Y_t = i)$\;\;
+\For{t in T}{
+Append new entry to $\alpha$\;
+\For{state "i" in states}{
+currP$\leftarrow$\{+:0,-:0\} : dict with entry for each state, indexed by state name\;
+\For{state "j" in states}{
+$A_{ij}(t)\leftarrow P(Y_t=i|Y_{t-1}=j)$\;
+currP[j]$\leftarrow \alpha_j(t-1) + A_{ij}(t)$\;
+}
+$\alpha_i(t)\leftarrow \textrm{logsumexp}\left(currP\right)+\log P(X_t|Y_t=i)$\;
+}
+}
+ \caption{Forward Algorithm}
+ \label{fwd}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\setstretch{1}
+\SetAlgoLined
+\emph{X}$\leftarrow$Sequence of kmers\;
+\emph{Y}$\leftarrow$Sequence of hidden states\;
+\emph{E}$\leftarrow$Emission matrix\;
+\emph{A}$\leftarrow$Transition matrix\;
+\emph{$\pi$}$\leftarrow$Starting probability of each state\;
+\emph{states}$\leftarrow$ List of states \emph{i.e.} [-,+]\;
+\;
+
+$\beta_i(t)\leftarrow$backward probabilities, indexed by time $t$ and state $i$ \emph{i.e.} the probability of being in state $i$ at time $t$\;
+$T\leftarrow$length of X\;\; 
+
+Initialize probabilities at $t=T$\;
+$\beta_i(t=T)\leftarrow 0$ ; probability of 1 in log space\;\;
+\For{T to t=1}{
+Append new entry to $\beta$\;
+\For{state "i" in states}{
+currP$\leftarrow$\{+:0,-:0\} : dict with entry for each state, indexed by state name\;
+\For{state "j" in states}{
+$A_{ij}(t)\leftarrow P(Y_{t+1}=j|Y_{t}=i)$\;
+$E_j(t+1)\leftarrow P(X_{t+1}|Y_{t+1}=j)$\;
+currP[j]$\leftarrow \beta_j(t+1) + A_{ij}(t) + E_j(t+1)$\;
+}
+$\beta_i(t)\leftarrow \textrm{logsumexp}\left(currP\right)$\;
+}
+}
+
+\textbf{return} $\beta$ inverted s.t. $1\rightarrow T$ rather than $T \rightarrow 1$\;
+ \caption{Backward Algorithm}
+ \label{bwd}
+\end{algorithm}
