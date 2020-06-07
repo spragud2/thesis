@@ -42,7 +42,7 @@ Throughout this dissertation, we used XIST as a guide to understand less studied
 \section{$k$-mer based sequence comparison}
 Traditional pairwise alignment has been a mainstay of bioinformatics for decades \cite{Smith1981IdentificationSubsequences}. Originally for detection of homologous sequences, pairwise alignment is now crucial for next generation sequencing experiments \cite{Dobin2013STAR:Aligner,Langmead2009UltrafastGenome}. A fundamental issue with pairwise alignment is its complexity. To obtain the best alignment between $N$ sequences of length $L$, $L^N$ calculations have to be made. To compare just 5 sequences of 100bp each, $10^{10}$ calculations would have to be made! For this reason, expedients have long been sought. Alignment-free methods of sequence comparison have existed almost as long as sequence alignment has \cite{Haubold2014Alignment-freeGenetics,Vinga2003Alignment-freeReview}.
 
-A particularly common form of alignment-free comparison involves $k$-mer frequency comparisons \cite{Haubold2014Alignment-freeGenetics}. A $k$-mer is defined as a sub-sequence of length $k$ within a larger sequence. $k$-mer based methods have been used for a variety of purposes, but most commonly for examining speciation in metagenomic samples and the evolutionary distance between two species \cite{Sims2011Whole-genomeFFPs,Yang2008PerformanceReconstruction,Yi2013Co-phylog:Organisms,Qi2004WholeApproach}. For DNA, as the value of $k$ is increased, the number of possible permutations of the four nucleotides increases exponentially ($4^k$). Therefore, the amount of shared overlap of $k$-mers is a function of their evolutionary distance from each other. Closely related species may show significant overlap for $k\in[14,26]$, whereas distantly related species may have the same amount of overlap for signficantly smaller values of $k\in[8,12]$ \cite{Qi2004WholeApproach,Yi2013Co-phylog:Organisms,Sims2011Whole-genomeFFPs}. 
+A particularly common form of alignment-free comparison involves $k$-mer frequency comparisons \cite{Haubold2014Alignment-freeGenetics}. A $k$-mer is defined as a sub-sequence of length $k$ within a larger sequence. $k$-mer based methods have been used for a variety of purposes, but most commonly for examining speciation in metagenomic samples and the evolutionary distance between two species \cite{Sims2011Whole-genomeFFPs,Yang2008PerformanceReconstruction,Yi2013Co-phylog:Organisms,Qi2004WholeApproach}. For DNA, as the value of $k$ is increased, the number of possible permutations of the four nucleotides increases exponentially ($4^k$). Therefore, the amount of shared overlap of $k$-mers is a function of their evolutionary distance from each other. Closely related species may show significant overlap for $k\in(14,26)$, whereas distantly related species may have the same amount of overlap for signficantly smaller values of $k\in(8,12)$ \cite{Qi2004WholeApproach,Yi2013Co-phylog:Organisms,Sims2011Whole-genomeFFPs}. 
 
 These methods are based on the frequencies of $k$-mers within a larger sequence, not on direct alignment between two sequences. Therefore statistics can quickly be calculated that quantify the degree of similarity between two sets of $k$-mers. Other methods, such as rapid detection of longest common sub-string \cite{Ulitsky2006TheReconstruction}, have also been developed. However, as described above these methods have been traditionally applied to evolutionary relations, and not as a functional model of sequence content. 
 
@@ -55,7 +55,7 @@ Our lab has recently developed a $k$-mer based method for assessing functionalit
  \begin{figure}[t!]
 \centering
 \includegraphics[width=.8\textwidth]{images/seekrclip.png}
-\caption[width=.8\textwidth]{(A) LncRNAs of related function (names in black) may harbor similar sequence similarity in the form of motif content (colored bars) even if they lack linear homology. (B) In SEEKR, the abundance of all kmers of length k are counted by tiling across each lncRNA in a user-defined group in one nucleotide increments. \cite{Kirk2018FunctionalContent}.}
+\caption[SEEKR Algorithm]{(A) LncRNAs of related function (names in black) may harbor similar sequence similarity in the form of motif content (colored bars) even if they lack linear homology. (B) In SEEKR, the abundance of all kmers of length k are counted by tiling across each lncRNA in a user-defined group in one nucleotide increments. \cite{Kirk2018FunctionalContent}.}
 \label{fig:seekr}
 \end{figure}
 
@@ -231,7 +231,7 @@ p(y_t=i|x_{1:L}) = \frac{\alpha_i(t)\beta_i(t)}{\sum_j{\alpha_j(t)\beta_j(t)}}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{images/fwdbwd.pdf}
-\caption{Information from the entire sequence $x_{1:T}$ is incorporated through the forward and backward probabilities. The formal definition of this probability is defined in equation \ref{eq:fwdbwd}}
+\caption[Forward-backward smoothed probability]{Information from the entire sequence $x_{1:T}$ is incorporated through the forward and backward probabilities. The formal definition of this probability is defined in equation \ref{eq:fwdbwd}}
 \label{fig:fwdbwd}
 \end{figure}
 

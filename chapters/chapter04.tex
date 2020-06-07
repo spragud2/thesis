@@ -24,7 +24,7 @@ To correct for the right skewed distribution of $k$-mers across all sequences, w
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{images/kmers_log_dist.pdf}
-\caption{$k$-mer counts are log-normally distributed. A) The frequency of $k$-mer counts over all $k$-mers, over all annotated transcripts in the human genome. B) The distribution in (A), with log-transformed counts.}
+\caption[$k$-mers are log-normally distributed within sequences]{$k$-mer counts are log-normally distributed. A) The frequency of $k$-mer counts over all $k$-mers, over all annotated transcripts in the human genome. B) The distribution in (A), with log-transformed counts.}
 \label{fig:logdist}
 \end{figure}
 
@@ -48,7 +48,7 @@ Below, we iterate through a series of algorithms for generating the final SEEKR 
 
 The first method we outline is the original algorithm published in \emph{Kirk et al.}. Here, we first count the occurrence of each $k$-mer in a sequence. This count is then normalized to a per-kB count by dividing each $k$-mer count by the length of the sequence and multiplying by 1000. This process is then repeated for a reference set of sequences, \emph{e.g.} the transcriptome, and the mean frequency and standard deviation for each $k$-mer over the reference set are calculated. From there, each frequency count in the SEEKR frequency matrix is transformed using Equation \ref{eq:zscore}. 
 
-\begin{table}[h]
+\begin{table}[ht]
 \begin{center}
 \begin{tabular}{llllll}
 &MXA & MXB                   & MXC                  & HXD                   & MXE                                         \\
@@ -57,13 +57,20 @@ KR2 & 0.085   & -0.089  & -0.111  & -0.024 & 0.147  \\
 KR3 & -0.041 & -0.119   & -0.009 & -0.021 & 0.267   \\
 KR4 & 0.180   & -0.114 & -0.081  & 0.087   & 0.294 
 \end{tabular}
-\caption{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated as in \emph{Kirk et al.}, 2018.}
+\caption[Kirk et al. $k$-mer counting]{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated as in \emph{Kirk et al.}, 2018.}
 \label{tbl:kmers1}
 
 \end{center}
 \end{table}
 
 From here, the pair-wise correlations of each sequence's $k$-mer profile, \emph{i.e.} the row vector of $k$-mer $z$-scores, are calculated. For each of the methods outlined in this chapter, we compare the tandem repeats of \emph{XIST} against the tandem repeats of \emph{Rsx} as in \emph{Sprague et al.}. The correlations for this algorithm are shown in Table \ref{tbl:kmers1}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/natgen.pdf}
+\caption[Kirk et al. $k$-mer counting $z$-score scatter plots]{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 1. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
+\label{fig:natgenscat}
+\end{figure}
 
 \subsubsection{Method 2. Sprague et al. 2019}
 
@@ -76,7 +83,7 @@ KR2 & 0.084  & -0.122  & -0.122 & -0.013 & 0.145  \\
 KR3 & -0.077   & -0.093 & 0.014 & -0.023 & 0.249   \\
 KR4 & 0.210   & -0.114 & -0.068 & 0.112   & 0.398
 \end{tabular}
-\caption{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated as in \emph{Sprague et al.}, 2019.}
+\caption[Sprague et al. $k$-mer counting]{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated as in \emph{Sprague et al.}, 2019.}
 \label{tbl:kmers2}
 
 \end{center}
@@ -84,7 +91,12 @@ KR4 & 0.210   & -0.114 & -0.068 & 0.112   & 0.398
 
 The second method outlined is the algorithm published in \emph{Sprague et al.}. The $k$-mers are counted exactly as in \emph{Kirk et al.}, however we additionally calculated the $log_2$ of the $z$-scores using Equation \ref{eq:seekrrsx}. Tandem repeat comparisons that were highly correlated as in Method 1 saw large increases in correlation using this method, whereas uncorrelated regions saw little change (Table \ref{tbl:kmers2}). 
 
-
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/rsxscatter.pdf}
+\caption[Sprague et al. $k$-mer counting $z$-score scatter plots]{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 2. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
+\label{fig:rsxscat}
+\end{figure}
 
 
 \subsubsection{Method 3. Row-wise addition to z-scores}
@@ -100,12 +112,19 @@ KR2 & 0.088   & -0.124 & -0.120 & -0.009 & 0.147 \\
 KR3 & -0.079  & -0.090 & 0.016 & -0.022 & 0.246 \\
 KR4 & 0.214    & -0.110 & -0.066  & 0.115   & 0.404
 \end{tabular}
-\caption{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated as in \emph{Sprague et al.}, 2018., except that instead of the minimum of the $z$-score matrix being added, the minimum of each row was added to all values within the row.}
+\caption[Row-wise minimum addition to $z$-score]{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated as in \emph{Sprague et al.}, 2018., except that instead of the minimum of the $z$-score matrix being added, the minimum of each row was added to all values within the row.}
 \label{tbl:kmers3}
 \end{center}
 \end{table}
 
 However, the inclusion of a log-transformation step alters the linear relationship of the data depending on how far the data is from 0. Therefore, it is ideal to add the smallest possible constant to each entry in the matrix. \emph{Sprague et al.} added the minimum of the entire matrix to each $z$-score, however adding the minimum of each row to all values within that row allows for the addition of the smallest possible value such that the log can be taken, without altering the relationship between the $k$-mer counts within a given sequence. The results were similar to those in Method 2, except with further increases in correlation between high correlated domains such as KR4-MXE and KR1-MXB (Table \ref{tbl:kmers3}). 
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/rows.pdf}
+\caption\caption[Row-wise minimum addition to $z$-score scatter plots]{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 3. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
+\label{fig:rowscat}
+\end{figure}
 
 
 \subsubsection{Method 4: Column-wise addition to z-scores}
@@ -121,7 +140,7 @@ KR2 & 0.057  & -0.046 & 0.034 & 0.201 & 0.261  \\
 KR3 & -0.061 & -0.015 & 0.144 & 0.173 & 0.347  \\
 KR4 & 0.147   & -0.094  & 0.044 & 0.241 & 0.451 
 \end{tabular}
-\caption{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated as in \emph{Sprague et al.}, 2018., except that instead of the minimum of the $z$-score matrix being added, the minimum of each column was added to all values within the column.}
+\caption[Column-wise minimum addition to $z$-scores]{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated as in \emph{Sprague et al.}, 2018., except that instead of the minimum of the $z$-score matrix being added, the minimum of each column was added to all values within the column.}
 \label{tbl:kmers4}
 \end{center}
 \end{table}
@@ -155,11 +174,18 @@ seq2 & 1   & 4 & 5 & 2
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{images/2_figs.pdf}
-\caption{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 4. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
+\caption[Column-wise minimum addition to $z$-score scatter plots]{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 4. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
 \label{fig:2plots}
 \end{figure}
 
 \subsubsection{Method 5: Pseudo-count to raw counts}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/7_figs.pdf}
+\caption[Pseudo-count to raw $k$-mer counts]{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 5. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
+\label{fig:7plots}
+\end{figure}
 
 A more natural transformation of the data is to take the logarithm of the raw count data, which is guaranteed to be $\geq 0$. A potential downside with this approach is that adding 1 to raw counts has a differential effect on sequences of different lengths, \emph{i.e.} adding +1 to the count of all $k$-mers in a sequence that is 200bp long has a larger effect on the frequencies than a 10,000bp sequence. Therefore, we tried two different approaches. In Method 5, we added +1 to the raw counts of the data, length normalized the counts, and then took the log-transform, followed by $z$-score calculation as in \emph{Kirk et al.} (Table \ref{tbl:kmers5}).
 
@@ -172,7 +198,7 @@ KR2 & -0.074 & -0.295 & -0.087 & 0.071  & 0.126  \\
 KR3 & -0.170 & -0.170 & 0.063   & 0.001 & 0.205  \\
 KR4 & 0.119  & -0.175  & -0.014 & 0.148   & 0.387
 \end{tabular}
-\caption{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated adding a pseudo-count to the raw count data (Method 5).}
+\caption[Pseudocount to raw $k$-mer counts $z$-score scatter plots]{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated adding a pseudo-count to the raw count data (Method 5).}
 \label{tbl:kmers5}
 \end{center}
 \end{table}
@@ -189,7 +215,7 @@ KR2 & 0.039   & -0.152 & -0.080  & -0.007 & 0.135  \\
 KR3 & -0.102   & -0.067 & 0.076  & -0.025 & 0.220   \\
 KR4 & 0.249   & -0.078 & 0.015 & 0.150  & 0.431 
 \end{tabular}
-\caption{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated using a length normalized pseudo-count (Method 6).}
+\caption[Length normalized pseudocount to $k$-mer frequencies]{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated using a length normalized pseudo-count (Method 6).}
 \label{tbl:kmers6}
 \end{center}
 \end{table}
@@ -197,7 +223,7 @@ KR4 & 0.249   & -0.078 & 0.015 & 0.150  & 0.431
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{images/9_figs.pdf}
-\caption{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 6. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
+\caption[Length normalized pseudocount $z$-score scatter plots]{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 6. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
 \label{fig:9plots}
 \end{figure}
 
@@ -207,16 +233,14 @@ KR4 & 0.249   & -0.078 & 0.015 & 0.150  & 0.431
 
 \subsection{$k$-mer count distributions}
 
-For a given sequence, \emph{e.g.}``seq1", we counted how many times we observed each $k$-mer. This yields a vector representing $\{c_{AAA},c_{AAT},\dots\,c_{GGG}\}$, where $c_{kmer}$ is the number of observed counts for that $k$-mer. We then calculated the frequency distribution of counts in a sequence, over all $k$-mers. \emph{E.g.}, if the $k$-mers AAA and GGG had counts $c_{AAA} = 5$ and $c_{GGG} = 5$, and no other $k$-mers had a count of 5 in ``seq1", then we would record a frequency of 2 for the number of times we observed a count of 5 in ``seq1". These observed frequencies were calculated for each transcript and then summed, \emph{e.g.} if we observed a count of 5 twice in ``seq1" and 10 times in ``seq2", then the marginal frequency of a count of 5 over those two sequences is 15.
+For a given sequence, \emph{e.g.}``seq1", the number of occurrences for each $k$-mer was calculated. This yields a vector representing $\{c_{AAA},c_{AAT},\dots\,c_{GGG}\}$, where $c_{kmer}$ is the number of observed counts for that $k$-mer. We then calculated the frequency distribution of counts in a sequence, over all $k$-mers. \emph{E.g.}, if the $k$-mers AAA and GGG had counts $c_{AAA} = 5$ and $c_{GGG} = 5$, and no other $k$-mers had a count of 5 in ``seq1", then we would record a frequency of 2 for the number of times we observed a count of 5 in ``seq1". These observed frequencies were calculated for each transcript and then summed, \emph{e.g.} if we observed a count of 5 twice in ``seq1" and 10 times in ``seq2", then the marginal frequency of a count of 5 over those two sequences is 15.
 
 $$
 P(\texttt{frequency}) = \sum_{\texttt{k-mers}}{\sum_{\texttt{sequences}}{P(\texttt{frequency,sequences,k-mers)}}}
 $$
 
 \subsection{SEEKR Data Sources}
-For each of the analyses above, we used the following transcript annotations. For \emph{XIST}, we used Mouse A-repeat (MXA) \cite{Brockdorff10TheNucleus.}, mouse B-repeat (MXB) \cite{Brockdorff10TheNucleus.}, human D-repeat (HXD) \cite{Brown10TheNucleus.}, and mouse E-repeat (MXE)\cite{Brockdorff10TheNucleus.} as annotated in \cite{Brockdorff10TheNucleus.}. For the \emph{Rsx} repeats, we used the koala \emph{Rsx} 1,2,3, and 4 repeats as defined in \cite{Sprague2019NonlinearDomains}. For the reference set of sequences within SEEKR, used the GENCODE (M14) annotated set of spliced lncRNA transcripts in the mouse transcriptome \cite{Derrien2012TheExpression}. Relatively speaking though very little is known about lncRNAs. It is known that the tandem repeats of \emph{XIST} encode a significant amount of its function \cite{Nesterova2001CharacterizationSequence,Wang2017TargetingGuanines,Hoki2009AMouse,Zhao2008PolycombChromosome,Pintacuda2017HnRNPKSilencing}, despite much of the sequence of \emph{XIST} being relatively poorly conserved \cite{Nesterova2001CharacterizationSequence}. This has led to the notion that lncRNAs may derive a significant amount of their function from small sub-sequences \cite{Brockdorff2018LocalNcRNA, Sprague2019NonlinearDomains}. 
-
-Our lab developed a $k$-mer based algorithm for quantifying sequence similarity between two lncRNAs \cite{Kirk2018FunctionalContent}. This revealed large communities of lncRNAs that are related based on their $k$-mer content, and these communities were predictive of cellular function \cite{Kirk2018FunctionalContent}. However, the functional analog to \emph{XIST} in marsupials, \emph{Rsx} was anti-correlated with \emph{XIST} in this analysis. This observation led to the implementation of a modular approach to lncRNA sequence analysis -- \emph{i.e.}, breaking the sequences up into known or hypothesized functional domains and comparing only those regions. It was only after this that the degree of similarity between \emph{XIST} and \emph{Rsx} could be realized \cite{Sprague2019NonlinearDomains}. We then developed a statistical model using an HMM framework  
+For each of the analyses above, we used the following transcript annotations. For \emph{XIST}, we used Mouse A-repeat (MXA) \cite{Brockdorff10TheNucleus.}, mouse B-repeat (MXB) \cite{Brockdorff10TheNucleus.}, human D-repeat (HXD) \cite{Brown10TheNucleus.}, and mouse E-repeat (MXE)\cite{Brockdorff10TheNucleus.}. For the \emph{Rsx} repeats, we used the koala \emph{Rsx} 1,2,3, and 4 repeats as defined in \cite{Sprague2019NonlinearDomains}. For the reference set of sequences within SEEKR, used the GENCODE (M14) annotated set of spliced lncRNA transcripts in the mouse transcriptome \cite{Derrien2012TheExpression}. 
 
 
 \begin{singlespace}
