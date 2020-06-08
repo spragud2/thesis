@@ -1,4 +1,4 @@
-\documentclass[12pt,left=1in,right=1in,top=1in,bottom=1in]{report}
+\documentclass[11pt]{report}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{caption}
@@ -59,10 +59,10 @@
 \newcommand{\changefont}{%
     \fontsize{11}{11}\selectfont
 }
-\usepackage{lipsum}
 \usepackage{ragged2e}
+\usepackage{changepage}
 \setlength{\RaggedRightParindent}{\parindent}
-\usepackage[a4paper,width=150mm,top=25mm,bottom=25mm]{geometry}
+\usepackage[a4paper,margin=1in]{geometry}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \usepackage{setspace} 
@@ -70,11 +70,6 @@
 \fancyhead[LE,RO]{\changefont \slshape \rightmark} %section
 \fancyhead[RE,LO]{\changefont \slshape \leftmark} %chapter
 \fancyfoot[C]{\changefont \thepage} %footer
-\title{
-    {Identification of functional domains \linebreak in non-coding RNA}\\
-    }
-\author{Daniel Sprague}
-\date{June 2020}
 \doublespacing
 \RaggedRight 
 
@@ -85,10 +80,51 @@
 \begin{document}
 
 
+\begin{titlepage}
+\newgeometry{bottom=.5in}
+   \begin{singlespacing}
+   \begin{center}
+       \vspace*{1in}
+       IDENTIFICATION OF FUNCTIONAL DOMAINS IN NON-CODING RNA\\
+       \vspace{1in}
+       Daniel Sprague\\
+       \vspace{1in}
+       A dissertation submitted to the faculty at the University of North Carolina at Chapel Hill in partial fulfillment of the requirements for the degree of Doctor of Philosophy in the Department of Pharmacology in the School of Medicine.\\
+       \vspace{1in}
+       Chapel Hill\\
+       2020
+    \end{center}
+    \end{singlespacing}
+    \vspace{1in}
+    \begin{flushleft}
+    \hspace{3.6in} Approved by:\\
+     \hspace{3.6in}  J. Mauro Calabrese\\
+     \hspace{3.6in}   Lee Graves\\
+      \hspace{3.6in}  Daniel Dominguez\\
+      \hspace{3.6in}  Jeremy Purvis\\
+      \hspace{3.6in}   Daniel Schrider
+      \end{flushleft}
+\newgeometry{bottom=1in}
+\end{titlepage}
 \frontmatter
 
-\maketitle
+\clearpage 
+\thispagestyle{plain}
+\begin{center}
+    \null 
+    \vfill
+    \begin{singlespacing}
+    \textcopyright \ 2020\\
+    Daniel Sprague\\
+    \textsc{All rights reserved}
+    \end{singlespacing}
+\end{center}
+
+\renewcommand\abstractname{\normalfont\textsc{Abstract}}
+
 \begin{abstract}
+\stepcounter{page}
+\thispagestyle{plain}
 \begin{center}
 Daniel Sprague: Identification of functional domains in non-coding RNA\\
 (Under the direction of J. Mauro Calabrese)
@@ -98,12 +134,14 @@ Long non-coding RNAs (lncRNAs) are known to be important regulators of gene expr
 We used hmmSEEKR to identify regions of sequence similarity between several known cis repressive lncRNAs that are invisible to standard local alignment techniques. We were then able to predict RNA binding protein (RBP) locations throughout the transcriptome using hmmSEEKR models trained on the Xist lncRNA.
 \end{abstract}
 \chapter*{\center Acknowledgements}
+\stepcounter{page}
 \begin{center}
 This work wouldn't have been possible without all the fantastic people who helped me through until the end. I would like to thank my advisor, Mauro Calabrese, for always pushing me to improve as well as for the opportunity to work on some very exciting science. I would also like to thank all the friends and family who made this work possible. 
 \end{center}
 \tableofcontents
 \listoffigures
 \listoftables
+\clearpage
 
 \mainmatter
 
@@ -117,4 +155,6 @@ This work wouldn't have been possible without all the fantastic people who helpe
 \input{chapters/chapter04}
 \chapter{Conclusion}
 \input{chapters/conclusion}
+
+
 \end{document}
