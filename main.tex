@@ -97,12 +97,12 @@
     \end{singlespacing}
     \vspace{1in}
     \begin{flushleft}
-    \hspace{3.6in} Approved by:\\
-     \hspace{3.6in}  J. Mauro Calabrese\\
-     \hspace{3.6in}   Lee Graves\\
-      \hspace{3.6in}  Daniel Dominguez\\
-      \hspace{3.6in}  Jeremy Purvis\\
-      \hspace{3.6in}   Daniel Schrider
+    \hspace{3.9in} Approved by:\\
+     \hspace{3.9in}  J. Mauro Calabrese\\
+     \hspace{3.9in}   Lee Graves\\
+      \hspace{3.9in}  Daniel Dominguez\\
+      \hspace{3.9in}  Jeremy Purvis\\
+      \hspace{3.9in}   Daniel Schrider
       \end{flushleft}
 \newgeometry{bottom=1in}
 \end{titlepage}
@@ -129,14 +129,14 @@
 Daniel Sprague: Identification of functional domains in non-coding RNA\\
 (Under the direction of J. Mauro Calabrese)
 \end{center}
-Long non-coding RNAs (lncRNAs) are known to be important regulators of gene expression and other cellular functions. However, only a very small proportion of lncRNAs have been extensively studied. The remainder exist largely as annotations in a database with no known function, if any. A primary challenge with understanding how lncRNAs function is that their sequence-to-function relationship is poorly understood relative to protein coding genes. Within lncRNA sequences, boundaries of functional sequence are not explicitly defined by exon-intron boundaries, and the code by which lncRNAs derive function is not nearly as explicit as in a protein coding reading frame. To address this challenge, we have developed a probabilistic framework, hmmSEEKR, for identifying where within a non-coding RNA functional regions may be based off of enrichment of short motifs, or k-mers. 
+Long non-coding RNAs (lncRNAs) are known to be important regulators of gene expression and other cellular functions. However, only a very small proportion of lncRNAs have been extensively studied. The remainder exist largely as annotations in a database with no known function, if any. A primary challenge to understanding how lncRNAs function is the poorly understood sequence-to-function relationship relative to protein coding genes. Within lncRNA transcripts, boundaries of functional sequence are not explicitly defined by exon-intron boundaries, and the code by which lncRNAs derive function is not nearly as explicit as in a protein coding reading frame. To address these challenges, we have developed a probabilistic framework, \emph{hmmSEEKR}, for identifying where within a non-coding RNA functional regions may be located based off of enrichment of short motifs, or $k$-mers. 
 
-We used hmmSEEKR to identify regions of sequence similarity between several known cis repressive lncRNAs that are invisible to standard local alignment techniques. We were then able to predict RNA binding protein (RBP) locations throughout the transcriptome using hmmSEEKR models trained on the Xist lncRNA.
+We used \emph{hmmSEEKR} to identify functional sequence domains in several lncRNAs that silence gene expression through recruitment of Polycomb, using \emph{XIST} as a model transcript. These predicted sequence domains share no detectable sequence alignment with \emph{XIST}; however, they share high $k$-mer based similarity with known functional domains in \emph{XIST} and precisely coincided with the location of RNA binding protein (RBP) interactions known to be important for Polycomb mediated silencing. Furthermore, we were able to extend our analysis to the entire transcriptome and identify many \emph{XIST}-like sequence domains throughout the transcriptome that interact with Polycomb-associated RBPs. These algorithms are some of the first sequence-to-function models based on functional analogy rather than homology between RNA transcripts. We hope that these tools can be used to help identify potentially functional non-coding transcripts that have yet to be studied. 
 \end{abstract}
 \chapter*{\center Acknowledgements}
 \stepcounter{page}
 \begin{center}
-This work wouldn't have been possible without all the fantastic people who helped me through until the end. I would like to thank my advisor, Mauro Calabrese, for always pushing me to improve as well as for the opportunity to work on some very exciting science. I would also like to thank all the friends and family who made this work possible. 
+This work wouldn't have been possible without all the fantastic people who helped me through the end. I would like to thank my advisor, Mauro Calabrese, for always pushing me to improve as well as for the opportunity to work on some very exciting science. I would also like to thank all the friends and family who made this work possible. 
 \end{center}
 \tableofcontents
 \listoffigures
