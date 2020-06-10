@@ -5,20 +5,25 @@ It is possible to show that the $k$-mer content of a sequence can be perfectly p
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{shufD.png}
-\caption[Shuffling $k$-mers destroyed tandem repeat without changing motif content]{Dot plot alignments and SEEKR-defined similarity between human Xist Repeat D, shuffled Repeat D, and the top 5 mouse lncRNAs that are most similar to Repeat D. Repeat D was shuffled using $\mu$Shuffle and preserving $k$-mer content at $k$ = 4 (Jiang et al., 2008). Dotplots were generated using a window size 20 nucleotides and a threshold of 50\% identity.}
+\caption[Shuffling $k$-mers abrogates tandem repeat without changing motif content]{Dot plot alignments and SEEKR-defined similarity between human Xist Repeat D, shuffled Repeat D, and the top 5 mouse lncRNAs that are most similar to Repeat D. Repeat D was shuffled using $\mu$Shuffle and preserving $k$-mer content at $k$ = 4 (Jiang et al., 2008). Dotplots were generated using a window size 20 nucleotides and a threshold of 50\% identity.}
 \label{fig:shufD}
 \end{figure}
 
 Therefore, a challenge in understanding lncRNA function is identifying where functional modules may be located within a sequence \cite{Pang2006RapidFunction,Hezroni2015PrinciplesSpecies,Johnson2014TheRNAs}. Clearly, the answer is not solely exonic sequence as in a protein coding reading frame. Within \emph{XIST} these sequence regions are sub-sequences within the spliced transcript \cite{Brockdorff10TheNucleus.,Brown10TheNucleus.,Brockdorff2018LocalNcRNA,Sprague2019NonlinearDomains,Pintacuda2017HnRNPKSilencing,Hoki2009AMouse,Sunwoo2017RepeatCIZ1}. Compounding the issue is that as far as is known, no specific boundary motifs (\emph{e.g.}, splice junction boundaries) are required. Potential splice junctions in genes are relatively easy to identify based off a combination of sequence content, and the presence of conserved 5' and 3' splice site motifs that demarcate the beginning and end of an intron, respectively \cite{Burge1997PredictionDNA}. 
 
 To model this hypothesized sequence structure, we have developed an HMM that is designed to identify sub-sequences within a larger transcript that contain regions of elevated $k$-mer content to a known functional domain. Given how little is known in the field about the sequence-to-function relationship in lncRNAs, we use the archetypal lncRNA \emph{XIST} and its known functional sub-sequences (A-,B-,D-,E- repeats) as our model. 
+
+We demonstrate here the first computational tool capable of detecting sequence similarity between functionally related but non-homologous  long non-coding RNAs in the human genome. Rather than deriving functional relationships through homology as in traditional sequence alignment \cite{Altschul1990BasicTool,Wheeler2013Nhmmer:HMMs}, we consider and model the problem of functional analogy between non-coding transcripts. lncRNAs are free to mutate at significantly faster rates than mRNAs however that lack of conservation has been shown to not necessarily imply lack of function \cite{Johnsson2014EvolutionaryFunction,Sprague2019NonlinearDomains,Nesterova2001CharacterizationSequence}. The model developed here is capable of identifying sequence features that are much too subtle and jumbled for even the most sensitive alignment algorithms to detect \cite{Wheeler2013Nhmmer:HMMs,Altschul1990BasicTool,Rice2000EMBOSS:Suite}, yet these same features have been shown to strongly predictive of function \cite{Kirk2018FunctionalContent,Sprague2019NonlinearDomains}. 
+
 \section{Results}
 \subsection{Model Structure}
-Given a transcript sequence, $X$, of length $L$, and a set of predefined functional features $Y$, the objective is to map each nucleotide $x \in X$ to a functional state, $y \in Y$. Our underlying biological hypothesis is that non-coding RNAs contain sub-sequences of specific $k$-mer content that is enriched for motifs that bind a specific RBP or subset of RBPs and that these domains are free to start and stop within a larger sequence, and these are ideas are supported in the literature \cite{Brockdorff2018LocalNcRNA,Hezroni2015PrinciplesSpecies,Pang2006RapidFunction}. We therefore defined the first functional feature to be the \emph{query}, which is a categorical distribution of $k$-mer frequencies from training sequences known to have some specific functional role (e.g. tandem repeats of \emph{XIST}). We defined one additional functional feature which comprises a \emph{null} feature. The null state is a categorical distribution of $k$-mer frequencies that represent the average of the transcriptome, or background sequence. 
+Given a transcript sequence of $k$-mers, $X$, of length $L$, and a set of predefined functional features $Y$, the objective is to map each $x \in X$ to a functional state, $y \in Y$ through an HMM. Our underlying biological hypothesis is that non-coding RNAs contain sub-sequences of specific $k$-mer content that are enriched for motifs that bind a specific RBP or subset of RBPs and that these domains are free to start and stop within a larger sequence\cite{Brockdorff2018LocalNcRNA,Hezroni2015PrinciplesSpecies,Pang2006RapidFunction}. The primary purpose of the HMM is to identify the most likely positions within a sequence that these RBP-interacting functional domains begin and end. We therefore defined the first functional feature to be the \emph{query}, which is a categorical distribution of $k$-mer frequencies from training sequences known to have some specific functional role (e.g. tandem repeats of \emph{XIST}). We defined one additional functional feature which comprises a \emph{null} feature. The null state is a categorical distribution of $k$-mer frequencies that represent the average of the transcriptome, or background sequence, which is designed to encapsulate all other sequences that don't match the \emph{query}.  
 
-From a probabilistic point of view, we assume there is an underlying stochastic process generating these functional domains and placing them in a sequence, and that these functional domains are then generating the sequence that we observe in $X$ \cite{Rabiner1989ARecognition}. Prior HMM based models have primarily modeled the emission of a sequence of individual nucleotides and incorporated high-order interactions through conditional probabilities \cite{Burge1997PredictionDNA,Pachter2002ApplicationsProblems,Henderson1997FindingModel}. 
+The two hidden states, \textit{query} and \textit{null} are represented by the symbols ``+'' and ``-'' respectively, throughout the rest of this chapter, as this is how they are coded within the python implementation of \emph{hmmSEEKR}. 
 
-As an example, if we observed the following sequence, we could calculate the probability of that sequence using varying amounts of prior information:
+From a probabilistic point of view, the HMM models an RNA sequence by assuming the sequence we observe ($X$) is stochastically sampled from an unknown sequence of hidden states (functional domains) that control the behavior of $X$ \cite{Rabiner1989ARecognition}. Prior HMM based models have primarily modeled the emission of a sequence of individual nucleotides and incorporated high-order interactions through conditional probabilities \cite{Burge1997PredictionDNA,Pachter2002ApplicationsProblems,Henderson1997FindingModel}. 
+
+As an example, if the following sequence were observed, the probability of that sequence occurring could be calculated using varying amounts of prior information. Generally, the more relationships captured within the sequence, the better the sequence can be modeled (Table \ref{tbl:highorder}). 
 
 \begin{table}[h!]
 \centering
@@ -38,54 +43,57 @@ As an example, if we observed the following sequence, we could calculate the pro
  \hline
  
 \end{tabular}
-\caption{Progressively more prior history can be incorporated to model the probability distribution of a sequence, however doing so exponentially increases the number of parameters to be estimated.}
-\label{table:1}
+\caption[Conditional dependencies in a DNA sequence]{Progressively more prior history can be incorporated to model the probability distribution of a sequence, however doing so exponentially increases the number of parameters to be estimated.}
+\label{tbl:highorder}
 \end{table}
 
 
 Given the underlying assumptions of SEEKR \cite{Kirk2018FunctionalContent} we chose to model the emissions of $k$-mers directly rather than individual nucleotides conditioned on $k$ previous nucleotides. When constructing a parse of a sequence, this choice better represents the bag-of-words model underyling SEEKR \cite{Kirk2018FunctionalContent} while allowing each emission to be conditionally dependent only on the functional feature emitting it (Figure 3.2).
 
-These two notions are very similar to each other, though, and are related by a normalizing factor. \emph{E.g.}, if $k=5$, then the probability of observing the $5$-mer $ATCGA$ is equivalent to the probability of observing $A$ given the probability of the preceeding nucleotides $ATCG$, multiplied by the probability of observing $ATCG$. 
+These two probabilities, \textit{e.g.} $P(ATCGA)$ \textit{vs.} $ P(A|ATCG)$, are very similar to each other, and are related by a normalizing factor. \emph{E.g.}, if $k=5$, then the probability of observing the $5$-mer $ATCGA$ is equivalent to the probability of observing $A$ given the probability of the preceding nucleotides $ATCG$, multiplied by the probability of observing $ATCG$.
 
 $$P(ATCGA) = P(A|ATCG)P(ATCG)$$
+This example illustrates another reason that we chose to model the joint probability of a $k$-mer rather than the conditional probability of a nucleotide on the preceding $k$-mer -- the joint probability distribution better models differentials between enriched and depleted $k$-mers in a bag-of-words model, whereas the conditional distribution better models longer-range interactions in the sequence. \textit{E.g.}, the $k$-mer ATCG might be quite rare in the training data, but A preceded by ATCG might have a high probability so long as it is observed, and so within the context of the HMM this sparsity of ATCG would not get modeled as desired in SEEKR.  
 
-The last modeling choice we make is to construct the HMM such that each hidden state $y$ has a non-zero probability of transitioning to any other state, including itself. This is formally known as an ergodic HMM \cite{Rabiner1989ARecognition}. Prior HMM models of DNA sequences are primarily left-right structured \cite{Burge1997PredictionDNA,Pachter2002ApplicationsProblems,Henderson1997FindingModel,Wheeler2013Nhmmer:HMMs}, due to prior knowledge of the structure of a gene, or motif. If a model for a gene were constructed, the transition Intron $\rightarrow$ 5' UTR can be assigned a probability of zero given prior knowledge. Within lncRNAs, we and others hypothesized and shown that protein binding functional domains are modular in nature and therefore the hidden states within our HMM are free to transition.
+
+The last modeling choice we make is to construct the HMM such that each hidden state $y$ has a non-zero probability of transitioning to any other state, including itself. This is formally known as an ergodic HMM \cite{Rabiner1989ARecognition}. Prior HMM models of DNA sequences are primarily left-right structured \cite{Burge1997PredictionDNA,Pachter2002ApplicationsProblems,Henderson1997FindingModel,Wheeler2013Nhmmer:HMMs}, due to prior knowledge of the structure of a gene, or motif. If a model for a gene were constructed, the transition Intron $\rightarrow$ 5' UTR can be assigned a probability of zero given prior knowledge. Within lncRNAs, we and others hypothesized and shown that protein binding functional domains are modular in nature and therefore the hidden states within our HMM are free to transition in all directions.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\textwidth]{model.png}
+\includegraphics[width=.75\textwidth]{model.png}
 \caption[Graphical model of \emph{hmmSEEKR}]{Graphical model of HMM SEEKR. The Query (``+") hidden state represents the functional domain to be identified in other lncRNA sequences and the Null (``-") hidden state represents the average $k$-mer frequencies of the transcriptome. The $\alpha$ and $\beta$ parameters represent the self-transition probabilities for the hidden state. }
 \label{fig:hmmseekrmodel}
 \end{figure}
 
 \subsection{Parameter Estimation}
-A hidden markov model is comprised of a stochastic transition matrix $A$, where each row vector $\psi_i$ corresponds to a categorical distribution representing hidden state $i$ probability of transitioning to state $j$. The emission matrix $E$, where each row corresponds to a categorical distribution of $k$-mer frequencies. Finally, there is the initialization matrix $\pi$ that describes the probability of starting at each hidden state at $t=1$.
+A hidden markov model is comprised of a stochastic transition matrix $A$, where each row vector $\psi_i$ corresponds to a categorical distribution representing the probability of hidden state $i$ transitioning to state $j$. The emission matrix $E$, where each row corresponds to a categorical distribution of $k$-mer frequencies. Finally, there is the initialization matrix $\pi$ that describes the probability of starting at each hidden state at $t=1$.
 \subsubsection{Emission Parameters}
-We define the emission distribution for the query and null hidden states to be $k$-mer frequencies taken from a set of training sequences. For the query hidden state, we defined our training set to be \emph{XIST} repeats A,B,D, and E. For the null hidden state, we defined the set of training sequences to be the set of unspliced lncRNAs in the human transcriptome. 
+We defined the emission distribution for the query and null hidden states to be $k$-mer frequencies taken from a set of training sequences. For the query hidden state, we defined our training sets to be \emph{XIST} repeats A,B,D, and E. For the null hidden state, we defined the set of training sequences to be the set of unspliced lncRNAs in the human transcriptome. A separate HMM was trained for each \emph{XIST} repeat. 
 
-The value of $k$ for each query was determined using a grid search based approach outlined in the Methods section below. Some of the \emph{XIST} repeats are quite short, for example \emph{XIST} repeat B is only $\approx 200$bp in length. Therefore, it is often the case that there are fewer nucleotides than there are parameters to estimate leading to zeros in the probability distribution. This is both unlikely, as many of the motifs for RBPs that bind \emph{XIST} have no non-zero probabilities, and also mathematically untractable, as we will need to work in log-space for probability calculations later.
+Some of the \emph{XIST} repeats are quite short, for example \emph{XIST} repeat B is only $\approx 200$bp in length. Therefore, it is often the case that there are fewer nucleotides than there are parameters to estimate leading to zeros in the probability distribution. In reality, zero probability $k$-mers are both unlikely, as many of the motifs for RBPs that bind \emph{XIST} have no non-zero probabilities, and also mathematically intractable, as log-space for probability calculations is required for long sequences.
 
-To correct for this we employed pseudo-counts, specifically we use a $+1$ pseudo-count for all $k$-mers in the training set (\emph{i.e.} initialize the counts array to 1). The justification for this is relatively straightforward and rigorous. Given the transition matrix $A$, we know that each row vector within it is a categorical distribution $\phi$ comprised of all $k$-mer frequencies. Our hypothesis is that in spite of our limited training data, we believe that there is an underlying randomness, or probability distribution, to these $k$-mer frequencies, and we have not been able to sample enough sequence to account for that stochasticity. 
-
-It can be shown that the \emph{maximum a posteriori}, or MAP, estimate for our $k$-mer frequency distribution is achieved by adding a pseudo-count of $1$ to each $k$-mer. This is achieved by placing a Dirichlet prior on our $k$-mer frequency distribution:
+To correct for this parameterization problem we employed pseudo-counts, specifically we use a $+1$ pseudo-count for all $k$-mers in the training set (\emph{i.e.} initialize the counts array to 1). The hypothesis driving the pseudo-count is that despite the limited training data implying zero probability events, this only occurs because there is insufficient data to sample enough $k$-mers and their frequencies. Given the transition matrix $A$, each row $i$ (representing a hidden state's emission distribution) within $A$ is a categorical distribution $\psi_i $ comprised of the frequencies for each possible $k$-mer. It can be shown that the \emph{maximum a posteriori}, or MAP, estimate for the $k$-mer frequency distribution $\psi_i$ is achieved by adding a pseudo-count of $1$ to each $k$-mer \cite{Rabiner1989ARecognition}. This is achieved by placing a Dirichlet prior on the $k$-mer frequency distribution:
 
 \begin{center}
-    $\psi_i \sim Dir(\alpha_{AAA},\alpha_{AAT},\dots,\alpha_{GGG})$
+    $\psi_i \sim Dir(\alpha_i^{AAA}+1,\alpha_i^{AAT}+1,\dots,\alpha_i^{GGG}+1)$
     
-    $x_i \sim Cat(\psi_{AAA},\psi_{AAT},\dots,\psi_{GGG})$
+    $x_i \sim Cat(\psi_i^{AAA},\psi_i^{AAT},\dots,\psi_i^{GGG})$
 \end{center}
 
-That is to say, the best estimate of the $k$-mer frequencies, given the data we have available and the uncertainty we have in it, is achieved by adding a count of $1$ to all $k$-mers. Intuitively this makes sense, as this addition has the largest impact when we have very little data to work with, and very little impact when we have substantial data as is the case for the null hidden state.
+The $\alpha$ parameters in the Dirichlet distribution would be the observed counts of each $k$-mer, and the +1 represents the pseudo-count. As the $\alpha$ for a given $k$-mer increases, the probability ``concentration" around that $k$-mer increases -- so when a sample of $\psi_i$ is drawn -- the $k$-mers with high $\alpha$ parameters are going to have the highest frequencies, and therefore most likely to be drawn when an observation $x_i$ is drawn. That is to say, the best estimate of the $k$-mer frequencies, given the data available and the uncertainty in it, is achieved by adding a count of $1$ to all $k$-mers. Intuitively this makes sense, as this addition has the largest impact when there is very little data to work with (less than $4^k$ $k$-mers to train from), and very little impact when there is substantial data as is the case for the null hidden state, which is trained on many thousands of $k$-mers.
 
-\subsubsection{Transition Parameters}
+\subsubsection{Transition Parameters and $k$}
 
-We are using the SEEKR algorithm to calculate which set of parameters for our HMM maximize the ‘distance’, or Kullback-Leibler diveregence, between a distribution of parsed and unparsed sequences.
+We used the SEEKR algorithm to calculate a score for how well the HMM performed at identifying query-like sequence regions based off their $k$-mer similarity to the original query.  For a given set of parameters, the Kullback-Leibler diveregence was calculated between a SEEKR correlation distributions of parsed and unparsed sequences.
+
 The KL-Divergence is defined as \cite{Brookes1951FoundationsProbability}:
 \begin{equation}
     D_{KL}(P||Q) = \sum_{x\in X}P(x)\log{\frac{P(x)}{Q(x}}
 \end{equation}
-Where $D_{KL}$ is the KL-Divergence between two probability distribtions P and Q. Here we will let P represent the SEEKR score distribution of the HMM parse hits to the query sequence, and Q represent the SEEKR score distribution of unparsed sequences to the query sequence, representing a ‘reference’. If P = Q then DKL = 0. D increases as the probability distributions become more dissimilar to each other. Important to note that $D_{KL}(P||Q) \neq D_{KL}(Q||P)$, so for consistenty $D_{KL}(P||Q)$ is always calculated.
-Our goal is to find a set of parameters, $\alpha$ ($Q\rightarrow Q$), $\beta$ ($N\rightarrow N$), and k, that maximize the above expression
+Where $D_{KL}$ is the KL-Divergence between two probability distributions P and Q. P represents the SEEKR score distribution of the HMM parse ``hits" (contiguously ``+'' labeled $k$-mers within the sequence) to the query sequence, and Q represent the SEEKR score distribution of unparsed sequences to the query sequence, representing a ‘reference’. If P = Q then D_{KL} = 0. D increases as the probability distributions become more dissimilar to each other. $D_{KL}(P||Q) \neq D_{KL}(Q||P)$, so for consistency $D_{KL}(P||Q)$ was always calculated. Being comprised of unparsed sequences, $Q(x)$ just depends on $k$.
+In the real dataset, $P$ and $Q$ are histograms calculated from the data, and so the calculation of $D_{KL}$ compares the frequencies of SEEKR correlations in each bin for the two distributions. The larger the difference between $P$ and $Q$, the more successful the HMM was at parsing out highly correlated regions to the query.
+
+Our goal is to find a set of parameters, $\alpha$ ($+\rightarrow +$), $\beta$ ($-\rightarrow -$), and $k$, that maximize the above expression. 
 \begin{equation}
     \argmax_{\alpha,\beta,k}\sum_{x\in X}P(x|\alpha,\beta,k)\log{\frac{P(x|\alpha,\beta,k)}{Q(x|k)}}
 \end{equation}
@@ -96,7 +104,7 @@ Our goal is to find a set of parameters, $\alpha$ ($Q\rightarrow Q$), $\beta$ ($
 \begin{center}
  \begin{tabular}{|c | c| c | c |} 
  \hline
- Query & k & $\alpha$ & $\beta$ \\
+ Query & $k$ & $\alpha$ & $\beta$ \\
  \hline\hline
  Repeat A & 4 & .9999 & .9999 \\ 
  \hline
@@ -108,30 +116,20 @@ Our goal is to find a set of parameters, $\alpha$ ($Q\rightarrow Q$), $\beta$ ($
  \hline
 \end{tabular}
 \end{center}
-\caption{Best values of k, the $+\rightarrow +$ parameter $\alpha$, and $-\rightarrow -$ parameter $\beta$ as determined through a grid search based approach to identify sequences with the highest SEEKR correlation to the query.}
+\caption[KL-Divergence best fit parameters]{Best values of $k$, the $+\rightarrow +$ parameter $\alpha$, and $-\rightarrow -$ parameter $\beta$ as determined through a grid search based approach to identify sequences with the highest SEEKR correlation to the query.}
 \label{tbl:transparams}
 \end{table}
 
-Being comprised of unparsed sequences, $Q(x)$ just depends on k.
-In the real dataset, $P$ and $Q$ are histograms calculated from the data, and so the calculation of $D_{KL}$ compares the frequencies of SEEKR correlations in each bin for the two distributions. 
-
-We found that $\beta$ must always be close to 1, whereas significant variance was found for the value of $\alpha$ amongst the different \emph{XIST} queries (Table \ref{tbl:transparams}). We also found that there was often significant overlap of hits between the varying sets of parameters (Fig \ref{fig:overlapparams})
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{images/intersection.pdf}
-\caption[Overlap of HMM hits with different parameterizations]{The fraction (colorbar) of shared HMM hits between different parameterizations and queries for \emph{hmmSEEKR}. Different HMM parameterization were clustered using complete linkage based on their degree of shared HMM hits.}
-\label{fig:overlapparams}
-\end{figure}
+We found that $\beta$ must always be close to 1, whereas significant variance was found for the value of $\alpha$ amongst the different \emph{XIST} queries (Table \ref{tbl:transparams}). We also found that there was often significant overlap of hits between the varying sets of parameters for each query, implying that there was significant consistant regardless of general parameterization.
 
 \subsection{Viterbi Parsing and Scoring}
 The primary use for the HMM in \emph{hmmSEEKR} is identifying the most likely parse, $\phi_{max}$ for a given sequence or set of sequences, $X_i \in \{X_1,X_2,\dots,X_n\}$, where each $X_i$ is a sequence of $k$-mers. The regions that we define as ``hits" are all sub-sequences of contiguously query-labeled sequence, \emph{e.g.} for a sequence/parse pair such as:
 
 $$(X_i=ATCGCCCG,\phi_{max}=-,-,+,+,+,+,+,+)$$
 
-The ``hit" in this example as defined in \emph{hmmSEEKR} is the sub-sequence CGCCCG. There may be any number of hits within a sequence, but a hit is always composed of contiguous ``$+$" (query) labeled nucleotides.  The Viterbi path through each sequence was calculated as in algorithm \ref{alg:viterbi}, \ref{alg:backtrack}, and was implemented in corefunctions.py within the \emph{hmmSEEKR} package. This code can be called as in section 3.4.3 within the mSEEKR.py program.
+The ``hit" in this example as defined in \emph{hmmSEEKR} is the sub-sequence CGCCCG. There may be any number of hits within a sequence, but a hit is always composed of contiguous ``$+$" (query) labeled nucleotides.  The Viterbi path through each sequence was calculated as in algorithms \ref{alg:viterbi}, \ref{alg:backtrack} (Methods), and was implemented in corefunctions.py within the \emph{hmmSEEKR} package. This code can be called as in section 3.4.3 within the mSEEKR.py program.
 
-Table \ref{tbl:hmmresults} illustrates the output of mSEEKR.py when scanning mouse \emph{Xist} using a human \emph{XIST} query. Here, an HMM was trained on human \emph{XIST} repeat A as the query hidden state, and the null hidden state was trained on the set of all unspliced lncRNAs in  mice (Methods 3.4.3,\cite{Derrien2012TheExpression}), and mouse \emph{Xist} was scanned for matches to the repeat A query. In the literature, repeat A is defined in mouse as spanning basepairs 292-713 \cite{Brockdorff10TheNucleus.}, and \emph{hmmSEEKR} called basepairs 201-748 as a hit to the repeat A query within mouse Xist (Table \ref{tbl:hmmresults}), yielding 100\% recovery of the original sequence. The score, kmerLLR as in table \ref{tbl:hmmresults}, is calculated as in Algorithm \ref{alg:LLR} and is the log-likelihood ratio of the hit. As the original definition for repeat A was formally defined by the presence of the tandem repeat \cite{Brockdorff10TheNucleus.,Brown10TheNucleus.}, and not based on functional motif enrichment or the presence of protein binding, it is significantly more challenging to accurately assess the false positive rate of the HMM.
+Table \ref{tbl:hmmresults} illustrates the output of mSEEKR.py when scanning mouse \emph{Xist} using a human \emph{XIST} query. Here, an HMM was trained on human \emph{XIST} repeat A as the query hidden state, and the null hidden state was trained on the set of all unspliced lncRNAs in  mice (Methods 3.4.3,\cite{Derrien2012TheExpression}), and mouse \emph{Xist} was scanned for matches to the repeat A query. In mouse \emph{Xist}, repeat A is defined as spanning basepairs 292-713 \cite{Brockdorff10TheNucleus.}, and \emph{hmmSEEKR} called basepairs 201-748 as a hit to the repeat A query within mouse Xist (Table \ref{tbl:hmmresults}), yielding 100\% recovery of the original sequence. The score, kmerLLR as in table \ref{tbl:hmmresults}, is calculated as in Algorithm \ref{alg:LLR} and is the log-likelihood ratio of the hit. As the original definition for repeat A was formally defined by the presence of the tandem repeat \cite{Brockdorff10TheNucleus.,Brown10TheNucleus.}, and not based on functionality, such as RBP motif enrichment or experimentally determined presence of protein binding, it is significantly more challenging to accurately assess the false positive rate of the HMM (Figure \ref{fig:hnkhumanmouse}).
 
 
 \begin{table}[h]
@@ -147,25 +145,32 @@ Rank&Start & End   & Length & kmerLLR & seqName                               \\
 4     & 17941 & 17946  & 5       & -0.968 & \textgreater{}xist\\
 \hline 
 \end{tabular}
-\caption[\emph{mSEEKR.py output file}]{Output of \emph{mSEEKR.py}. Each hit from scanning \emph{XIST} with an HMM trained on the A-repeat of mouse \emph{Xist} is shown and sorted by the \emph{hmmSEEKR} score, ``kmerLLR". }
+\caption[\emph{mSEEKR.py} output file]{Output of \emph{mSEEKR.py}. Each hit from scanning \emph{XIST} with an HMM trained on the A-repeat of mouse \emph{Xist} is shown and sorted by the \emph{hmmSEEKR} score, ``kmerLLR". }
 \label{tbl:hmmresults}
 \end{table}
 
-As there are no pre-existing annotations for these $k$-mer based sequence features within lncRNAs, it is difficult to define what constitutes a true positive and a true negative. To help elucidate what sequence features within \emph{XIST} and other lncRNAs are functional, we turned to protein binding data for proteins that are known to bind \emph{XIST} and have been shown to be crucial for its function.
-
-\subsection{Xist Associated RBPs}
-A crucial feature of the \emph{XIST} transcript are the 4 core repeats that bind unique subsets of RNA binding proteins \cite{Sunwoo2017RepeatCIZ1,Zhao2008PolycombChromosome,Pintacuda2017HnRNPKSilencing,Wang2017TargetingGuanines,Hoki2009AMouse}. Several RBPs have been shown to be crucial for the function of \emph{XIST}, including HNRNPK, RBM15, and several others \cite{Sunwoo2017RepeatCIZ1,Zhao2008PolycombChromosome,Pintacuda2017HnRNPKSilencing,Wang2017TargetingGuanines,Hoki2009AMouse,Chu2015SystematicProteins}. The tandem repeats have been defined based off their repetitiveness, but Figure \ref{fig:shufD} demonstrates that a non-repetitive sequence can have the same motif content as a repetitive one. Indeed, examination of ENCODE eCLIP data for HNRNPK reveals significant eCLIP binding adjacent to and extending beyond the formally defined B- and D-repeats of \emph{XIST}. Therefore, we hypothesized that the functional elements of lncRNA such as \emph{XIST} are not defined by repetitiveness but rather by enrichment of protein binding motifs \cite{Kirk2018FunctionalContent,Sprague2019NonlinearDomains,Dominguez2018SequenceProteins,Ray2013ARegulation,Wang2017TargetingGuanines}. To further test \emph{hmmSEEKR}, we sought to identify the proteins most associated with the A,B,D,E-repeats of \emph{XIST} so that we could validate the predictive power of our model against existing protein binding data.
 \begin{figure}[h!]
 \centering
-\includegraphics[width=\textwidth]{images/sigproteins.pdf}
-\caption[\emph{XIST} tandem repeat enriched proteins]{Proteins selectively enriched within tandem repeats of \emph{XIST}. A) $\log_2$ ratio of read density for Repeat A compared to the remainder of \emph{XIST}. Individual points represent biological replicates. B) $\log_2$ ratio of read density for Repeat B compared to the remainder of \emph{XIST} is shown. Individual points represent biological replicates. C) $\log_2$ ratio of read density for Repeat D compared to the remainder of \emph{XIST}. Individual points represent biological replicates. D) $\log_2$ ratio of read density for Repeat E compared to the remainder of \emph{XIST}. Individual points represent biological replicates.}
+\includegraphics[width=\textwidth]{images/hnkmousehuman.png}
+\caption[HNRNPK enrichment relative tandem repeat locations in human \emph{XIST} and mouse \emph{Xist}.]{UCSC wiggle- density display of HNRNPK CLIP data (orange) aligned over the mouse (mm9) and human (hg38) Xist genomic loci. Mouse and human clip data are from \cite{Cirillo2016QuantitativeEditor,VanNostrand2016RobusteCLIP}. Arrows denote direction of Xist transcription. Black rectangles indicate genomic locations of mouse and human repeat sequences used in this work.}
+\label{fig:hnkhumanmouse}
+\end{figure}
+
+As there are no pre-existing annotations for these $k$-mer based sequence features within lncRNAs, it is difficult to define what constitutes a true positive and a true negative (Figure \ref{fig:hnkhumanmouse}). To help elucidate what sequence features within \emph{XIST} and other lncRNAs are functional, we turned to protein binding data for proteins that are known to bind \emph{XIST} and have been shown to be crucial for its function.
+
+\subsection{Xist Associated RBPs}
+A crucial feature of the \emph{XIST} transcript are the 4 core repeats that bind unique subsets of RNA binding proteins \cite{Sunwoo2017RepeatCIZ1,Zhao2008PolycombChromosome,Pintacuda2017HnRNPKSilencing,Wang2017TargetingGuanines,Hoki2009AMouse}. Several RBPs have been shown to be crucial for the function of \emph{XIST}, including HNRNPK, RBM15, and several others \cite{Sunwoo2017RepeatCIZ1,Zhao2008PolycombChromosome,Pintacuda2017HnRNPKSilencing,Wang2017TargetingGuanines,Hoki2009AMouse,Chu2015SystematicProteins}. The tandem repeats have been defined based only on their repetitiveness, but Figure \ref{fig:shufD} demonstrates that a non-repetitive sequence can have the same motif content as a repetitive one. Indeed, examination of ENCODE eCLIP data for HNRNPK reveals significant eCLIP binding adjacent to and extending beyond the formally defined B- and D-repeats of \emph{XIST} (Figure \ref{fig:hnkhumanmouse}). Therefore, we hypothesized that the functional elements of a lncRNA such as \emph{XIST} are not defined by repetitiveness but rather by enrichment of protein binding motifs \cite{Kirk2018FunctionalContent,Sprague2019NonlinearDomains,Dominguez2018SequenceProteins,Ray2013ARegulation,Wang2017TargetingGuanines}. To further test \emph{hmmSEEKR}, we sought to identify the proteins most associated with the A,B,D,E-repeats of \emph{XIST} so that we could validate the predictive power of our model against existing protein binding data.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.8\textwidth]{images/sigproteins.pdf}
+\caption[\emph{XIST} tandem repeat enriched proteins]{Proteins selectively enriched within tandem repeats of \emph{XIST}. A) $\log_2$ ratio of read density for Repeat A compared to the remainder of \emph{XIST}. B) $\log_2$ ratio of read density for Repeat B compared to the remainder of \emph{XIST} is shown. C) $\log_2$ ratio of read density for Repeat D compared to the remainder of \emph{XIST}. D) $\log_2$ ratio of read density for Repeat E compared to the remainder of \emph{XIST}. A-D) Individual points within each protein represent biological replicates. }
 \label{fig:xistproteins}
 \end{figure}
 
-We found that each repeat within \emph{XIST} contained at least one protein that was at least 2x more enriched in within the repeat than the remainder of the \emph{XIST} transcript (Figure \ref{fig:xistproteins}A). RBM15 and SRSF1 were found to be the most specific proteins to repeat A. Prior work has shown that RBM15 is required for full \emph{XIST} silencing functionality, and that RBM15 recruits the m6A complex to the 5' region of \emph{XIST}. SRSF1 has previously been shown to bind the A-repeat of \emph{XIST} but its function within the sequence is currently unknown.
+To do this, we compared eCLIP signal for all proteins with data in the ENCODE database inside each tandem repeat relative to the remainder of the \emph{XIST} transcript. We found that each repeat within \emph{XIST} contained at least one protein that was at least 2x more enriched in within the repeat than the remainder of the \emph{XIST} transcript (Figure \ref{fig:xistproteins}A). RBM15 and SRSF1 were found to be the most specific proteins to repeat A. RBM15 is required for full \emph{XIST} silencing functionality \cite{Moindrot2015ASilencing}, and that RBM15 recruits the m6A complex to the 5' region of \emph{XIST} \cite{Patil2016M6Repression}. SRSF1 has previously been shown to bind the A-repeat of \emph{XIST} but its function within the sequence is currently unknown.
 
 
-Both the B-repeat and D-repeat were found to be significantly enriched for HNRNPK over the rest of the transcript (Figure \ref{fig:xistproteins}B-C). HNRNPK is required for recruitment of PRC1 to the \emph{XIST} transcripts. Deletion of the B-repeat region has previously been shown to be sufficient to abrogate \emph{XIST} dependent PRC recruitment, as well as \emph{XIST} mediated silencing. Our analysis showed that DROSHA is also enriched within the B-repeat of \emph{XIST}, however no previous studies have identified DROSHA as a direct interactor with \emph{XIST} and so the function of this interaction is unknown.
+Both the B-repeat and D-repeat were found to be significantly enriched for HNRNPK over the rest of the transcript (Figure \ref{fig:xistproteins}B-C). HNRNPK is required for recruitment of PRC1 to the \emph{XIST} transcripts \cite{Pintacuda2017HnRNPKSilencing}. Deletion of the B-repeat region has previously been shown to be sufficient to abrogate \emph{XIST} dependent PRC recruitment, as well as \emph{XIST} mediated silencing. Our analysis showed that DROSHA is also enriched within the B-repeat of \emph{XIST}, however no previous studies have identified DROSHA as a direct interactor with \emph{XIST} and so the function of this interaction is unknown.
 
 \begin{table}[h]
 \centering
@@ -183,22 +188,22 @@ Both the B-repeat and D-repeat were found to be significantly enriched for HNRNP
 \label{tbl:eclipscan}
 \end{table}
 
-The E-repeat of \emph{XIST} was highly enriched for several proteins. The E-repeat itself is composed primarily of T-rich sequence, and therefore the proteins we observe often contain similar motifs (cisBP). PTBP1, MATR3, TARDBP, and TIA1 were all found to be the most enriched within the E-repeat. PTBP1 has previously been shown to be required for proper \emph{XIST} expression and splicing during development. TARDBP depletion is also associated with increased expression of mis-spliced \emph{XIST} transcripts. A recent study found that MATR3 and PTBP1 form a condensate mediated by the \emph{XIST} E-repeat and this condensate is required for \emph{XIST} localization to the Xi. 
+The E-repeat of \emph{XIST} was highly enriched for several proteins. The E-repeat itself is composed primarily of T-rich sequence, and therefore the proteins we observe often contain similar motifs (\cite{Ray2013ARegulation}). PTBP1, MATR3, TARDBP, and TIA1 were all found to be the most enriched within the E-repeat. PTBP1 has previously been shown to be required for proper \emph{XIST} expression and splicing during development \cite{Stork2019DevelopmentalSplicing}. TARDBP depletion is also associated with increased expression of mis-spliced \emph{XIST} transcripts \cite{Stork2019DevelopmentalSplicing}. A recent study found that MATR3 and PTBP1 form a condensate mediated by the \emph{XIST} E-repeat and this condensate is required for \emph{XIST} localization to the Xi \cite{Pandya-Jones2020AnSilencing}. 
 
 \subsection{Detection of Rsx Domains}
 Our \emph{Rsx} study in Chapter 2 relied on the existence of tandem repeats within the \emph{Rsx} transcript to perform the domain based SEEKR analysis. On a whole transcript level, \emph{XIST} and \emph{Rsx} were slightly anti-correlated despite their shared function. The relationship between the two sequences didn't become apparent until we parsed out the tandem repeats within \emph{Rsx} and performed pairwise comparisons between each \emph{XIST} tandem repeat. 
 
-We hypothesized that we could use \emph{hmmSEEKR} to identify regions of non-linear sequence similarity between \emph{XIST} and \emph{Rsx} without \emph{a priori} identification of tandem repeats. To do this, we trained 4 separate HMMs on the A,B,D, and E-repeats of \emph{XIST} at $k=2,3,4,5,6$ and all pairwise combinations of $\alpha,\beta = .5,.75,.9,.99,.999,.9999$. The results outlined in Figure \ref{fig:koalarsxhmm} and Table \ref{tbl:rsxresults} are using the set of parameters that yielded the best F1 score (Methods 3.4.X). 
+We hypothesized that we could use \emph{hmmSEEKR} to identify regions of non-linear sequence similarity between \emph{XIST} and \emph{Rsx} without \emph{a priori} identification of tandem repeats. To do this, we trained 4 separate HMMs on the A,B,D, and E-repeats of \emph{XIST} at $k\in\{2,3,4,5,6\}$ and all pairwise combinations of $\alpha,\beta \in \{.5,.75,.9,.99,.999,.9999\}$. The results outlined in Figure \ref{fig:koalarsxhmm} and Table \ref{tbl:rsxresults} are using the set of parameters that yielded the best F1 score (Methods 3.4.X). 
 
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{images/koalarsx.pdf}
-\caption[HMM analysis of \emph{Rsx}]{\emph{hmmSEEKR} hits within \emph{Rsx} for an HMM trained on each \emph{XIST} repeat. Blue regions represent hits to the query, whereas dashed grey lines represent null sequence.}
+\caption[HMM analysis of \emph{Rsx}]{\emph{hmmSEEKR} hits within koala\emph{Rsx} for an HMM trained on each \emph{XIST} repeat. Blue regions represent hits to the query, whereas dashed grey lines represent null sequence.}
 \label{fig:koalarsxhmm}
 \end{figure}
 
-We found that the HMM trained on the \emph{XIST} D-repeat captured the entire tandem repeat from transcript coordinates 1,000-14,000 (Figure \ref{fig:koalarsxhmm}, Table \ref{tbl:rsxresults}). Likewise, the HMM trained on the \emph{XIST} B-repeat captured a significant portion of \emph{Rsx} repeat 1, and these regions were significantly more C-rich than the remainder of \emph{Rsx} repeat 1 (show data). Additional C-rich sequence were also identified at the 5' and 3' regions of \emph{Rsx} (Figure \ref{fig:koalarsxhmm}). The HMMs trained on the A-repeat and E-repeat both significantly aligned with \emph{Rsx} repeat 4, with 100\% precision and 25.45\% recall. In our original analysis, we mapped A,E-repeats to repeats 2,3, and 4 in \emph{Rsx}, however repeats 2 and 3 had relatively marginal correlation to the A,E-repeats, whereas the A,E$\rightarrow$4 relationship was the strongest of all comparisons in the original \emph{Rsx} analysis (Sprague et al.).
+We found that the HMM trained on the \emph{XIST} D-repeat captured the entire tandem repeat from transcript coordinates 1,000-14,000 (Figure \ref{fig:koalarsxhmm}, Table \ref{tbl:rsxresults}). Likewise, the HMM trained on the \emph{XIST} B-repeat captured a significant portion of \emph{Rsx} repeat 1, and these regions were significantly more C-rich than the remainder of \emph{Rsx} repeat 1. Additional C-rich sequence were also identified at the 5' and 3' regions of \emph{Rsx} (Figure \ref{fig:koalarsxhmm}). The HMMs trained on the A-repeat and E-repeat both significantly aligned with \emph{Rsx} repeat 4, with 100\% precision and 25.45\% recall of the full-length repeat 4. In our original analysis, we mapped A,E-repeats to repeats 2,3, and 4 in \emph{Rsx}, however repeats 2 and 3 had relatively marginal correlation to the A,E-repeats, whereas the A,E$\rightarrow$4 relationship was the strongest of all comparisons in the original \emph{Rsx} analysis \cite{Sprague2019NonlinearDomains}. 
 
 \begin{table}[h!]
 \centering
@@ -208,35 +213,35 @@ We found that the HMM trained on the \emph{XIST} D-repeat captured the entire ta
 \hline 
     1&  1000   & 14000    & B,D     & 98.42\% & 100\% \\
       2&17500 & 21000  & A,E     & 100\%   & 1.32\% \\
-      3&21500  & 22500   & A,E      & 0\% & 0\%  \\
+      3&21500  & 22500   & A,E      & - & 0\%  \\
       4&23000 & 27500  & A,E     & 100\%   & 25.45\% \\
 \hline 
 \end{tabular}
-\caption{Precision and recall for each HMM using the tandem repeat definitions from \cite{Sprague2019NonlinearDomains}. Precision is defined as the number of correct nucleotides relative to the number of incorrect nucleotides, whereas recall is the fraction of the total domain retrieved by the HMM.}
+\caption[\textit{Rsx-Xist} Precision and Recall]{Precision and recall for each HMM using the tandem repeat definitions from \cite{Sprague2019NonlinearDomains}. Precision is defined as the number of correct nucleotides relative to the number of incorrect nucleotides, whereas recall is the fraction of the total domain retrieved by the HMM.}
 \label{tbl:rsxresults}
 \end{table}
 
 
-\subsection{Sequence based prediction of RBP binding in Kcnq1ot1}
+\subsection{Sequence based prediction of RBP binding in \textit{KCNQ1OT1}}
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=.4\textwidth]{images/kcnd.pdf}
-\caption[\emph{KCNQ1OT1} dot plot alignment]{Dot plot alignment of human \emph{KCNQ1OT1} against itself using flexidot software \cite{Flexidot}. The window parameter is 20bp and the threshold is 40\%. Black regions correspond to windows that succesfully aligned against each other. }
+\caption[\emph{KCNQ1OT1} dot plot alignment]{Dot plot alignment of human \emph{KCNQ1OT1} against itself using flexidot software \cite{Seibt2018FlexiDot:Analyses}. The window parameter is 20bp and the threshold is 40\%. Black regions correspond to windows that succesfully aligned against each other. }
 \label{fig:kcndot}
 \end{figure}
 
-There is at least one lncRNA in the human transcriptome that is known to silence gene expression in \emph{cis} through a PRC-mediated mechanism similar to \emph{XIST}, \emph{KCNQ1OT1}. The mouse \emph{Kcnq1ot1} has been shown to silence megabase scale regions of chromosome 7 and human \emph{KCNQ1OT1} silences a large region of chromosome 11. Unlike \emph{XIST}, the sequence of \emph{KCNQ1OT1} is not predominantly comprised of tandem repeat domains (Figure \ref{fig:kcndot}), barring a region in the 3' region of the sequence. Furthermore, eCLIP data for RBPs known to be essential for \emph{XIST}'s function show that the predominantly bind in the 5' half of \emph{KCNQ1OT1}'s sequence (Figure \ref{fig:kcnproteins}). Therefore, we sought to use the \emph{hmmSEEKR} package to identify functional sub-sequences within \emph{KCNQ1OT1} that are similar in $k$-mer content to \emph{XIST} A-,B-,D-, and E-repeats. 
+There is at least one conserved lncRNA in the mammalian transcriptome that is known to silence gene expression in \emph{cis} through a PRC-mediated mechanism similar to \emph{XIST}, \emph{KCNQ1OT1}. The mouse \emph{Kcnq1ot1} has been shown to silence megabase scale regions of chromosome 7 and human \emph{KCNQ1OT1} silences a large region of chromosome 11. Unlike \emph{XIST}, the sequence of \emph{KCNQ1OT1} is not predominantly comprised of tandem repeat domains (Figure \ref{fig:kcndot}), barring a region in the 3' region of the sequence. Furthermore, eCLIP data for RBPs known to be essential for \emph{XIST}'s function show that they predominantly bind in the 5' half of \emph{KCNQ1OT1}'s sequence (Figure \ref{fig:kcnproteins}). Therefore, we sought to use the \emph{hmmSEEKR} package to identify functional sub-sequences within \emph{KCNQ1OT1} that are similar in $k$-mer content to \emph{XIST} A-,B-,D-, and E-repeats. 
 
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{images/kcnproteins.pdf}
-\caption[\emph{KCNQ1OT1} RBM15, HNRNPK, and MATR3 eCLIP tracks]{Browser tracks for RBM15 (top), HNRNPK (middle), and MATR3 (bottom) within the \emph{KCNQ1OT1} locus. Data shown are the eCLIP narrowPeak files for each protein.}
+\caption[\emph{KCNQ1OT1} RBM15, HNRNPK, and MATR3 eCLIP tracks]{Browser tracks for RBM15 (top), HNRNPK (middle), and MATR3 (bottom) within the \emph{KCNQ1OT1} locus. Tracks represent peak intensity from ENCODE narrowPeak files for each protein, regions with no signal were not called as statistically significant peaks. }
 \label{fig:kcnproteins}
 \end{figure}
 
-\emph{KCNQ1OT1} contained regions of similarity to each of the \emph{XIST} HMMs that we trained (Figure \ref{fig:kcntracks} A-D). We found that the 5' region of \emph{KCNQ1OT1}'s sequence in particular containins regions of similarity to A-,B-,D-, and E-repeats of \emph{XIST} (Figure \ref{fig:kcntracks} A-D) -- suggesting that this region of \emph{KCNQ1OT1} is multipurpose binder of RBPs. Indeed, eCLIP data for RBM15 and SRSF1 (Figure \ref{fig:kcntracks} A), HNRNPK (Figure \ref{fig:kcntracks} B-C), and MATR3 and PTBP1 (Figure \ref{fig:kcntracks} D) reveal elevated read density for all these proteins at the 5' region of \emph{KCNQ1OT1}'s sequence. Additionally, a large portion of the inner region of \emph{KCNQ1OT1}'s sequence was identified by \emph{hmmSEEKR} to have similarity to the B- and D- repeats of \emph{Xist}. (Figure \ref{fig:kcntracks} B-C). Similar to actual B- and D-repeats of \emph{XIST}, these regions within \emph{KCNQ1OT1} correspond to elevated HNRNPK read density (Figure \ref{fig:kcntracks} B,C). 
+\emph{KCNQ1OT1} contained regions of similarity to each of the \emph{XIST} HMMs that we trained (Figure \ref{fig:kcntracks} A-D). We found that the 5' region of \emph{KCNQ1OT1}'s sequence in particular containins regions of similarity to A-,B-,D-, and E-repeats of \emph{XIST} (Figure \ref{fig:kcntracks} A-D) -- suggesting that this region of \emph{KCNQ1OT1} could be a multipurpose binder of numerous RBPs. Indeed, eCLIP data for RBM15 and SRSF1 (Figure \ref{fig:kcntracks} A), HNRNPK (Figure \ref{fig:kcntracks} B-C), and MATR3 and PTBP1 (Figure \ref{fig:kcntracks} D) reveal elevated read density for all these proteins at the 5' region of \emph{KCNQ1OT1}'s sequence. Additionally, a large portion of the inner region of \emph{KCNQ1OT1}'s sequence was identified by \emph{hmmSEEKR} to have similarity to the B- and D- repeats of \emph{Xist}. (Figure \ref{fig:kcntracks} B-C). Similar to actual B- and D-repeats of \emph{XIST}, these regions within \emph{KCNQ1OT1} correspond to elevated HNRNPK read density (Figure \ref{fig:kcntracks} B,C). 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=.92\textwidth]{images/kcneclip.pdf}
@@ -244,7 +249,7 @@ There is at least one lncRNA in the human transcriptome that is known to silence
 \label{fig:kcntracks}
 \end{figure}
 
-We then sought to compare the read density for each protein in Table \ref{tbl:eclipscan} found within our \emph{hmmSEEKR} prediction for the associated \emph{XIST} query against a randomized shuffling of the hits found within \emph{KCNQ1OT1} (Method 3.4.6 randomization). We found that the A-repeat HMM significantly outperformed randomized shuffles for both RBM15 (Figure \ref{fig:kcntracks} E; $p< 10^{-8}$, chi-square test) and SRSF1 (Figure \ref{fig:kcntracks} F; $p< 10^{-5}$, chi-square test). HNRNPK was also significantly better predicted by the HMMs trained on the B- and D-repeats of \emph{XIST} (Figure \ref{fig:kcntracks} G,H;$p<10^{-33}$ B-repeat, $p<10^{-51}$ D-repeat, chi-square test). Finally, the E-repeat trained HMM significantly outperformed a shuffled parse for both MATR3 (Figure \ref{fig:kcntracks} I, $p<10^{-28}$,chi-square test) and PTBP1 (Figure \ref{fig:kcntracks} J; $p<10^{-43}$,chi-square test). 
+We then sought to compare the read density for each protein in Table \ref{tbl:eclipscan} found within our \emph{hmmSEEKR} prediction for the associated \emph{XIST} query against a randomized shuffling of the hits found within \emph{KCNQ1OT1} (Method 3.4.6 randomization). We found that the A-repeat HMM significantly outperformed randomized shuffles for both RBM15 (Figure \ref{fig:kcntracks} E; $p< 10^{-8}$, chi-square test) and SRSF1 (Figure \ref{fig:kcntracks} F; $p< 10^{-5}$, chi-square test). HNRNPK was also significantly better predicted by the HMMs trained on the B- and D-repeats of \emph{XIST} (Figure \ref{fig:kcntracks} G,H;$p<10^{-33}$ B-repeat, $p<10^{-51}$ D-repeat, chi-square test). Finally, the E-repeat trained HMM significantly outperformed a shuffled parse for both MATR3 (Figure \ref{fig:kcntracks} I, $p<10^{-28}$,chi-square test) and PTBP1 (Figure \ref{fig:kcntracks} J; $p<10^{-43}$,chi-square test). Thus, our predictions from \textit{hmmSEEKR} would support our hypothesis that \textit{KCNQ1OT1} does contain shared sequence features with \textit{XIST}. Under the traditional hypotheses of sequence alignment, \textit{XIST} and \textit{KCNQ1OT1} have no shared sequence features \cite{Altschul1990BasicTool,Wheeler2013Nhmmer:HMMs,Rice2000EMBOSS:Suite}, however using a $k$-mer based similarity metric we have identified $>10^4$ basepairs of sequence in \textit{KCNQ1OT1} that map to functional domains in \textit{XIST}. 
 
 \clearpage
 
@@ -253,20 +258,27 @@ We then sought to compare the read density for each protein in Table \ref{tbl:ec
 %%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Transcriptome-wide RBP Prediction}
-Many of the proteins that bind to \emph{XIST} and \emph{KCNQ1OT1} bind throughout the transcriptome \cite{VanNostrand2016RobusteCLIP}. Furthermore, \emph{XIST} clusters with thousands of transcripts in the human genome based on $k$-mer content \cite{Kirk2018FunctionalContent}. Therefore, we hypothesized that \emph{XIST}-like sub-sequences may be found throughout the transcriptome, both in lncRNAs as well as in pre-mRNAs. To test this hypothesis, we trained 4 HMMs on the A-,B-,D-, and E-repeats of human \emph{XIST} as in section 3.2.6 and used \emph{hmmSEEKR} to scan the set of all unspliced coding and non-coding transcripts in the human genome. We compared the results of our HMM against ENCODE eCLIP data for proteins that we have shown are enriched within each \emph{XIST} repeat (Table \ref{tbl:eclipscan}). 
+Many of the proteins that bind to \emph{XIST} and \emph{KCNQ1OT1} bind throughout the transcriptome \cite{VanNostrand2016RobusteCLIP}. Furthermore, \emph{XIST} clusters with thousands of transcripts in the human genome based on $k$-mer content \cite{Kirk2018FunctionalContent}. Therefore, we hypothesized that \emph{XIST}-like sub-sequences may be found throughout the transcriptome, both in lncRNAs as well as in pre-mRNAs. To test this hypothesis, we trained 4 HMMs on the A-,B-,D-, and E-repeats of human \emph{XIST} as in section 3.2.6 and used \emph{hmmSEEKR} to scan the set of all unspliced coding and non-coding transcripts in the human genome. The Viterbi parses for the A-,B-,D-, and E-repeat HMMs extracted sequences from the transcriptome that were significantly more similar to the query compared to the unparsed sequences (Figure \ref{fig:hmmdist}).  We then compared the results of our HMM against ENCODE eCLIP data for proteins that we have shown are enriched within each \emph{XIST} repeat (Table \ref{tbl:eclipscan}). 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.8\textwidth]{images/hmmdist.pdf}
+\caption[\emph{hmmSEEKR} extracts sub-sequences with high correlation to query]{\emph{hmmSEEKR} models trained on \emph{XIST} tandem repeats extract sub-sequences with higher SEEKR correlation to the query than unparsed sequences using parameters listed in Table \ref{tbl:transparams}. A) A-repeat HMM hits relative to unparsed sequences, B) B-repeat HMM hits relative to unparsed sequences. C) D-repeat HMM hits relative to unparsed sequences. D) E-repeat HMM hits relative to unparsed sequences. $x$-axis represents the SEEKR correlation from the query to each transcript.}
+\label{fig:hmmdist}
+\end{figure}
 
 The \emph{hmmSEEKR} HMMs significantly out-performed randomized HMM parses for each of the proteins we tested. The A-repeat trained HMM successfully captured significantly more reads for RBM15 (Figure \ref{fig:transcriptome} A left; $p\ll 10^{-100}$, chi-squared test) and SRSF1 (Figure \ref{fig:transcriptome} B left panels; $p\ll 10^{-100}$, chi-squared test) than did the randomized hits. Furthermore, true HMM hits throughout the transcriptome had significantly more reads per hit than the shuffled parses for RBM15 eCLIP data (Figure \ref{fig:transcriptome} A right panel; $p\ll10^{-100}$, student's t-test) and SRSF1 (Figure \ref{fig:transcriptome} B right panel; $p\ll10^{-100}$,student's t-test).
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=.95\textwidth]{images/transcriptomescan.pdf}
-\caption[Transcriptome-wide prediction of RBP binding regions]{\emph{hmmSEEKR} models trained \emph{XIST} tandem repeats predict RBP binding regions throughout the transcriptome. A-G) Total number of eCLIP reads assigned to HMM Viterbi parse hits compared to randomized shuffling of hits within each transcript (left plot), and the number of reads per hit for the true HMM hits compared to the shuffled parses (right plots), for RBM15 (A), SRSF1 (B), HNRNPK B-repeat (C), HNRNPK D-repeat (D), MATR3 (E), TIA1 (F), PTBP1 (G).}
+\caption[Transcriptome-wide prediction of RBP binding regions]{\emph{hmmSEEKR} models trained on\emph{XIST} tandem repeats predict RBP binding regions throughout the transcriptome. A-G) Total number of eCLIP reads assigned to HMM Viterbi parse hits compared to randomized shuffling of hits within each transcript (left plot), and the number of reads per hit for the true HMM hits compared to the shuffled parses (right plots), for RBM15 (A), SRSF1 (B), HNRNPK B-repeat (C), HNRNPK D-repeat (D), MATR3 (E), TIA1 (F), PTBP1 (G).}
 \label{fig:transcriptome}
 \end{figure}
 
 The B-repeat trained model had significantly more reads assigned from HNRNPK eCLIP data (Figure \ref{fig:transcriptome} C left-panel, $p\ll10^{-100}$, chi-squared test), and significantly more reads per hit than the randomized parses (Figure \ref{fig:transcriptome} C right-panel, $p\ll10^{-100}$,student's t-test). A similar pattern emerged with the D-repeat HMM, which captured more reads than the B-repeat HMM (Figure \ref{fig:transcriptome} C-D left-panels), and overlapped significantly more reads than randomized parses (Figure \ref{fig:transcriptome} D left-panel, $p\ll10^{-100}$,chi-square test) as well as more reads per hit than the randomized parses (Figure \ref{fig:transcriptome} D right-panel, $p\ll10^{-100}$,student's t-test). 
 
-Finally, the E-repeat trained HMM also successfully predicted associated protein binding better than randomized parses (Figure \ref{fig:transcriptome} E-G). MATR3 had significantly more reads assigned by the true HMM (Figure \ref{fig:transcriptome} E left-panel, $p\ll 10^{-100}$,chi-square test) and more reads per hit than random (Figure \ref{fig:transcriptome} E right-panel, $p\ll 10^{-100}$, student's t-test). Intriguingly, the HMM assigned significantly more reads from TIA eCLIP (Figure \ref{fig:transcriptome} F left-panel, $p\ll 10^{-100}$, chi-squared test) but there was no significant difference in the number of reads per hit for the true HMM parses and the randomized parses (Figure \ref{fig:transcriptome} F right-panel, \emph{n.s.}, student's t-test). PTBP1 displayed the highest ratio of assigned reads between the true HMM and randomized parses over all comparisons (Figure \ref{fig:transcriptome} A-G left-panels) and assigned significantly more eCLIP reads than the randomized parses (Figure \ref{fig:transcriptome} G left-panel, $p\ll10^{-100}$, chi-squared test) as well as more reads per hit compared to random (Figure \ref{fig:transcriptome} G right-panel, $p\ll10^{-100}$, student's t-test). 
+Finally, the E-repeat trained HMM also successfully predicted associated protein binding better than randomized parses (Figure \ref{fig:transcriptome} E-G). MATR3 had significantly more reads assigned by the true HMM (Figure \ref{fig:transcriptome} E left-panel, $p\ll 10^{-100}$,chi-square test) and more reads per hit than random (Figure \ref{fig:transcriptome} E right-panel, $p\ll 10^{-100}$, student's t-test). Intriguingly, the HMM assigned significantly more reads from TIA eCLIP (Figure \ref{fig:transcriptome} F left-panel, $p\ll 10^{-100}$, chi-squared test) but there was no significant difference in the number of reads per hit for the true HMM parses and the randomized parses (Figure \ref{fig:transcriptome} F right-panel, \emph{n.s.}, student's t-test). PTBP1 displayed the highest ratio of assigned reads between the true HMM and randomized parses over all comparisons (Figure \ref{fig:transcriptome} A-G left-panels) and assigned significantly more eCLIP reads than the randomized parses (Figure \ref{fig:transcriptome} G left-panel, $p\ll10^{-100}$, chi-squared test) as well as more reads per hit compared to random (Figure \ref{fig:transcriptome} G right-panel, $p\ll10^{-100}$, student's t-test). These data show that domains with $k$-mer based similarity to \textit{XIST} in the transcriptome are binding \textit{XIST}-associated proteins in a manner consistent with the hypotheses in \cite{Kirk2018FunctionalContent,Sprague2019NonlinearDomains}.  
 
 %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%
@@ -287,7 +299,7 @@ We found that \emph{hmmSEEKR} was able to reproduce the non-linear sequence rela
 
 
 \section{Methods}
-\subsection{Algorithms}
+\subsection{Pseudo-code and algorithms}
 The functions that drive much of analysis in the \emph{hmmSEEKR} package are found in the corefunctions.py file. These include the algorithms behind HMM analysis including the forward, backward, Viterbi, and Baum-Welch algorithm implementations. In addition, several functions crucial for parsing the supplied DNA sequences and outputting in human readable format are found within this file.
 
 \subsubsection{$k$-mer counting}
@@ -485,6 +497,130 @@ maxPriorState$\leftarrow$dictMaxState[t+1][maxPriorState]
 
 \clearpage
 
+\subsubsection{Baum-Welch Algorithm}
+
+The Baum-Welch algorithm uses the forward and backward algorithms to iteratively calculate the expected number of state transitions from a training set of sequences. Given that we do not wish to update the $k$-mer frequency distributions, the algorithm was implemented in \emph{hmmSEEKR} to only update the transition matrix $A$. 
+
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\setstretch{1}
+\SetAlgoLined
+\emph{X}$\leftarrow$Sequence of kmers\;
+\emph{Y}$\leftarrow$Sequence of hidden states\;
+\emph{E}$\leftarrow$Emission matrix\;
+\emph{A}$\leftarrow$Transition matrix\;
+\emph{$\pi$}$\leftarrow$Starting probability of each state\;
+\emph{states}$\leftarrow$ List of states \emph{i.e.} [-,+]\;
+\;
+
+$\alpha(t)\leftarrow$forward probabilities\;
+$\beta(t)\leftarrow$backward probabilities\;\;
+
+$\gamma_{i}(t)\leftarrow \frac{P(Y_t=i,X|A,E,\pi)}{P(X_t)}$ ; probability of being in state i at time t\;
+$\epsilon_{ij}(t)\leftarrow \frac{P(Y_t=i,Y_{t+1}=j,X|A,E,\pi)}{P(X_t)}$ ; probability of being in state i at time t and state j at time t+1\;
+\;
+
+\For{each time "t" in sequence X}{
+\For{state "i" in states}{
+$\log P(X_t)\leftarrow \textrm{logsumexp}\left(\alpha_i(t)+\beta_i(t)\right)$\;
+$\gamma_i(t)\leftarrow \alpha_i(t)+\beta_i(t) - \log P(X_t)$\;
+\For{state "j" in state}{
+$A_{ij}(t+1)\leftarrow \log P(Y_{t+1}=j|Y_t=i)$\;
+$E_j(t+1)\leftarrow \log P(X_{t+1}|Y_{t+1}=j)$\;
+numerator$\leftarrow \alpha_i(t)+A_{ij}(t) + \beta_j(t+1)+E_j(t+1)$\;
+denominator$\leftarrow \log P(X_t)$\;\;
+$\epsilon_{ij}(t)\leftarrow$numerator-denominator\;
+}
+}
+Append new entry to $\gamma$ list of dicts\;
+Append new entry to $\epsilon$ list of dicts\;
+}
+
+Sum $\gamma$ and $\epsilon$ over all values of $T$ for all states $i$ and $j$. The sum below represents the expected number of transitions from state $i$ to state $j$ over the sequence. 
+$$A^*_{ij} = \frac{\sum_t{\epsilon_{ij}(t)}}{\sum_t{\gamma_{i}(t)}} $$\;
+
+Do not update emission matrix $E$.\;\;
+\textbf{return} $A^*$\;
+
+ \caption{Baum Welch Parameter Update}
+ \label{bw}
+\end{algorithm}
+
+\subsubsection{Forward Algorithm}
+The forward algorithm calculates the likelihood of the data, $P(X)$, as well as the probability of the sequence $x_{1:t}$ ending at state $i$ at time $t$. The algorithm was implemented through the pseudo-code below in \emph{hmmSEEKR}. 
+
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\setstretch{1}
+\SetAlgoLined
+\emph{X}$\leftarrow$Sequence of kmers\;
+\emph{Y}$\leftarrow$Sequence of hidden states\;
+\emph{E}$\leftarrow$Emission matrix\;
+\emph{A}$\leftarrow$Transition matrix\;
+\emph{$\pi$}$\leftarrow$Starting probability of each state\;
+\emph{states}$\leftarrow$ List of states \emph{i.e.} [-,+]\;
+\;
+
+$\alpha_i(t)\leftarrow$forward probabilities, indexed by time $t$ and state $i$ \emph{i.e.} the probability of being in state $i$ at time $t$\;
+$T\leftarrow$length of X\;\; 
+
+Initialize probabilities at $t=1$\;
+$\alpha_i(t=1)\leftarrow \pi(i) + \log P(X_t |Y_t = i)$\;\;
+\For{t in T}{
+Append new entry to $\alpha$\;
+\For{state "i" in states}{
+currP$\leftarrow$\{+:0,-:0\} : dict with entry for each state, indexed by state name\;
+\For{state "j" in states}{
+$A_{ij}(t)\leftarrow P(Y_t=i|Y_{t-1}=j)$\;
+currP[j]$\leftarrow \alpha_j(t-1) + A_{ij}(t)$\;
+}
+$\alpha_i(t)\leftarrow \textrm{logsumexp}\left(currP\right)+\log P(X_t|Y_t=i)$\;
+}
+}
+ \caption{Forward Algorithm}
+ \label{fwd}
+\end{algorithm}
+
+\subsubsection{Backward Algorithm}
+The backward algorithm calculates the probability of the observed sequence $P(X)$, as well as the probability of sequence $x_{t+1:T}$ starting in state $i$ at time $t$. The algorithm was implemented as below in \textit{hmmSEEKR} and is primarily used in the Baum-Welch algorithm. 
+
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\setstretch{1}
+\SetAlgoLined
+\emph{X}$\leftarrow$Sequence of kmers\;
+\emph{Y}$\leftarrow$Sequence of hidden states\;
+\emph{E}$\leftarrow$Emission matrix\;
+\emph{A}$\leftarrow$Transition matrix\;
+\emph{$\pi$}$\leftarrow$Starting probability of each state\;
+\emph{states}$\leftarrow$ List of states \emph{i.e.} [-,+]\;
+\;
+
+$\beta_i(t)\leftarrow$backward probabilities, indexed by time $t$ and state $i$ \emph{i.e.} the probability of being in state $i$ at time $t$\;
+$T\leftarrow$length of X\;\; 
+
+Initialize probabilities at $t=T$\;
+$\beta_i(t=T)\leftarrow 0$ ; probability of 1 in log space\;\;
+\For{T to t=1}{
+Append new entry to $\beta$\;
+\For{state "i" in states}{
+currP$\leftarrow$\{+:0,-:0\} : dict with entry for each state, indexed by state name\;
+\For{state "j" in states}{
+$A_{ij}(t)\leftarrow P(Y_{t+1}=j|Y_{t}=i)$\;
+$E_j(t+1)\leftarrow P(X_{t+1}|Y_{t+1}=j)$\;
+currP[j]$\leftarrow \beta_j(t+1) + A_{ij}(t) + E_j(t+1)$\;
+}
+$\beta_i(t)\leftarrow \textrm{logsumexp}\left(currP\right)$\;
+}
+}
+
+\textbf{return} $\beta$ inverted s.t. $1\rightarrow T$ rather than $T \rightarrow 1$\;
+ \caption{Backward Algorithm}
+ \label{bwd}
+\end{algorithm}
+
+\clearpage
+
 \subsection{Python implementation}
 \begin{table}[t!]
 \centering
@@ -670,7 +806,7 @@ And the set of parameters for each \emph{XIST} query with the highest $F_1$ scor
  \hline
 \end{tabular}
 \end{center}
-\caption{Best values of k, the $Q\rightarrow Q$ parameter $\alpha$, and $N\rightarrow N$ parameter $\beta$ as determined through a grid search based approach to identify sequences with the highest SEEKR correlation to the query.}
+\caption[\emph{Rsx} F1-score best parameters]{Best values of k, the $Q\rightarrow Q$ parameter $\alpha$, and $N\rightarrow N$ parameter $\beta$ as determined through a grid search based approach to identify sequences with the highest SEEKR correlation to the query.}
 \label{tbl:rsxparams}
 \end{table}
 

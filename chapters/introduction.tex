@@ -2,9 +2,18 @@ Protein coding genes have dominated the study of genetics for decades. The rules
 
 The advent of RNA sequencing has led to an explosion of annotated RNA transcripts that have no corresponding protein products in multiple mammalian species \cite{Derrien2012TheExpression,Hon2017AnEnds,Bogu2016ChromatinMouse}. Even with numerous advances in genetics and genomics, these RNAs have proven to particularly challenging to understand. The functions of non-coding RNAs range from gene expression regulation through RNA interference, to chromatin remodeling, and extensive association with human disease \cite{Rinn2012GenomeRNAs,Lee2003TheProcessing,Yang2013MALAT-1Regulation,Tripathi2010ThePhosphorylation,Raphael2017IntegratedAdenocarcinoma,}.
 \section{Long non-coding RNAs}
-Long non-coding RNAs (lncRNAs) are defined as non-coding RNA transcripts longer than 200 base pairs (bp) \cite{Derrien2012TheExpression}. lncRNAs have emerged as a major mechanism of gene regulation in eutherians \cite{Sarropoulos2019DevelopmentalSpecies,Bogu2016ChromatinMouse,Sauvageau2013MultipleDevelopment}, however they have been annotated in eukaryotic organisms as far back as \emph{S. cerevisiae} \cite{Niederer2017LongCerevisiae}. Despite their ubiquitous presence, lncRNAs have evaded generalized understanding due to their variety and poor conservation across species \cite{Johnsson2014EvolutionaryFunction}. That is, while proteins can have many different functions within the cell, those functions are encoded through a specific and predictable code, whereas few discernible patterns and poor conservation in lncRNAs occlude any obvious sequence-to-function relationship. 
+Long non-coding RNAs (lncRNAs) are defined as non-coding RNA transcripts longer than 200 base pairs (bp) \cite{Derrien2012TheExpression}. lncRNAs have emerged as a major mechanism of gene regulation in eutherians \cite{Sarropoulos2019DevelopmentalSpecies,Bogu2016ChromatinMouse,Sauvageau2013MultipleDevelopment}, however they have been annotated in eukaryotic organisms as far back as \emph{S. cerevisiae} \cite{Niederer2017LongCerevisiae}. Despite their ubiquitous presence, lncRNAs have evaded generalized understanding due to their variety and poor conservation across species \cite{Johnsson2014EvolutionaryFunction}. That is, while proteins can have many different functions within the cell, those functions are encoded through a specific and predictable code, whereas few discernible patterns and poor conservation in lncRNAs occlude any obvious sequence-to-function relationship.
 
-Of the lncRNAs that have been studied and have known function within the cell, there often is considerable work left to fully understand the mechanism of action of these transcripts, despite many years worth of work. A particular challenge with lncRNAs is that they are often poorly conserved related to protein coding genes, if they are conserved at all \cite{Sleutels2002TheGenes,Pang2006RapidFunction, Johnsson2014EvolutionaryFunction}. Furthermore, conventional alignment tools such as BLAST or nhmmer fail to detect meaningful relationships between two transcripts with similar function \cite{Kirk2018FunctionalContent,Sprague2019NonlinearDomains}. 
+
+
+Of the lncRNAs that have been studied and have known function within the cell, there often is considerable work left to fully understand the mechanism of action of these transcripts, despite many years worth of work. A particular challenge with lncRNAs is that they are often poorly conserved related to protein coding genes (Figure \ref{fig:xistconserve}), if they are conserved at all \cite{Sleutels2002TheGenes,Pang2006RapidFunction, Johnsson2014EvolutionaryFunction}. Furthermore, conventional alignment tools such as BLAST or nhmmer fail to detect meaningful relationships between two transcripts with similar function \cite{Kirk2018FunctionalContent,Sprague2019NonlinearDomains}. 
+
+ \begin{figure}[t!]
+\centering
+\includegraphics[width=.95\textwidth]{images/combined.pdf}
+\caption[Much of \emph{Xist} is poorly conserved across species.]{Human \textit{Xist} aligned against \textit{Xist} from other mammals using dotmatcher with window size = 20 and threshold = 50. Human \textit{Xist} is along the x-axis and the indicated species is along the y-axis. Repeat D-like regions tend to be the largest domains of similarity between human and non-murid \textit{Xists}.}
+\label{fig:xistconserve}
+\end{figure}
 
 lncRNAs have proven difficult to study experimentally, as well. lncRNAs rarely function in isolation, and are not known to be catalytic, but rather function through the concerted action of the lncRNA transcript, RNA binding proteins, and other biological molecules such as DNA or other proteins \cite{Chu2015SystematicProteins,Schertzer2019LncRNA-InducedDNA,Hacisuleyman2016FunctionLocus,Wang2011AExpression,Yang2013MALAT-1Regulation}. Rather than being a single functional unit in a larger sequence of molecular operations within the cell, such as kinases in a signalling cascade, lncRNAs serve as hubs wherein complex molecular processes take place in tandem with each other \cite{Schertzer2019LncRNA-InducedDNA, Chu2015SystematicProteins, Moindrot2015ASilencing,Brockdorff2018LocalNcRNA}. 
 
@@ -87,15 +96,15 @@ Could be accurately modeled with the markov assumption:
 A markov based model would be able to reliably suggest the word \emph{park} instead of \emph{office} because the word \emph{office} would almost never follow the word \emph{dog}, regardless of the remainder of the sentence. This assumption has proven to be wildly useful in the field of bioinformatics, especially with probabilistic modeling of DNA sequences. Mammalian chromosomes can be hundrends of millions of basepairs long, but in reality the relationships between nucleotides exist on much shorter scales. Often a nucleotide can be accurately predicted from preceeding sequence using only the previous 5-6 nucleotides \cite{Burge1997PredictionDNA}.
 
 \subsection{Gene finding and other applications}
-HMMs have been used for many purposes, from sequence alignment \cite{Wheeler2013Nhmmer:HMMs} to modeling the timing of switches in fluorescence from FRET experiments \cite{Sgouralis2017AnAnalysis}. An early application of HMMs to biological data was gene finding in the 1990s \cite{Burge1997PredictionDNA}. During this period the Human Genome Project was well underway, and only a fraction of protein coding genes were known. Huge regions of the human genome were being sequenced but massively parallel RNA sequencing technology did not exist at the time, so it was unknown how many novel genes were in the human genome. Therefore, computational models were developed to predict regions within the genome that contained reading frames. 
+HMMs have been used for many purposes, from sequence alignment \cite{Wheeler2013Nhmmer:HMMs} to modeling the timing of switches in fluorescence from FRET experiments \cite{Sgouralis2017AnAnalysis}. An early application of HMMs to biological data was gene finding in the 1990s \cite{Burge1997PredictionDNA}. During this period the Human Genome Project was well underway, and only a fraction of protein coding genes were known. Huge regions of the human genome were being sequenced but massively parallel RNA sequencing technology did not exist at the time, so it was unknown how many undiscovered genes were in the human genome. Therefore, computational models were developed to predict regions within the genome that contained reading frames\cite{Burge1997PredictionDNA,Pachter2002ApplicationsProblems,Henderson1997FindingModel}. 
 
-The majority of the methods developed utilized HMMs at their core \cite{Burge1997PredictionDNA,Pachter2002ApplicationsProblems,Henderson1997FindingModel}. The reason for this was relatively straightforward. Protein coding genes are composed of distinct functional domains, and each of these functional domains contains unique nucleotide distributions \cite{Burge1997PredictionDNA,Pachter2002ApplicationsProblems,Henderson1997FindingModel}. Therefore, we can start with a very general model of protein coding gene:
+The majority of the methods developed utilized HMMs at their core \cite{Burge1997PredictionDNA,Pachter2002ApplicationsProblems,Henderson1997FindingModel}. The reason for this was relatively straightforward. Protein coding genes are composed of distinct functional domains, and each of these functional domains contains unique nucleotide distributions \cite{Burge1997PredictionDNA,Pachter2002ApplicationsProblems,Henderson1997FindingModel}. Therefore, given a general model of protein coding gene's structure:
 
 \begin{center}
     Promoter$\rightarrow$5' UTR$\rightarrow$Exon$\rightarrow$Intron$\rightarrow \dots \rightarrow$ 3' UTR
 \end{center}
 
-Using the nomenclature defined in 1.4.1, this is the sequence of hidden states $Y$. The actual DNA sequence that we observe, $X$, is controlled by the presence of these functional domains, and an HMM calculates the joint probability of the parse of the sequence $Y$ and the sequence $X$, or $P(X,Y)$. A parse is here is defined as taking a string of symbols, \textit{e.g.} nucleotides in a sequence, and identifying which portions of that string correspond to a set of predefined functional states. The idea is that some parses of $X$ will be more likely than others, and that the model can be used to identify the most likely parse, $Y^*$, of the data. 
+Using the nomenclature defined in 1.4.1, this sequence above would be the sequence of hidden states $Y$. The actual DNA sequence that we observe, $X$, is controlled by the presence of these functional domains, and an HMM calculates the joint probability of the parse of the sequence $Y$ and the sequence $X$, or $P(X,Y)$. A parse is here is defined as taking a string of symbols, \textit{e.g.} nucleotides in a sequence, and identifying which portions of that string correspond to a set of predefined functional states. The idea is that some parses of $X$ will be more likely than others, and that the model can be used to identify the most likely parse, $Y^*$, of the data. 
 \begin{figure}[h]
 \centering
 \includegraphics[width=.75\textwidth]{images/hmm.pdf}
@@ -105,13 +114,13 @@ Using the nomenclature defined in 1.4.1, this is the sequence of hidden states $
 \subsection{Model structure}
 The HMM is constructed with the Markov assumption placed on the sequence of hidden states $Y$, so that for a sequence of length $L$ the probability of the current hidden state $y_t$ is dependent only on the previous hidden state $y_{t-1}$. Further, $y_t$ does not depend on the observed sequence $X$. 
 \begin{equation}
-    P(y_t,X_{1:L},Y_{1:t-1},Y_{t+1:L}) = P(y_t|y_{t-1})
+    P(y_t,X_{1:t},Y_{1:t}) = P(y_t|y_{t-1})
 \end{equation}
 
 And the probability of each observation $x_t \in X$ is conditionally independent of everything except the emitting state at time $t$, $y_t$, and is not dependent on any other observation.
 
 \begin{equation}
-    P(x_t,X_{1:t-1},X_{t+1:L},Y_{1:L}) = P(x_t|y_t)
+    P(x_t,X_{1:t-1},Y_{1:t}) = P(x_t|y_t)
 \end{equation}
 
 These conditional independence assumptions can be represented in the graphical form illustrated in Figure \ref{fig:HMM}. 
@@ -169,9 +178,9 @@ The law of total probability (Eq. \ref{eq:totalprob}) states that, for two rando
 \label{eq:totalprob}
 \end{equation}
 
-Within the context of our HMM, we are interested in knowing the probability of our observation $X=ATC$ regardless of the actual parse. To do this, we apply equation \ref{eq:totalprob} and sum each of the joint probabilities above to get the probability that $X=ATC$, yielding equation \ref{eq:partition}.
+Within the context of our HMM, the probability of our observation $X=ATC$ can be calculated over all possible parses. To do this, we apply equation \ref{eq:totalprob} and sum each of the joint probabilities above to get the probability that $X=ATC$, yielding equation \ref{eq:partition}.
 
-This quantity is important for several reasons, but as described above is impossible to calculate through a brute force approach, as the size of the set $\Phi$ combinatorally explodes.
+This quantity is important for several reasons, particularly in learning problems such as parameter estimation, but as described above is impossible to calculate through a brute force approach, as the size of the set $\Phi$ combinatorally explodes.
 
 Fortunately, there exists an algorithm which can efficiently calculate $P(X)$ with a computational complexity of $LK^2$, compared to the $K^L$ complexity described above \cite{Rabiner1989ARecognition}.
 \subsection{Forward and Backward Algorithms}

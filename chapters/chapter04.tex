@@ -14,7 +14,7 @@ For each $k$-mer frequency $j$ within a sequence $X$, $X_j$ has a $z$-score $X^*
 
 We observed when studying the $k$-mer similarities between XIST and RSX that these $z$-scores were approximately log-normally distributed \cite{Sprague2019NonlinearDomains}. For the analysis within that paper, we transformed $z$-scores as outlined in 2.X.X. However, we sought to perform a more rigorous analysis of different methodologies for adjusting $k$-mer counts. This chapter outlines the methods that we used and their results. 
 
-\section{Results} 
+\section{Results and \textit{k}-mer counting methods} 
 
 \subsection{$k$-mer counts are log-normally distributed}
 
@@ -166,7 +166,7 @@ After the transformation, the SEEKR matrix is now indicating that A and T are eq
 seq1 & 1 & 1   & 7  & 1 \\
 seq2 & 1   & 4 & 5 & 2  
 \end{tabular}
-\caption{The same matrix as in Table \ref{tbl:ex1} but transformed by adding the minimum of each column to all values within that column, then adding 1 such that all values are greater than 0.}
+\caption[Column transformed SEEKR matrix from Table 4.5]{The same matrix as in Table \ref{tbl:ex1} but transformed by adding the minimum of each column to all values within that column, then adding 1 such that all values are greater than 0.}
 \label{tbl:ex2}
 \end{center}
 \end{table}
