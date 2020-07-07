@@ -1,30 +1,30 @@
 \section{Introduction}
-$K$-mer counting is a seemingly relatively straightforward process. Given a sequence $X = \{x_1,\dots,x_L\}$ of length $L$, for each position $i\in 1\leq i\leq \left(L-k+1\right)$ within the sequence, a sub-string is sliced from $[i,i+k)$. Where ``[" indicates inclusion, and ``)" indicates non-inclusive. A hash-map (python dictionary), then saves the count for each $k$-mer as encountered in $X$. In many applications, the frequency of each $k$-mer would be calculated by dividing each $k$-mer count by the total number of $k$-mers, \emph{i.e.} $L-k+1$. 
+$K$-mer counting is a seemingly relatively straightforward process. Given a sequence $X = \{x_1,\dots,x_L\}$ of length $L$, for each position $i\in 1\leq i\leq \left(L-k+1\right)$ within the sequence, a sub-string is sliced from $[i,i+k)$. Where ``[" indicates inclusive, and ``)" indicates non-inclusive. A hash-map (python dictionary), then saves the count for each $k$-mer as encountered in $X$. In many applications, the frequency of each $k$-mer is then calculated by dividing each $k$-mer count by the total number of $k$-mers, \emph{i.e.} $L-k+1$. 
 
-SEEKR differs from this approach in that the algorithm adjusts from the non-uniformity of $k$-mers within the genome. Some $k$-mers are more, or less, frequent than others solely due to mononucleotide frequency variations within the genome \cite{Haubold2014Alignment-freeGenetics,Yang2008PerformanceReconstruction}. Therefore, the enrichment for already common $k$-mers, or depletion of rare $k$-mers, are not informative unless it is known if they are significantly more enriched than background. To account for this, SEEKR calculates a $z$-score for each $k$-mer rather than a frequency.
+SEEKR differs from this approach in that the algorithm adjusts for the non-uniformity of $k$-mers within the genome. Some $k$-mers are more, or less, frequent than others solely due to mononucleotide frequency variations within the genome \cite{Haubold2014Alignment-freeGenetics,Yang2008PerformanceReconstruction}. Therefore, the enrichment for already common $k$-mers, or depletion of rare $k$-mers, is not informative unless it is known that they are significantly more enriched or depleted than background. To account for this, SEEKR calculates a $z$-score for each $k$-mer rather than a frequency.
 
-The $z$-score is calculated by first calculating the $k$-mer frequencies within some reference set of sequences, \emph{e.g.} the transcriptome. From this reference set of $k$-mer frequencies, the mean frequency of each $k$-mer $\mu_j$ and the standard deviation of each $k$-mer $\sigma_j$ is calculated. 
+The $z$-score is calculated by first calculating the $k$-mer frequencies within some reference set of sequences, \emph{e.g.} the transcriptome. From this reference set of $k$-mer frequencies, SEEKR calculates, for each $k$-mer ``$j$", the mean frequency of each $k$-mer $\mu_j$ and the standard deviation of each $k$-mer $\sigma_j$. 
 
-For each $k$-mer frequency $j$ within a sequence $X$, $X_j$ has a $z$-score $X^*_j$ \cite{Kirk2018FunctionalContent}: 
+For each $k$-mer $j$ within a sequence $X$, $X_j$ (the frequency of $j$ in $X$), has a $z$-score $X^*_j$ \cite{Kirk2018FunctionalContent}: 
 
 \begin{equation}
     X_j^* = \frac{X_j-\mu_j}{\sigma_j}
     \label{eq:zscore}
 \end{equation}
 
-We observed when studying the $k$-mer similarities between XIST and RSX that these $z$-scores were approximately log-normally distributed \cite{Sprague2019NonlinearDomains}. For the analysis within that paper, we transformed $z$-scores as outlined in 2.X.X. However, we sought to perform a more rigorous analysis of different methodologies for adjusting $k$-mer counts. This chapter outlines the methods that we used and their results. 
+We observed that $k$-mer similarities between XIST and RSX that these $z$-scores were approximately log-normally distributed \cite{Sprague2019NonlinearDomains}. For the analysis in \cite{Sprague2019NonlinearDomains}, we transformed $z$-scores as outlined in 2.3.4. However, we sought to perform a more rigorous analysis of different methodologies for adjusting $k$-mer counts. This chapter outlines the methods that we used and their results. 
 
 \section{Results and \textit{k}-mer counting methods} 
 
 \subsection{$k$-mer counts are log-normally distributed}
 
-We observed that a primary challenge with estimating the correlation between highly repetitive regions of \emph{XIST} and other \emph{cis}-repressive lncRNAs was that the $k$-mer counts were heavily right-skewed \cite{Sprague2019NonlinearDomains}. Pearson correlation is primarily intended to calculate the correlation between two normally distributed random variables. Spearman correlation can be used when this condition is not met, but a further observation we made was that the mode of the $k$-mer count distribution for any sequence or sub-sequence was 0, yielding artificially high correlations between any two given sequences \cite{Sprague2019NonlinearDomains}. 
+We observed that a challenge when estimating the correlation between highly repetitive regions of \emph{XIST} and other \emph{cis}-repressive lncRNAs was that the $k$-mer counts were heavily right-skewed \cite{Sprague2019NonlinearDomains}. Pearson correlation is primarily intended to calculate the correlation between two normally distributed random variables. Spearman correlation can be used when this condition is not met, for a strictly monotonic relationship, but we found that the mode of the $k$-mer count distribution for any sequence or sub-sequence was 0, yielding artificially high correlations between any two given sequences \cite{Sprague2019NonlinearDomains}. 
 
-To correct for the right skewed distribution of $k$-mers across all sequences, we first confirmed that $k$-mer counts within lncRNAs are log-normally distributed (Figure \ref{fig:logdist}). The left panel of Figure \ref{fig:logdist} shows the marginal count distribution of $k$-counts summed over all possible $k$-mers, over all annotated human transcripts (Methods 4.x.x). We then log-transformed the data and observed an approximately normal distribution (Figure \ref{fig:logdist}), with the exception being the mode of the distribution was still a count of 0. This indicated that $k$-mer frequencies amongst all transcripts were log-normally distributed and that correcting for this in the SEEKR algorithm may yield better correlation estimates amongst transcripts. 
+To correct for the right skewed distribution of $k$-mers across all sequences, we first confirmed that $k$-mer counts within lncRNAs are log-normally distributed (Figure \ref{fig:logdist}). The left panel of Figure \ref{fig:logdist} shows the marginal count distribution of $k$-counts summed over all possible $k$-mers, over all annotated human transcripts (Methods 4.3.1). We then log-transformed the data and observed an approximately normal distribution (Figure \ref{fig:logdist}), with the exception being the mode of the distribution was still a count of 0. This indicated that $k$-mer frequencies amongst all transcripts were log-normally distributed and that correcting for this in the SEEKR algorithm may yield better correlation estimates amongst transcripts. 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=\textwidth]{images/kmers_log_dist.pdf}
-\caption[$k$-mers are log-normally distributed within sequences]{$k$-mer counts are log-normally distributed. A) The frequency of $k$-mer counts over all $k$-mers, over all annotated transcripts in the human genome. B) The distribution in (A), with log-transformed counts.}
+\includegraphics[width=.8\textwidth]{images/kmers_log_dist.pdf}
+\caption[$k$-mers are log-normally distributed within sequences]{$k$-mer counts are log-normally distributed. A) The frequency of $k$-mer counts over all $k$-mers, over all annotated transcripts in the human genome. B) The distribution in (A), log-transformed.}
 \label{fig:logdist}
 \end{figure}
 
@@ -32,7 +32,7 @@ To correct for the right skewed distribution of $k$-mers across all sequences, w
 
 We then asked if a $k$-mer counting strategy could be devised that yielded more consistent estimates of correlations between two sequences, in a way that is sensible and mathematically tractable. The primary difficulty is the addition of a $z$-score calculation step within SEEKR, which transforms the data in a way that suppresses the influence of naturally frequent or depleted $k$-mers within a reference set, \emph{e.g.} the transcriptome. 
 
-Within our \emph{Rsx} analysis in Chapter 2, we originally noticed that the $z$-scores themselves were log-normally distributed, and so we log-transformed the $z$-scores after shifting all values by equation \ref{eq:seekrrsx} (Sprague et al, 2019).
+We found in \cite{Sprague2019NonlinearDomains}, that the $z$-scores themselves were log-normally distributed, and so we log-transformed the $z$-scores after shifting all values by equation \ref{eq:seekrrsx} \cite{Sprague2019NonlinearDomains}.
 
 \begin{equation}
 M_{ij}^* = \log_2{\left(M_{ij} + |\min{M}|+1\right)}
@@ -40,13 +40,13 @@ M_{ij}^* = \log_2{\left(M_{ij} + |\min{M}|+1\right)}
 \end{equation}
 
 
-Where $M$ is the SEEKR $z$-score matrix, $i$ is the row, $j$ is the column ($M_{ij}$ is then the coordinates of a single data point in $M$), and $\min{M}$ is the smallest value in the matrix $M$. This translation of the data allows for the calculation of the log. An issue with this methodology, however, is that there is no clear best choice of value to add to each data point in $M$, due to the log-transform. The goal, therefore, was to add the smallest possible value to each data-entry without destroying the linear relationship between row vectors. Each row within a SEEKR matrix represents the vector of $k$-mer frequencies within a single sequence, and the correlation step in SEEKR calculates the Pearson correlation between all pair-wise combinations of rows within $M$.
+Where $M$ is the SEEKR $z$-score matrix, $i$ is the row, $j$ is the column ($M_{ij}$ is then the coordinates of a single data point in $M$), and $\min{M}$ is the smallest value in the matrix $M$. This translation of the data allows for the calculation of the logarithm. An issue with this methodology, however, is that there is no clear best choice of value to add to each data point in $M$, due to the log-transform. The goal, therefore, was to add the smallest possible value to each data-entry without destroying the linear relationship between row vectors. Each row within a SEEKR matrix represents the vector of $k$-mer frequencies within a single sequence, and the correlation step in SEEKR calculates the Pearson correlation between all pair-wise combinations of rows within $M$.
 
-Below, we iterate through a series of algorithms for generating the final SEEKR matrix from which correlations will be calculated. 
+Below, we iterate through a series of algorithms for generating the final SEEKR matrix from which correlations will be calculated, and the resulting correlations.  
 
 \subsubsection{Method 1. Kirk et al. 2018}
 
-The first method we outline is the original algorithm published in \emph{Kirk et al.}. Here, we first count the occurrence of each $k$-mer in a sequence. This count is then normalized to a per-kB count by dividing each $k$-mer count by the length of the sequence and multiplying by 1000. This process is then repeated for a reference set of sequences, \emph{e.g.} the transcriptome, and the mean frequency and standard deviation for each $k$-mer over the reference set are calculated. From there, each frequency count in the SEEKR frequency matrix is transformed using Equation \ref{eq:zscore}. 
+The first method we outline is the original algorithm published in \emph{Kirk et al.}. Here, we first count the occurrence of each $k$-mer in a sequence. This count is then normalized to a per-kB count by dividing each $k$-mer count by the length of the sequence and multiplying by 1000. This process is then repeated for a reference set of sequences, \emph{e.g.} the transcriptome, and the mean frequency and standard deviation for each $k$-mer over the reference set are calculated. From there, each frequency count in the SEEKR frequency matrix is transformed using Equation \ref{eq:zscore} \cite{Kirk2018FunctionalContent}.  
 
 \begin{table}[ht]
 \begin{center}
@@ -57,17 +57,17 @@ KR2 & 0.085   & -0.089  & -0.111  & -0.024 & 0.147  \\
 KR3 & -0.041 & -0.119   & -0.009 & -0.021 & 0.267   \\
 KR4 & 0.180   & -0.114 & -0.081  & 0.087   & 0.294 
 \end{tabular}
-\caption[Kirk et al. $k$-mer counting]{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated as in \emph{Kirk et al.}, 2018.}
+\caption[Kirk et al. $k$-mer counting]{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated as in \cite{Kirk2018FunctionalContent}, 2018.}
 \label{tbl:kmers1}
 
 \end{center}
 \end{table}
 
-From here, the pair-wise correlations of each sequence's $k$-mer profile, \emph{i.e.} the row vector of $k$-mer $z$-scores, are calculated. For each of the methods outlined in this chapter, we compare the tandem repeats of \emph{XIST} against the tandem repeats of \emph{Rsx} as in \emph{Sprague et al.}. The correlations for this algorithm are shown in Table \ref{tbl:kmers1}.
+From here, the pair-wise correlations of each sequence's $k$-mer profile, \emph{i.e.} the row vector of $k$-mer $z$-scores, are calculated. For each of the methods outlined in this chapter, the tandem repeats of \emph{XIST} were compared against the tandem repeats of \emph{Rsx} as in \cite{Sprague2019NonlinearDomains}. The correlations for this algorithm are shown in Table \ref{tbl:kmers1}.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\textwidth]{images/natgen.pdf}
+\includegraphics[width=.9\textwidth]{images/natgen.pdf}
 \caption[Kirk et al. $k$-mer counting $z$-score scatter plots]{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 1. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
 \label{fig:natgenscat}
 \end{figure}
@@ -83,17 +83,17 @@ KR2 & 0.084  & -0.122  & -0.122 & -0.013 & 0.145  \\
 KR3 & -0.077   & -0.093 & 0.014 & -0.023 & 0.249   \\
 KR4 & 0.210   & -0.114 & -0.068 & 0.112   & 0.398
 \end{tabular}
-\caption[Sprague et al. $k$-mer counting]{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated as in \emph{Sprague et al.}, 2019.}
+\caption[Sprague et al. $k$-mer counting]{SEEKR Pearson correlations between the tandem repeats of \emph{Xist} and \emph{Rsx}. Correlations were calculated as in \cite{Sprague2019NonlinearDomains}, 2019.}
 \label{tbl:kmers2}
 
 \end{center}
 \end{table}
 
-The second method outlined is the algorithm published in \emph{Sprague et al.}. The $k$-mers are counted exactly as in \emph{Kirk et al.}, however we additionally calculated the $log_2$ of the $z$-scores using Equation \ref{eq:seekrrsx}. Tandem repeat comparisons that were highly correlated as in Method 1 saw large increases in correlation using this method, whereas uncorrelated regions saw little change (Table \ref{tbl:kmers2}). 
+The second method outlined is the algorithm published in \cite{Sprague2019NonlinearDomains}. The $k$-mers are counted exactly as in \cite{Kirk2018FunctionalContent}, however we additionally calculated the $log_2$ of the $z$-scores using Equation \ref{eq:seekrrsx}. Tandem repeat comparisons that were highly correlated as in Method 1 saw large increases in correlation using this method, whereas uncorrelated regions saw little change (Table \ref{tbl:kmers2}). 
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\textwidth]{images/rsxscatter.pdf}
+\includegraphics[width=.9\textwidth]{images/rsxscatter.pdf}
 \caption[Sprague et al. $k$-mer counting $z$-score scatter plots]{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 2. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
 \label{fig:rsxscat}
 \end{figure}
@@ -101,7 +101,7 @@ The second method outlined is the algorithm published in \emph{Sprague et al.}. 
 
 \subsubsection{Method 3. Row-wise addition to z-scores}
 
-A concern when translating data, as in Equation \ref{eq:seekrrsx}, is the unequal effect it has when calculating the log of the data. Typically, Pearson correlation is translation invariant, \emph{i.e.} the addition of any constant to all elements of a vector does not affect its correlation with another vector. This is because the calculation of the Peasron correlation involves 0-mean centering each vector, which negates the addition or multiplication of any constant. Another intuition is that moving a scatter plot around on a graph changes the location of the data points, but it doesn't change the relative relationship between data points (slope of best fit). 
+A concern when translating data, as in Equation \ref{eq:seekrrsx}, is the unequal effect it has when calculating the log of the data. Typically, Pearson correlation is translation invariant, \emph{i.e.} the addition of any constant to all elements of a vector does not affect its correlation with another vector. This is because the calculation of the Pearson correlation involves 0-mean centering each vector, which negates the addition or multiplication of any constant. Another intuition for this is that moving a scatter plot around on a graph changes the location of the data points, but it doesn't change the line of best fit between the data. 
 
 \begin{table}[ht]
 \begin{center}
@@ -117,12 +117,12 @@ KR4 & 0.214    & -0.110 & -0.066  & 0.115   & 0.404
 \end{center}
 \end{table}
 
-However, the inclusion of a log-transformation step alters the linear relationship of the data depending on how far the data is from 0. Therefore, it is ideal to add the smallest possible constant to each entry in the matrix. \emph{Sprague et al.} added the minimum of the entire matrix to each $z$-score, however adding the minimum of each row to all values within that row allows for the addition of the smallest possible value such that the log can be taken, without altering the relationship between the $k$-mer counts within a given sequence. The results were similar to those in Method 2, except with further increases in correlation between high correlated domains such as KR4-MXE and KR1-MXB (Table \ref{tbl:kmers3}). 
+However, the inclusion of a log-transformation step alters the linear relationship of the data depending on how far the data point is from 0. Therefore, it is ideal to add the smallest possible constant to each entry in the matrix. \emph{Sprague et al.} added the minimum of the entire matrix to each $z$-score, however adding the minimum of each row to all values within that row allows for the addition of the smallest possible value such that the log can be taken, without altering the relationship between the $k$-mer counts within a given sequence. The results were similar to those in Method 2, except with further increases in correlation between high correlated domains such as KR4-MXE and KR1-MXB (Table \ref{tbl:kmers3}). 
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
-\includegraphics[width=\textwidth]{images/rows.pdf}
-\caption\caption[Row-wise minimum addition to $z$-score scatter plots]{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 3. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
+\includegraphics[width=.9\textwidth]{images/1_figs.pdf}
+\caption[Row-wise minimum addition to $z$-score scatter plots]{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 3. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
 \label{fig:rowscat}
 \end{figure}
 
@@ -173,7 +173,7 @@ seq2 & 1   & 4 & 5 & 2
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\textwidth]{images/2_figs.pdf}
+\includegraphics[width=.9\textwidth]{images/2_figs.pdf}
 \caption[Column-wise minimum addition to $z$-score scatter plots]{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 4. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
 \label{fig:2plots}
 \end{figure}
@@ -182,7 +182,7 @@ seq2 & 1   & 4 & 5 & 2
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\textwidth]{images/7_figs.pdf}
+\includegraphics[width=.9\textwidth]{images/7_figs.pdf}
 \caption[Pseudo-count to raw $k$-mer counts]{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 5. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
 \label{fig:7plots}
 \end{figure}
@@ -222,12 +222,16 @@ KR4 & 0.249   & -0.078 & 0.015 & 0.150  & 0.431
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\textwidth]{images/9_figs.pdf}
+\includegraphics[width=.9\textwidth]{images/9_figs.pdf}
 \caption[Length normalized pseudocount $z$-score scatter plots]{Scatter plots of SEEKR $z$-scores for all pair-wise comparisons between MXA,MXB,HXD,MXE and KR1,KR2,KR3, and KR4 using Method 6. Each dot represents a $k$-mer $z$-score for both transcripts being compared (x,y axis).}
 \label{fig:9plots}
 \end{figure}
 
 \clearpage
+
+\section{Discussion}
+
+Several methods for counting $k$-mers in SEEKR were analyzed. We observed the methodology in \cite{Kirk2018FunctionalContent} could be improved, but the calculation in \cite{Sprague2019NonlinearDomains} was not optimal and a touch convoluted. We found that $k$-mers are log-normally distributed in the genome (Figure \ref{fig:logdist}), and that adding a pseudo-count of 1 posterior to length normalization of the raw count data (Method 6), provided the sharpest distinction between correlated domains in \textit{Xist} and \textit{Rsx}, without erroneously increasing correlation between domains that we originally did not find to have sequence based relationships in \cite{Sprague2019NonlinearDomains} as well as linear relationships between the data that are well suited for Pearson correlation calculations (Figure \ref{fig:9plots}). 
 
 \section{Methods}
 

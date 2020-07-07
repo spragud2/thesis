@@ -60,11 +60,14 @@
     \fontsize{11}{11}\selectfont
 }
 \usepackage{ragged2e}
+\newenvironment{abbreviations}{\begin{list}{}{\renewcommand{\makelabel}{\abbrlabel}}}{\end{list}}
 \usepackage{changepage}
 \setlength{\RaggedRightParindent}{\parindent}
 \usepackage[a4paper,margin=1in]{geometry}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
+\newcommand{\abbrlabel}[1]{\makebox[3cm][l]{\textbf{#1}\ \dotfill}}
+
 \usepackage{setspace} 
 \fancyhf{}
 \fancyhead[LE,RO]{\changefont \slshape \rightmark} %section
@@ -131,7 +134,7 @@ Daniel Sprague: Identification of functional domains in non-coding RNA\\
 \end{center}
 Long non-coding RNAs (lncRNAs) are known to be important regulators of gene expression and other cellular functions. However, only a very small proportion of lncRNAs have been extensively studied. The remainder exist largely as annotations in a database with no known function, if any. A primary challenge to understanding how lncRNAs function is the poorly understood sequence-to-function relationship relative to protein coding genes. Within lncRNA transcripts, boundaries of functional sequence are not explicitly defined by exon-intron boundaries, and the code by which lncRNAs derive function is not nearly as explicit as in a protein coding reading frame. To address these challenges, we have developed a probabilistic framework, \emph{hmmSEEKR}, for identifying where within a non-coding RNA functional regions may be located based off of enrichment of short motifs, or $k$-mers. 
 
-We used \emph{hmmSEEKR} to identify functional sequence domains in several lncRNAs that silence gene expression through recruitment of Polycomb, using \emph{XIST} as a model transcript. These predicted sequence domains share no detectable sequence alignment with \emph{XIST}; however, they share high $k$-mer based similarity with known functional domains in \emph{XIST} and precisely coincided with the location of RNA binding protein (RBP) interactions known to be important for Polycomb mediated silencing. Furthermore, we were able to extend our analysis to the entire transcriptome and identify many \emph{XIST}-like sequence domains throughout the transcriptome that interact with Polycomb-associated RBPs. These algorithms are some of the first sequence-to-function models based on functional analogy rather than homology between RNA transcripts. We hope that these tools can be used to help identify potentially functional non-coding transcripts that have yet to be studied. 
+We used \emph{hmmSEEKR} to identify functional sequence domains in several lncRNAs that silence gene expression through recruitment of Polycomb, using \emph{XIST} as a model transcript. These predicted sequence domains share no detectable linear sequence alignment with \emph{XIST}; however, they share high $k$-mer based similarity with known functional domains in \emph{XIST} and precisely coincided with the location of RNA binding protein (RBP) interactions known to be important for Polycomb mediated silencing. Furthermore, we were able to extend our analysis to the entire transcriptome and identify many \emph{XIST}-like sequence domains throughout the transcriptome that interact with Polycomb-associated RBPs. We have packaged these algorithms into python-based software and have included an in-depth walk-through of the code and tutorial of how to analyze sequences using \textit{hmmSEEKR. } 
 \end{abstract}
 \chapter*{\center Acknowledgements}
 \stepcounter{page}
@@ -142,6 +145,47 @@ This work wouldn't have been possible without all the fantastic people who helpe
 \listoffigures
 \listoftables
 \clearpage
+\chapter*{List of Abbreviations}
+\begin{abbreviations}
+\item [$\in$] in
+\item [$\mapsto$] maps to
+\item [$\sum_X$] sum the values over all items in the set $X$
+\item [``+"] query state in \emph{hmmSEEKR}
+\item [``-"] null state in \textit{hmmSEEKR}
+\item [bp] Basepair
+\item [BLAST] Basic local alignment search tool
+
+\item [eCLIP] Enhanced cross-linking immunoprecipitation 
+\item [HMM] Hidden Markov Model
+\item [HMMER] Profile HMM tool for sequence alignment 
+\item[hmmSEEKR] Hidden Markov Model based Sequence Evaluation through $k$-mer representation
+\item [KL-Divergence] Kullback-Leibler Divergence
+\item [KR(1-4)] Koala \textit{Rsx} Repeats 1,2,3,4
+\item [lncRNA] Long non-coding RNA
+\item [$P(X,Y)$] Joint probability distribution
+\item [$P(X|Y)$] Conditional probability distribution
+\item [MX(A-E)] Mouse \textit{Xist} Repeats A,B,C,E
+\item [HX(A-E)] Human \textit{XIST} Repeats A,B,D,E
+\item [mRNA] Messenger RNA
+\item [OR(1-4)] Opossum \textit{Rsx} Repeats 1,2,3,4
+
+\item [PRC] Polycomb Repressive Complex
+\item [PWM] Position weight matrix 
+
+\item [RBP] RNA Binding Protein
+\item [RNA-IP] RNA immunoprecipitation
+\item [RNA-seq] RNA sequencing 
+\item [SAF] Simple annotation format
+\item [SEEKR] Sequence evaluation through $k$-mer representation
+\item [XCI] X chromosome inactivation
+\item [Xi] Inactive X
+\item [\textit{XIST}] Human X inactivation specific transcript
+\item [\textit{Xist}] Mouse X inactivation specific transcript
+
+\end{abbreviations}
+\clearpage
+
+
 
 \mainmatter
 
