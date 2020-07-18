@@ -1,7 +1,8 @@
+\section{Long non-coding RNAs}
 Protein coding genes have dominated the study of genetics for decades. The rules by which they function are well understood and we can often predict the function of an unknown gene based off of its sequence alone \cite{Whisstock2003PredictionStructure}. This is due to the well understood rules of protein coding reading frames and the principles of conservation in evolutionay biology \cite{Burge1997PredictionDNA,Altschul1990BasicTool,Wheeler2013Nhmmer:HMMs}. The paradigm of the central dogma, DNA $\rightarrow$RNA$\rightarrow$Protein, was upended, however, with the discovery of the human non-coding \emph{XIST} RNA  and its essential function in the process of X chromosome inactivation (XCI) in all eutherians \cite{Brown10TheNucleus.,Brockdorff10TheNucleus.}. This discovery led to RNA being thought of as not just a messenger, but also as a functional end product in the cell \cite{Rinn2012GenomeRNAs,Lee2003TheProcessing,Yang2013MALAT-1Regulation,Tripathi2010ThePhosphorylation,Raphael2017IntegratedAdenocarcinoma,Brown10TheNucleus.,Brockdorff10TheNucleus.}. 
 
 The advent of RNA sequencing has led to an explosion of annotated RNA transcripts that have no corresponding protein products in multiple mammalian species \cite{Derrien2012TheExpression,Hon2017AnEnds,Bogu2016ChromatinMouse}. Even with numerous advances in genetics and genomics, these RNAs have proven particularly challenging to understand. The functions of non-coding RNAs range from gene expression regulation through RNA interference, to chromatin remodeling, and extensive association with human disease \cite{Rinn2012GenomeRNAs,Lee2003TheProcessing,Yang2013MALAT-1Regulation,Tripathi2010ThePhosphorylation,Raphael2017IntegratedAdenocarcinoma,}.
-\section{Long non-coding RNAs}
+
 Long non-coding RNAs (lncRNAs) are defined as non-coding RNA transcripts longer than 200 base pairs (bp) \cite{Derrien2012TheExpression}. lncRNAs have emerged as a major mechanism of gene regulation in eutherians \cite{Sarropoulos2019DevelopmentalSpecies,Bogu2016ChromatinMouse,Sauvageau2013MultipleDevelopment}, however they have been annotated in eukaryotic organisms as far back as \emph{S. cerevisiae} \cite{Niederer2017LongCerevisiae}. Despite their ubiquitous presence, lncRNAs have evaded generalized understanding due to their variety and poor conservation across species \cite{Johnsson2014EvolutionaryFunction}. That is, while proteins can have many different functions within the cell, those functions are encoded through a specific and predictable code, whereas few discernible patterns and poor conservation in lncRNAs occlude any obvious sequence-to-function relationship.
 
 
@@ -137,7 +138,7 @@ This joint probability distribution allows us to work with the three most common
 There are three primary questions that an HMM is used to answer. 
 
 \begin{enumerate}
-    \item Evaluation: What is the probability of being in a given state, at a particular point in time? A related quantity is the total probability of the observed sequence, \emph{i.e.} $P(X)$. This value is crucial from converting the joint distribution to conditional distributions, especially with respect to Baye's Theorem and the calculation of maximum likelihood estimates for parameters.
+    \item Evaluation: What is the probability of being in a given state, at a particular point in time? A related quantity is the total probability of the observed sequence, \emph{i.e.} $P(X)$. This value is crucial to convert the joint distribution to conditional distributions, especially with respect to Baye's Theorem and the calculation of maximum likelihood estimates for parameters.
     \item Decoding: What is the most likely parse of the sequence? 
     \item Learning: What are the most likely set of parameters, given the observed data?
 \end{enumerate}
@@ -286,7 +287,7 @@ V^*(t-1) = \argmax_i{\mu_i(t)}
 Once the list created from equation \ref{eq:backtrace} has been inverted, as it is a back-trace, the path $V^* = \phi_{max}$, which is the parse $\phi \in \Phi$ that maximizes the joint probability of the HMM \cite{Rabiner1989ARecognition}.
 
 \subsection{Baum-Welch Algorithm}
-A final common task for HMMs is to learn the set of parameters that maximize the likelihood of the model, \textit{i.e.} what set of parameters $\theta = \{A=$transition parameters,$E=$emission parameters,$\pi=$initiation parameters$\}$, maximize the probability of the observed sequence $P(X|\theta)$. The Baum-Welch algorithm does this through an expectation-maximization (EM) algorithm that estimates a new set of parameters, $\theta^*$, by iterating through the forward and backward algorithms, and then calculation of the new likelihood $P(X|\theta^*)$ using the updated parameter values. This algorithm is guaranteed to converge to a \textit{local} maximum -- not necessarily a global maximum, meaning that better estimates for the parameters may exist. Furthermore, it is possible for the Baum-Welch algorithm to overfit the data, \textit{i.e.} $P(X|\theta^{\texttt{MLE}}) > P(X|\theta^{\texttt{true}})$. 
+A final common task for HMMs is to learn the set of parameters that maximize the likelihood of the model, \textit{i.e.} what set of parameters $\theta$, maximizes the probability of the observed sequence $P(X|\theta)$. The Baum-Welch algorithm does this through an expectation-maximization (EM) algorithm that estimates a new set of parameters, $\theta^*$, by iterating through the forward and backward algorithms, and then calculation of the new likelihood $P(X|\theta^*)$ using the updated parameter values. This algorithm is guaranteed to converge to a \textit{local} maximum -- not necessarily a global maximum, meaning that better estimates for the parameters may exist. Furthermore, it is possible for the Baum-Welch algorithm to overfit the data, \textit{i.e.} $P(X|\theta^{\texttt{MLE}}) > P(X|\theta^{\texttt{true}})$. 
 
 \subsubsection{Initiation}
 Any value, including randomized values, can be initially assigned to the parameter values in $\theta = \{A,E,\pi\}$, however if \textit{a priori} knowledge exists then that may speed convergence to the MLE. The Baum-Welch algorithm utilizes the forward and backward algorithm, and being described above, will be compressed here.
@@ -311,12 +312,27 @@ $$\epsilon_{ij}(t) = P(y_t =i,y_{t+1}=j|X,\theta) = \frac{P(y_t = i,y_{t+1}=j,X|
 $$A_{ij}^* = \frac{\sum_{t=1}^{T-1}{\epsilon_{ij}(t)}}{\sum_{t=1}^{T}{\gamma_i(t)}}$$ 4. Calculate the expected number of occurrences of each observation category in the emission distribution (in the use-case in this dissertation, all $k$-mers), ``v'' (an observation in $X$) in state $i$, relative to the total occurrence of state $i$. 
 
 $$E_i^*(v) = \frac{\sum_{t=1}^T{1_{x_t=v}}\gamma_i(t)}{\sum_{t=1}^T{\gamma_i(t)}}$$ Where $1_{x_t=v}$ is an indicator that equals 1 if $x_t = v$, and 0 otherwise. 
+\clearpage 
 
-
-
-\subsubsection{}
-
-
+\titleformat{\section}
+  {\centering\normalfont\fontsize{12}{12}\bfseries}{\thesection}{1em}{}
 \begin{singlespace}
-\printbibliography[heading=bibintoc,title={References}]
+
+\printbibliography[heading=subbibintoc,title={REFERENCES}]
+
 \end{singlespace}
+
+\titleformat{\section}
+  {\normalfont\fontsize{12}{12}\bfseries}{\thesection}{1em}{}
+% \clearpage
+% \phantomsection
+
+% {\def\chapter*#1{} % suppress bibliograph header.
+% \begin{singlespace}
+% \begin{center}
+% \textbf{REFERENCES}
+% \vspace{17pt}
+% \end{center}
+% \printbibliography[heading=bibintoc,title={References}]
+% \end{singlespace}
+% }

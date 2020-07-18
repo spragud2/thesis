@@ -2,9 +2,9 @@
 \emph{XIST} and \emph{Rsx} provide compelling examples of how the sequence-to-function relationship in lncRNAs may be modular in nature \cite{Brockdorff2018LocalNcRNA, Sprague2019NonlinearDomains,Pintacuda2017HnRNPKSilencing,Wang2017TargetingGuanines,Zhao2008PolycombChromosome}. These two transcripts demonstrate clear sequence regions, defined by the boundaries of their tandem repeat domains \cite{Brown10TheNucleus.,Brockdorff10TheNucleus.,Sprague2019NonlinearDomains,Grant2012RsxInactivation}, that are conserved and are clearly functional as demonstrated by the binding of RNA binding proteins to their transcripts \cite{Hoki2009AMouse,Moindrot2015ASilencing,Sunwoo2017RepeatCIZ1,Nesterova2001CharacterizationSequence,Royce-Tolland2010TheInactivation,Brown10TheNucleus.,Brockdorff10TheNucleus.}. Our model of lncRNA function, specifically the bag-of-words model that the order of short motifs in a sequence is less important than their overall density \cite{Kirk2018FunctionalContent}, implicitly means that a tandem repeated sequence may not be essential for recruitment of these RNA binding proteins \cite{Sprague2019NonlinearDomains}.
 
 It is possible to show that the $k$-mer content of a sequence can be perfectly preserved while destroying the tandomly repeated nature of a sequence (Fig \ref{fig:shufD} A-C). This can be done by building a graph whose nodes are $(k-1)$-mers and whose edges are connected such that a sequence is reconstructed with the exact same $k$-mer frequencies as the original sequence \cite{Jiang2008UShuffle:Counts}. Furthermore, if we examine lncRNA sequences in mouse with very high SEEKR correlation to HXD it is clear that not all these sequences contain substantial tandemly repeated sequence as in \emph{XIST} (Fig \ref{fig:shufD} D-H). 
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
-\includegraphics[width=\textwidth]{shufD.png}
+\includegraphics[width=.85\textwidth]{shufD.png}
 \caption[Shuffling $k$-mers abrogates tandem repeat without changing motif content]{Dot plot alignments and SEEKR-defined similarity between human Xist Repeat D, shuffled Repeat D, and the top 5 mouse lncRNAs that are most similar to Repeat D. Repeat D was shuffled using $\mu$Shuffle and preserving $k$-mer content at $k$ = 4 (Jiang et al., 2008). Dotplots were generated using a window size 20 nucleotides and a threshold of 50\% identity.}
 \label{fig:shufD}
 \end{figure}
@@ -101,7 +101,7 @@ Rank&Start & End   & Length & kmerLLR & seqName                               \\
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{images/hnkmousehuman.png}
-\caption[HNRNPK enrichment relative tandem repeat locations in human \emph{XIST} and mouse \emph{Xist}.]{UCSC wiggle- density display of HNRNPK CLIP data (orange) aligned over the mouse (mm9) and human (hg38) Xist genomic loci. Mouse and human clip data are from \cite{Cirillo2016QuantitativeEditor,VanNostrand2016RobusteCLIP}. Arrows denote direction of Xist transcription. Black rectangles indicate genomic locations of mouse and human repeat sequences used in this work.}
+\caption[HNRNPK enrichment in human \emph{XIST} and mouse \emph{Xist}.]{UCSC wiggle- density display of HNRNPK CLIP data (orange) aligned over the mouse (mm9) and human (hg38) Xist genomic loci. Mouse and human clip data are from \cite{Cirillo2016QuantitativeEditor,VanNostrand2016RobusteCLIP}. Arrows denote direction of Xist transcription. Black rectangles indicate genomic locations of mouse and human repeat sequences used in this work.}
 \label{fig:hnkhumanmouse}
 \end{figure}
 
@@ -177,7 +177,7 @@ There is at least one conserved lncRNA in the mammalian transcriptome that is kn
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=.4\textwidth]{images/kcnd.pdf}
+\includegraphics[width=.35\textwidth]{images/kcnd.pdf}
 \caption[\emph{KCNQ1OT1} dot plot alignment]{Dot plot alignment of human \emph{KCNQ1OT1} against itself using flexidot software \cite{Seibt2018FlexiDot:Analyses}. The window parameter is 20bp and the threshold is 40\%. Black regions correspond to windows that succesfully aligned against each other. }
 \label{fig:kcndot}
 \end{figure}
@@ -187,7 +187,7 @@ Furthermore, eCLIP data for RBPs known to be essential for \emph{XIST}'s functio
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=\textwidth]{images/kcnproteins.pdf}
+\includegraphics[width=.85\textwidth]{images/kcnproteins.pdf}
 \caption[\emph{KCNQ1OT1} RBM15, HNRNPK, and MATR3 eCLIP tracks]{Browser tracks for RBM15 (top), HNRNPK (middle), and MATR3 (bottom) within the \emph{KCNQ1OT1} locus. Tracks represent peak intensity from ENCODE narrowPeak files for each protein, regions with no signal were not called as statistically significant peaks. }
 \label{fig:kcnproteins}
 \end{figure}
@@ -195,7 +195,7 @@ Furthermore, eCLIP data for RBPs known to be essential for \emph{XIST}'s functio
 \emph{KCNQ1OT1} contained regions of similarity to each of the \emph{XIST} HMMs that we trained (Figure \ref{fig:kcntracks} A-D) with parameterizations $\theta_A = (4,.9999,.9999), \theta_B = (4,.9999,.9999), \theta_D = (2,.9999,.9999), \theta_E = (4,.9999,.9999)$. We found that the 5' region of \emph{KCNQ1OT1}'s sequence in particular containins regions of similarity to A-,B-,D-, and E-repeats of \emph{XIST} (Figure \ref{fig:kcntracks} A-D) -- suggesting that this region of \emph{KCNQ1OT1} could be a multipurpose binder of numerous RBPs. Indeed, eCLIP data for RBM15 and SRSF1 (Figure \ref{fig:kcntracks} A), HNRNPK (Figure \ref{fig:kcntracks} B-C), and MATR3 and PTBP1 (Figure \ref{fig:kcntracks} D) reveal elevated read density for all these proteins at the 5' region of \emph{KCNQ1OT1}'s sequence. Additionally, a large portion of the inner region of \emph{KCNQ1OT1}'s sequence was identified by \emph{hmmSEEKR} to have similarity to the B- and D- repeats of \emph{Xist}. (Figure \ref{fig:kcntracks} B-C). Similar to actual B- and D-repeats of \emph{XIST}, these regions within \emph{KCNQ1OT1} correspond to elevated HNRNPK read density (Figure \ref{fig:kcntracks} B,C). 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=.89\textwidth]{images/kcneclip.pdf}
+\includegraphics[height=.75\textheight]{images/kcneclip.pdf}
 \caption[Analysis of HMM and eCLIP data in \emph{KCNQ1OT1}]{\emph{hmmSEEKR} predicts \emph{XIST} associated protein binding in \emph{KCNQ1OT1}. A) HMM viterbi parse showing hits to the A-repeat in \emph{KCNQ1OT1} (blue), RBM15 eCLIP read density (middle plot), and SRSF1 eCLIP read density (bottom plot). B) HMM viterbi parse showing hits to the B-repeat (top, blue regions), and HNRNPK eCLIP read density (bottom). C) HMM viterbi parse in \emph{KCNQ1OT1} for the D-repeat (top, blue regions) and HNRNPK eCLIP read density (bottom). D) HMM viterbi parse for E-repeat in \emph{KCNQ1OT1} (top, blue regions) and eCLIP read density for MATR3 (middle) and PTBP1 (bottom). E-J) Total eCLIP reads assigned to the HMM or randomized parses for RBM15, SRSF1, HNRNPK (B-repeat), HNRNPK (D-repeat), MATR3, and PTBP1 respectively. HMM parameterizations were $\theta_A = (4,.9999,.9999), \theta_B = (4,.9999,.9999), \theta_D = (2,.9999,.9999), \theta_E = (4,.9999,.9999)$ for A-,B-,D-,and E- respectively. }
 \label{fig:kcntracks}
 \end{figure}
@@ -350,16 +350,8 @@ The pseudo-code in Algorithm \ref{alg:kmercounts} is implemented in kmers.py and
 \subsubsection{Ambiguous Nucleotides}
 Transcripts containing regions of ambiguous sequence are of concern when building the viterbi parse, as ambiguous $k$-mers are not included in the emission distributions of the hidden state. Therefore only sequences of $k$-mers containing A,T,C, or G are allowed. To adjust for any ambiguous positions within the sequence, \textbf{Algorithm \ref{alg:ambigIdx}} stores two lists of indices. The first stores the position, or index, of each allowable $k$-mer, and the second stores the position of any $k$-mer containining an ``N'' within it. If there are any ``N" within the sequence, the list of $k$-mers passed into the Viterbi algorithm are split into distinct sub-sequences, because the regions flanking the ambiguous nucleotides are not adjacent to each other. Finally, when mapping the Viterbi parse back to the original sequence, the two lists of indices generated above are used to merge the results back to their original order.
 
-An example would best illustrate what this portion of the code is trying to achieve. For simplicity, let $k=1$, and our observation $X$ be: 
-$$X= A,A,N,N,T,T$$
-Counting indices from 1, the allowable $k$-mer indices in $X$ are:
-$$\{1,2,5,6\}$$
-The ambiguous $k$-mer indices are:
-$$\{3,4\}$$
-As the sequence $X$ is fragmented by two Ns at position 3 and 4, the flanking sequences are passed to the Viterbi algorithm to be parsed separately:
-$$\{\{A,A\},\{T,T\}\}$$
-Yielding the hypothetical merged results following Viterbi parse
-$$\{+,+,N,N,-,-\}$$
+An example would best illustrate what this portion of the code is trying to achieve. For simplicity, let $k=1$, and our observation be $X= A,A,N,N,T,T$. Counting indices from 1, the allowable $k$-mer indices in $X$ are $\{1,2,5,6\}$. The ambiguous $k$-mer indices are $\{3,4\}$. As the sequence $X$ is fragmented by two Ns at position 3 and 4, the flanking sequences are passed to the Viterbi algorithm to be parsed separately: $\{\{A,A\},\{T,T\}\}$. The grouping algorithm then sorts the viterbi parse back in with the ambiguous nucleotides, $\{+,+,N,N,-,-\}$.
+
 \begin{algorithm}[h]
 \DontPrintSemicolon
 \setstretch{1}
@@ -382,7 +374,6 @@ $$\{+,+,N,N,-,-\}$$
  \caption{Generate unambiguous observed sequence}
  \label{alg:ambigIdx}
 \end{algorithm}
-
 \subsubsection{Identifying hits from the Viterbi parse}
 Within \emph{hmmSEEKR} a Viterbi parse is a sequence of state labels that have been assigned to each $k$-mer from a DNA sequence, \emph{e.g.} if the DNA sequence was ``AAAACCCC", and $k=4$, then the $k$-mer sequence is $\{AAAA,AAAC,AACC,ACCC,CCCC\}$, and a hypothetical Viterbi parse would be a list such as $\{-,-,-,+,+\}$, where ``$-$" represents the null state, and ``$+$" represents the query state. \textbf{Algorithm \ref{alg:groupHMM}} takes the list $\{-,-,-,+,+\}$ and converts it into a grouped list, \emph{e.g.} $\{\{-,-,-\},\{+,+\}\}$. This also exactly defines what term a hit within our HMM, consecutively labeled ``$+$" regions with a sequence from the viterbi parse.
 \begin{algorithm}[h]
@@ -927,6 +918,16 @@ A SAF (Simple Annotation Format) file was then created from the \emph{hmmSEEKR} 
 In tandem with the real \emph{hmmSEEKR} parse, a randomized parse for each transcript was created (as in the KCNQ1OT1 analysis). For each hit within a transcript a random point was chosen with uniform probability within the transcript from position 1, to the final coordinate less the length of the hit. This randomly chosen point was then designated as the start point for the random hit, with length equal to the original hit from \emph{hmmSEEKR}. From here, a SAF file was created for all randomized hits and overlapped with the ENCODE eCLIP data. 
 
 We then calculated the total number of reads retrieved by the true HMM and the randomized parses, as well as the average number of reads per hit. Statistics were calculated using a chi-square test for total reads retrieved, with a null hypothesis of 1:1 ratio between the true HMM and the randomized parses, and a student's t-test of the average number of reads per hit with a null hypothesis of no difference between HMM and random. 
+
+\clearpage 
+
+\titleformat{\section}
+  {\centering\normalfont\fontsize{12}{12}\bfseries}{\thesection}{1em}{}
 \begin{singlespace}
-\printbibliography[heading=bibintoc,title={References}]
+
+\printbibliography[heading=subbibintoc,title={REFERENCES}]
+
 \end{singlespace}
+
+\titleformat{\section}
+  {\normalfont\fontsize{12}{12}\bfseries}{\thesection}{1em}{}
