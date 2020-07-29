@@ -434,7 +434,7 @@ The premise behind the Viterbi algorithm is outlined in the introduction. Briefl
 
 At each step in the Viterbi algorithm, the state transition that maximizes the probability at time $t$ is recorded, for each state. That is, at time $t$, the ``+" state has a most likely transition from either ``+'' or ``-" from time $t-1$, and the ``-" state at time $t$ has a most likely transition from either ``+" or ``-" from time $t-1$ in the sequence. To identify which was the most likely, a backtrace must be calculated after all these calculations have been made, and this is implemented in \textbf{Algorithm \ref{alg:backtrack}}.
 
-\begin{algorithm}[H]
+\begin{algorithm}[B]
 \DontPrintSemicolon
 \setstretch{1}
 \SetAlgoLined
@@ -476,6 +476,8 @@ currMaxProb$\leftarrow$currMaxProb$+\log P(O_t|state)$\;
  \label{alg:viterbi}
 \end{algorithm}
 
+\cleardoublepage
+
 \begin{algorithm}[h]
 \DontPrintSemicolon
 \setstretch{1}
@@ -504,13 +506,10 @@ maxPriorState$\leftarrow$dictMaxState[t+1][maxPriorState]
  \caption{Backtrack viterbi}
  \label{alg:backtrack}
 \end{algorithm}
-
 \clearpage
-
 \subsubsection{Forward Algorithm}
-The forward algorithm calculates the likelihood of the data, $P(X)$, as well as the probability of the sequence $x_{1:t}$ ending at state $i$ at time $t$. The algorithm was implemented through the pseudo-code below in \emph{hmmSEEKR}. 
-
-\begin{algorithm}[H]
+The forward algorithm calculates the likelihood of the data, $P(X)$, as well as the probability of the sequence $x_{1:t}$ ending at state $i$ at time $t$. The algorithm was implemented through the pseudo-code below in \emph{hmmSEEKR}. \\
+\begin{algorithm}[h]
 \DontPrintSemicolon
 \setstretch{1}
 \SetAlgoLined
@@ -541,11 +540,10 @@ $\alpha_i(t)\leftarrow \textrm{logsumexp}\left(currP\right)+\log P(X_t|Y_t=i)$\;
  \caption{Forward Algorithm}
  \label{alg:fwd}
 \end{algorithm}
-
+\clearpage
 \subsubsection{Backward Algorithm}
-The backward algorithm calculates the probability of the observed sequence $P(X)$, as well as the probability of sequence $x_{t+1:T}$ starting in state $i$ at time $t$. The algorithm was implemented as below in \textit{hmmSEEKR} and is primarily used in the Baum-Welch algorithm. 
-
-\begin{algorithm}[H]
+The backward algorithm calculates the probability of the observed sequence $P(X)$, as well as the probability of sequence $x_{t+1:T}$ starting in state $i$ at time $t$. The algorithm was implemented as below in \textit{hmmSEEKR} and is primarily used in the Baum-Welch algorithm. \\
+\begin{algorithm}[h]
 \DontPrintSemicolon
 \setstretch{1}
 \SetAlgoLined
@@ -815,7 +813,7 @@ From here, two files are saved. One contains the values of $\alpha$ and $\beta$ 
 
 All ENCODE eCLIP Experiments (non-controls) in K562 cells were selected and downloaded from the ENCODE database (bigWig file type). 
 
-\lstinline{xargs -L 1 curl -O -L < encodefileurls.txt
+\lstinline{xargs -L 1 curl -O -L < encodefileurls.txt\\
 for i in *bigWig; do ./bigWigToBedGraph $i ${i}.bedGraph;done}
 
 

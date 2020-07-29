@@ -1,4 +1,4 @@
-\documentclass[11pt,letterpaper,twosided]{report}
+\documentclass[11pt,letterpaper,oneside]{report}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{caption}
@@ -15,12 +15,12 @@
 \usepackage[compact]{titlesec}
 \usepackage{xcolor}
 \usepackage{indentfirst}
-
 \usepackage{setspace}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
 \lstdefinestyle{mystyle}{
     language=c,
     %basicstyle=\small\ttfamily,
@@ -64,9 +64,10 @@
 }
 \usepackage{ragged2e}
 \newenvironment{abbreviations}{\begin{list}{}{\renewcommand{\makelabel}{\abbrlabel}}}{\end{list}}
-\usepackage{changepage}
 \setlength{\RaggedRightParindent}{\parindent}
-\usepackage[letterpaper,left=1.25in,top=1in,right=1in,bottom=1in,nohead]{geometry}
+
+\usepackage[left=1in,top=1in,right=1in,bottom=1in,nohead]{geometry}
+
 \newcommand{\abbrlabel}[1]{\makebox[3cm][l]{\textbf{#1}\ \dotfill}}
 
 \usepackage{setspace} 
@@ -74,11 +75,14 @@
 \RaggedRight 
 
 \setlength{\footskip}{.5in}
-\providecommand\phantomsection{}
+%\providecommand\phantomsection{}
+\usepackage[titles]{tocloft}
+\renewcommand{\cftchapdotsep}{\cftdotsep}
 \renewcommand{\contentsname}{TABLE OF CONTENTS}
 \renewcommand*\listfigurename{LIST OF FIGURES}
-\renewcommand*\listfigurename{LIST OF TABLES}
-
+\renewcommand*\listtablename{LIST OF TABLES}
+\setlength{\cfttabindent}{0in}
+\setlength{\cftfigindent}{0in}
 \usepackage[backend=biber,refsection=chapter,style=ieee,maxbibnames=99,citestyle=numeric-comp]{biblatex}
 % \addtocontents{toc}{%
 %     \protect\renewcommand{\protect\cftchapleader}{%-- switch it on here
@@ -86,12 +90,16 @@
 \addbibresource{references.bib}
 % \makeindex
 
+
+%%%%
+
+
 \titleformat{\chapter}[hang]
 {\singlespacing\bfseries\centering\uppercase}
 {Chapter \thechapter: \ }
 {0pt}
 {}
-\titlespacing*{\chapter}{0pt}{.6in}{*2}{}
+\titlespacing{\chapter}{0pt}{42pt}{*2}{}
 
 \titleformat{\section}
   {\normalfont\fontsize{12}{12}\bfseries}{\thesection}{1em}{}
@@ -105,9 +113,9 @@
 
 
 \begin{titlepage}
-\newgeometry{left=1in,top=1.95in,right=1in,bottom=1in,nohead}
+\newgeometry{left=1in,top=2in,right=1in,bottom=1in,nohead}
    \begin{singlespacing}
-   \begin{center}
+   \centering{
        \textsc{IDENTIFICATION OF FUNCTIONAL DOMAINS IN NON-CODING RNA}\\
        \vspace{.95in}
        Daniel Sprague\\
@@ -115,8 +123,8 @@
        A dissertation submitted to the faculty at the University of North Carolina at Chapel Hill in partial fulfillment of the requirements for the degree of Doctor of Philosophy in the Department of Pharmacology in the School of Medicine.\\
        \vspace{.95in}
        Chapel Hill\\
-       2020
-    \end{center}
+       2020\par
+    }
     \vspace{.5in}
     \end{singlespacing}
     \begin{flushleft}
@@ -143,34 +151,40 @@ Daniel Sprague \\
 
 \clearpage
 
-\renewcommand\abstractname{\normalfont\textsc{Abstract}}
+\renewcommand\abstractname{\centering\textbf\textsc\uppercase{Abstract}}
 
-\newgeometry{left=1in,top=1.15in,right=1in,bottom=1in,nohead}
-
+\newgeometry{left=1in,top=89pt,right=1in,bottom=1in,nohead}
 \begin{abstract}
 \thispagestyle{plain}
 \setcounter{page}{3}
-\begin{center}
-Daniel Sprague: Identification of functional domains in non-coding RNA\\
-(Under the direction of Joseph Mauro Calabrese)
-\end{center}
+\begin{singlespace}
+{\centering Daniel Sprague: Identification of functional domains in non-coding RNA\\
+(Under the direction of Joseph Mauro Calabrese)\par}
+\end{singlespace}
+\vspace{\baselineskip}
 \ \ \ \ Long non-coding RNAs (lncRNAs) are known to be important regulators of gene expression and other cellular functions. However, only a very small proportion of lncRNAs have been extensively studied. The remainder exist largely as annotations in a database with no known function, if any. A primary challenge to understanding how lncRNAs function is the poorly understood sequence-to-function relationship relative to protein coding genes. Within lncRNA transcripts, boundaries of functional sequence are not explicitly defined by exon-intron boundaries, and the code by which lncRNAs derive function is not nearly as explicit as in a protein coding reading frame. To address these challenges, we have developed a probabilistic framework, \emph{hmmSEEKR}, for identifying where within a non-coding RNA functional regions may be located based off of enrichment of short motifs, or $k$-mers.
 
 We used \emph{hmmSEEKR} to identify functional sequence domains in several lncRNAs that silence gene expression through recruitment of Polycomb, using \emph{XIST} as a model transcript. These predicted sequence domains share no detectable linear sequence alignment with \emph{XIST}; however, they share high $k$-mer based similarity with known functional domains in \emph{XIST} and precisely coincided with the location of RNA binding protein (RBP) interactions known to be important for Polycomb mediated silencing. Furthermore, we were able to extend our analysis to the entire transcriptome and identify many \emph{XIST}-like sequence domains throughout the transcriptome that interact with Polycomb-associated RBPs. We have packaged these algorithms into python-based software and have included an in-depth walk-through of the code and tutorial of how to analyze sequences using \textit{hmmSEEKR.} 
 \end{abstract}
 
+\clearpage
 \newgeometry{left=1in,top=1in,right=1in,bottom=1in,nohead}
 
 \chapter*{Acknowledgements}
 \setcounter{page}{4}
-\begin{center}
 This work wouldn't have been possible without all the fantastic people who helped me through the end. I would like to thank my advisor, Mauro Calabrese, for always pushing me to improve as well as for the opportunity to work on some very exciting science. I would also like to thank all the friends and family who made this work possible. 
-\end{center}
+\clearpage 
 \tableofcontents
-\titlespacing*{\chapter}{0pt}{-.4in}{*2}{}
+\titlespacing{\chapter}{0pt}{-30pt}{*2}{}
+\titlespacing*{\chapter}{0pt}{-30pt}{*2}{}
+\cleardoublepage
+\addcontentsline{toc}{chapter}{\listfigurename}
 \listoffigures
+\cleardoublepage
+\addcontentsline{toc}{chapter}{\listtablename}
 \listoftables
-\clearpage
+\cleardoublepage
+\addcontentsline{toc}{chapter}{LIST OF ABBREVIATIONS AND SYMBOLS}
 \chapter*{LIST OF ABBREVIATIONS AND SYMBOLS}
 \begin{abbreviations}
 \item [$\in$] in
@@ -211,19 +225,18 @@ This work wouldn't have been possible without all the fantastic people who helpe
 \end{abbreviations}
 \clearpage
 
-\titlespacing*{\chapter}{0pt}{.6in}{*2}{}
 \newgeometry{left=1in,top=1in,right=1in,bottom=1in,nohead}
-
+\titlespacing*{\chapter}{0pt}{42pt}{*2}{}
 \mainmatter
-\chapter{Introduction}
+\chapter{\uppercase{Introduction}}
 \input{chapters/introduction}
-\chapter{Xist and Rsx}
+\chapter{XIST AND RSX}
 \input{chapters/chapter02}
 \chapter{hmmSEEKR}
 \input{chapters/chapter03}
-\chapter{SEEKR $k$-mers}
+\chapter{SEEKR $k$-MERS}
 \input{chapters/chapter04}
-\chapter{Conclusion}
+\chapter{CONCLUSION}
 \input{chapters/conclusion}
 
 
