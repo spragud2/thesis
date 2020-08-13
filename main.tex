@@ -83,7 +83,25 @@
 \renewcommand*\listtablename{LIST OF TABLES}
 \setlength{\cfttabindent}{0in}
 \setlength{\cftfigindent}{0in}
-\usepackage[backend=biber,refsection=chapter,style=ieee,maxbibnames=99,citestyle=numeric-comp]{biblatex}
+\usepackage[final]{microtype} 
+\usepackage[backend=biber,refsection=chapter,style=ieee,maxbibnames=99,citestyle=numeric-comp,doi=false,url=false,eprint=false]{biblatex}
+\appto\bibfont{\RaggedRight}
+\makeatletter
+\defbibenvironment{bibliography}
+{\list{\printtext[labelnumberwidth]{%
+    \printfield{prefixnumber}%
+    \printfield{labelnumber}}}
+{\setlength{\bibhang}{0in}%
+\setlength{\leftmargin}{.3in}%
+\setlength{\itemindent}{0in}%
+\setlength{\itemsep}{\bibitemsep}%
+\setlength{\parsep}{\bibparsep}}}
+{\endlist}
+{\item}
+\makeatother
+
+
+
 % \addtocontents{toc}{%
 %     \protect\renewcommand{\protect\cftchapleader}{%-- switch it on here
 %         \bfseries\protect\cftdotfill{\protect\cftdotsep}}}
